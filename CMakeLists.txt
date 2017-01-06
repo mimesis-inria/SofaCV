@@ -7,14 +7,18 @@ set(SOFAORCOMMON_VERSION ${SOFAORCOMMON_MAJOR_VERSION}.${SOFAORCOMMON_MINOR_VERS
 
 
 set(HEADER_FILES
+  initplugin.h
   Data.h
   Image.h
   ImageUtils.h
+  ImageViewer.h
   )
 
 set(SOURCE_FILES
+  initplugin.cpp
   Image.cpp
   ImageUtils.cpp
+  ImageViewer.cpp
   )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
