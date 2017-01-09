@@ -3,6 +3,7 @@
 
 #include <SofaORCommon/Data.h>
 #include <opencv2/core.hpp>
+#include <iostream>
 
 namespace sofa
 {
@@ -10,7 +11,6 @@ namespace OR
 {
 namespace common
 {
-
 enum VideoMode
 {
   MONO = 0,
@@ -62,15 +62,18 @@ class Image : public cv::Mat, public sofa::OR::common::Data
 
   Image(const cv::Mat &m, const cv::Rect &roi) : cv::Mat(m, roi) {}
   Image(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
-  inline friend std::istream &operator>>(std::istream &in,
-                                         Image __attribute__((__unused__)) & s)
+
+  inline friend std::istream &operator>>(std::istream &in, Image &s)
   {
+      Image image;
+      in.read(reinterpret_cast<char*>(&image), sizeof(Image*));
+      image.copyTo(s);
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const Image &s)
   {
-    out << s.cols << s.rows << s.type();
+    out.write(reinterpret_cast<const char*>(&s), sizeof(Image*));
     return out;
   }
 };

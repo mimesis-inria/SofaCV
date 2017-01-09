@@ -3,7 +3,7 @@
 
 #include "initplugin.h"
 
-#include <sofa/core/objectmodel/BaseObject.h>
+#include <sofa/core/DataEngine.h>
 
 #include <SofaORCommon/Image.h>
 #include <opencv2/opencv.hpp>
@@ -15,10 +15,10 @@ namespace OR
 {
 namespace common
 {
-class ImageViewer: public core::objectmodel::BaseObject
+class ImageViewer: public core::DataEngine
 {
  public:
-  SOFA_CLASS(ImageViewer, core::objectmodel::BaseObject);
+  SOFA_CLASS(ImageViewer, core::DataEngine);
 
  public:
   ImageViewer();
@@ -30,6 +30,7 @@ class ImageViewer: public core::objectmodel::BaseObject
 
   sofa::Data<common::Image> d_image;
   std::string m_winID;
+  void handleEvent(sofa::core::objectmodel::Event* event);
 };
 
 }  // namespace common
