@@ -38,7 +38,7 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-  return "ImageViewer";
+  return "FrameViewer";
 }
 
 }  // namespace common
@@ -49,4 +49,4 @@ const char* getModuleComponentList()
 
 ////////// BEGIN CLASS LIST //////////
 
-SOFA_LINK_CLASS(ImageViewer);
+SOFA_LINK_CLASS(FrameViewer);

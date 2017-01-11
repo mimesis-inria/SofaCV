@@ -1,11 +1,11 @@
-#ifndef SOFA_OR_ACQUISITOR_IMAGEVIEWER_H
-#define SOFA_OR_ACQUISITOR_IMAGEVIEWER_H
+#ifndef SOFA_OR_ACQUISITOR_FRAMEVIEWER_H
+#define SOFA_OR_ACQUISITOR_FRAMEVIEWER_H
 
 #include "initplugin.h"
+#include "SofaORCommon/cvMat.h"
 
 #include <sofa/core/DataEngine.h>
 
-#include <SofaORCommon/Image.h>
 #include <opencv2/opencv.hpp>
 
 
@@ -15,20 +15,20 @@ namespace OR
 {
 namespace common
 {
-class ImageViewer: public core::DataEngine
+class FrameViewer: public core::DataEngine
 {
  public:
-  SOFA_CLASS(ImageViewer, core::DataEngine);
+  SOFA_CLASS(FrameViewer, core::DataEngine);
 
  public:
-  ImageViewer();
-  virtual ~ImageViewer();
+  FrameViewer();
+  virtual ~FrameViewer();
 
   void init();
   void update();
   void reinit();
 
-  sofa::Data<common::Image> d_image;
+  sofa::Data<common::cvMat> d_frame;
   std::string m_winID;
   void handleEvent(sofa::core::objectmodel::Event* event);
 };
@@ -37,4 +37,4 @@ class ImageViewer: public core::DataEngine
 }  // namespace OR
 }  // namespace sofa
 
-#endif  // SOFA_OR_ACQUISITOR_IMAGEVIEWER_H
+#endif  // SOFA_OR_ACQUISITOR_FRAMEVIEWER_H

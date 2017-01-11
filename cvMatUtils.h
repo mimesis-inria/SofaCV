@@ -1,4 +1,4 @@
-#include <igtlImageMessage.h>
+#include <igtl/igtlImageMessage.h>
 #include <opencv2/opencv.hpp>
 
 namespace sofa
