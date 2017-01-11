@@ -43,13 +43,12 @@ void FrameViewer::update()
 {
   if (d_frame.isDirty())
   {
-    d_frame.update();
-    d_frame.cleanDirty();
     if (!d_frame.getValue().empty())
     {
       cv::imshow(m_winID, d_frame.getValue());
       cv::waitKey(1);
     }
+    d_frame.cleanDirty();
   }
 }
 

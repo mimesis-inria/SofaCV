@@ -1,7 +1,6 @@
 #ifndef SOFA_OR_COMMON_CVMAT_H
 #define SOFA_OR_COMMON_CVMAT_H
 
-//#include "SofaORCommon/Data.h"
 #include <opencv2/core.hpp>
 #include <iostream>
 
@@ -11,16 +10,7 @@ namespace OR
 {
 namespace common
 {
-enum VideoMode
-{
-  MONO = 0,
-  STEREO_INTERLEAVED = 1,
-  STEREO_TOP_BOTTOM = 2,
-  STEREO_SIDE_BY_SIDE = 3,
-  STEREO_ROTATED_SIDE_BY_SIDE = 4
-};
-
-class cvMat : public cv::Mat //, public sofa::OR::common::Data
+class cvMat : public cv::Mat
 {
  public:
   cvMat() : cv::Mat() {}
