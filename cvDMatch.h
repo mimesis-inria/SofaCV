@@ -13,7 +13,7 @@ namespace common
 class cvDMatch : public cv::DMatch
 {
  public:
-  cvDMatch();
+  cvDMatch() {}
   cvDMatch(const cv::DMatch &o)
   {
     distance = o.distance;
@@ -21,8 +21,14 @@ class cvDMatch : public cv::DMatch
     queryIdx = o.queryIdx;
     trainIdx = o.trainIdx;
   }
-  cvDMatch(int _queryIdx, int _trainIdx, float _distance);
-  cvDMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance);
+  cvDMatch(int _queryIdx, int _trainIdx, float _distance)
+      : cv::DMatch(_queryIdx, _trainIdx, _distance)
+  {
+  }
+  cvDMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance)
+      : cv::DMatch(_queryIdx, _trainIdx, _imgIdx, _distance)
+  {
+  }
 
   inline friend std::istream &operator>>(std::istream &in, cvDMatch &s)
   {
