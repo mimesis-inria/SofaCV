@@ -9,6 +9,7 @@ set(SOFAORCOMMON_VERSION ${SOFAORCOMMON_MAJOR_VERSION}.${SOFAORCOMMON_MINOR_VERS
 set(HEADER_FILES
   initplugin.h
   cvKeypoint.h
+  cvDMatch.h
   cvMat.h
   cvMatUtils.h
   FrameViewer.h
@@ -17,6 +18,7 @@ set(HEADER_FILES
 set(SOURCE_FILES
   initplugin.cpp
   cvKeypoint.cpp
+  cvDMatch.cpp
   cvMat.cpp
   cvMatUtils.cpp
   FrameViewer.cpp
