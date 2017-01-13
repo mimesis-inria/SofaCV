@@ -13,6 +13,7 @@ set(HEADER_FILES
   cvMat.h
   cvMatUtils.h
   FrameViewer.h
+  StereoViewer.h
   )
 
 set(SOURCE_FILES
@@ -22,6 +23,7 @@ set(SOURCE_FILES
   cvMat.cpp
   cvMatUtils.cpp
   FrameViewer.cpp
+  StereoViewer.cpp
   )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

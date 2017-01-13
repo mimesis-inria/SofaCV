@@ -41,14 +41,13 @@ void FrameViewer::init()
 
 void FrameViewer::update()
 {
-  if (d_frame.isDirty())
+  updateAllInputsIfDirty();
+  cleanDirty();
+  std::cout << "Viewing" << std::endl;
+  if (!d_frame.getValue().empty())
   {
-    if (!d_frame.getValue().empty())
-    {
-      cv::imshow(m_winID, d_frame.getValue());
-      cv::waitKey(1);
-    }
-    d_frame.cleanDirty();
+    cv::imshow(m_winID, d_frame.getValue());
+    cv::waitKey(1);
   }
 }
 
