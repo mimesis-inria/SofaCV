@@ -13,7 +13,13 @@ namespace common
 class cvDMatch : public cv::DMatch
 {
  public:
-  cvDMatch() {}
+  cvDMatch()
+  {
+      distance = -1.0f;
+      imgIdx = -1;
+      queryIdx = -1;
+      trainIdx = -1;
+  }
   cvDMatch(const cv::DMatch &o)
   {
     distance = o.distance;
