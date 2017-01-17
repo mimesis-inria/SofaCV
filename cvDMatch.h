@@ -15,10 +15,10 @@ class cvDMatch : public cv::DMatch
  public:
   cvDMatch()
   {
-      distance = -1.0f;
-      imgIdx = -1;
-      queryIdx = -1;
-      trainIdx = -1;
+    distance = -1.0f;
+    imgIdx = -1;
+    queryIdx = -1;
+    trainIdx = -1;
   }
   cvDMatch(const cv::DMatch &o)
   {
