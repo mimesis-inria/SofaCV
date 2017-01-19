@@ -38,7 +38,7 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-  return "FrameViewer";
+  return "FrameViewer;CalibLoader";
 }
 
 }  // namespace common
@@ -49,4 +49,5 @@ const char* getModuleComponentList()
 
 ////////// BEGIN CLASS LIST //////////
 
+SOFA_LINK_CLASS(CalibLoader);
 SOFA_LINK_CLASS(FrameViewer);

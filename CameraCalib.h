@@ -26,7 +26,7 @@ class CameraCalib
   {
   }
 
-  CameraCalib(cv::Mat_<double> &_cameraMatrix, cv::Mat_<double> &_distCoefs,
+  CameraCalib(const cv::Mat_<double>& _cameraMatrix, const cv::Mat_<double>& _distCoefs,
               double _error)
   {
     common::matrix::cvMat2sofaMat<3, 3, double>(_cameraMatrix, cameraMatrix);

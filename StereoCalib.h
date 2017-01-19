@@ -24,7 +24,7 @@ class StereoCalib
   {
   }
 
-  StereoCalib(cv::Mat_<double> &_R, cv::Mat_<double> &_T, cv::Mat_<double> &_F,
+  StereoCalib(const cv::Mat_<double> &_R, const cv::Mat_<double> &_T, const cv::Mat_<double> &_F,
               double _error)
   {
     common::matrix::cvMat2sofaMat(_R, R);

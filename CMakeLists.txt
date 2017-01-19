@@ -17,6 +17,7 @@ set(HEADER_FILES
   CameraCalib.h
   StereoCalib.h
   CalibLoader.h
+  #DataDependentOptionsGroup.h
   )
 
 set(SOURCE_FILES
@@ -30,14 +31,16 @@ set(SOURCE_FILES
   CameraCalib.cpp
   StereoCalib.cpp
   CalibLoader.cpp
+  #DataDependentOptionsGroup.cpp
   )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(SofaFramework REQUIRED)
+find_package(SofaGui REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore SofaSimulationCommon ${OpenIGTLink_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore SofaSimulationCommon SofaGuiQt SofaGuiCommon ${OpenIGTLink_LIBRARIES} ${OpenCV_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
