@@ -17,7 +17,6 @@ set(HEADER_FILES
   CameraCalib.h
   StereoCalib.h
   CalibLoader.h
-  #DataDependentOptionsGroup.h
   )
 
 set(SOURCE_FILES
@@ -31,7 +30,6 @@ set(SOURCE_FILES
   CameraCalib.cpp
   StereoCalib.cpp
   CalibLoader.cpp
-  #DataDependentOptionsGroup.cpp
   )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
