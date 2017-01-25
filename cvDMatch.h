@@ -20,7 +20,7 @@ class cvDMatch : public cv::DMatch
     queryIdx = -1;
     trainIdx = -1;
   }
-  cvDMatch(const cv::DMatch &o)
+  cvDMatch(const cv::DMatch& o)
   {
     distance = o.distance;
     imgIdx = o.imgIdx;
@@ -36,15 +36,16 @@ class cvDMatch : public cv::DMatch
   {
   }
 
-  inline friend std::istream &operator>>(std::istream &in, cvDMatch &s)
+  inline friend std::istream& operator>>(std::istream& in, cvDMatch& s)
   {
     in >> s.distance >> s.imgIdx >> s.queryIdx >> s.trainIdx;
     return in;
   }
 
-  inline friend std::ostream &operator<<(std::ostream &out, const cvDMatch &s)
+  inline friend std::ostream& operator<<(std::ostream& out, const cvDMatch& s)
   {
-    out << s.distance << s.imgIdx << s.queryIdx << s.trainIdx;
+    out << s.distance << ' '  << s.imgIdx << ' ' << s.queryIdx << ' '
+        << s.trainIdx << ' ';
     return out;
   }
 };

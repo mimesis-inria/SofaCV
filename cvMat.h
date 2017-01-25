@@ -1,8 +1,8 @@
 #ifndef SOFA_OR_COMMON_CVMAT_H
 #define SOFA_OR_COMMON_CVMAT_H
 
-#include <opencv2/core.hpp>
 #include <iostream>
+#include <opencv2/core.hpp>
 
 namespace sofa
 {
@@ -52,18 +52,18 @@ class cvMat : public cv::Mat
 
   cvMat(const cv::Mat &m, const cv::Rect &roi) : cv::Mat(m, roi) {}
   cvMat(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
-
   inline friend std::istream &operator>>(std::istream &in, cvMat &s)
   {
-      cvMat image;
-      in.read(reinterpret_cast<char*>(&image), sizeof(cvMat*));
-      image.copyTo(s);
+    cvMat image;
+    in.read(reinterpret_cast<char *>(&image), sizeof(cvMat *));
+    image.copyTo(s);
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
-    out.write(reinterpret_cast<const char*>(&s), sizeof(cvMat*));
+    out.write(reinterpret_cast<const char *>(&s), sizeof(cvMat *));
+    out << " ";
     return out;
   }
 };

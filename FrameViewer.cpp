@@ -32,11 +32,6 @@ void FrameViewer::init()
 {
   addInput(&d_frame);
   d_frame.setDirtyValue();
-  if (!d_frame.getValue().empty())
-  {
-    cv::imshow(m_winID, d_frame.getValue());
-    cv::waitKey(1);
-  }
 }
 
 void FrameViewer::update()
