@@ -3,7 +3,7 @@
 
 #include <sofa/defaulttype/Mat.h>
 
-#include <igtl/igtlImageMessage.h>
+#include <igtlImageMessage.h>
 #include <opencv2/opencv.hpp>
 
 namespace sofa
@@ -64,7 +64,7 @@ template <int L, int C, class T = float>
 void sofaMat2cvMat(const defaulttype::Mat<L, C, T>& src, cv::Mat_<T>& dst)
 {
   dst = cv::Mat_<T>(L, C);
-  std::memcpy(dst.ptr(), src.ptr(), L*C*sizeof(T));
+  std::memcpy(dst.ptr(), src.ptr(), L * C * sizeof(T));
 }
 
 template <int N, class T>
@@ -83,6 +83,20 @@ void cvMat2sofaVector(const cv::Mat_<T>& src, helper::vector<T>& dst)
   {
     dst.push_back(ptr[i]);
   }
+}
+
+template <class T>
+void sofaVector2cvMat(const helper::vector<T>& src, cv::Mat_<T>& dst)
+{
+  dst = cv::Mat_<T>(src.size(), 1);
+  std::memcpy(dst.ptr(), src.data(), src.size() * sizeof(T));
+}
+
+template <int N, class T>
+void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat_<T>& dst)
+{
+  dst = cv::Mat_<T>(src.size(), N);
+  std::memcpy(dst.ptr(), src.data(), src.size() * N * sizeof(T));
 }
 
 }  // namespace matrix
