@@ -17,7 +17,8 @@ set(HEADER_FILES
   CameraCalib.h
   StereoCalib.h
   CalibLoader.h
-  )
+  CVFilter.h
+  ImplicitDataEngine.h)
 
 set(SOURCE_FILES
   initplugin.cpp
@@ -30,7 +31,8 @@ set(SOURCE_FILES
   CameraCalib.cpp
   StereoCalib.cpp
   CalibLoader.cpp
-  )
+  CVFilter.cpp
+  ImplicitDataEngine.cpp)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

@@ -17,7 +17,7 @@ int FrameViewerClass =
         .add<FrameViewer>();
 
 FrameViewer::FrameViewer()
-    : d_frame(initData(&d_frame, "frame", "frame to display in opencv window"))
+    : d_frame(initData(&d_frame, "img", "frame to display in opencv window"))
 {
   f_listening.setValue(true);
   static int i = 0;
@@ -30,7 +30,7 @@ FrameViewer::FrameViewer()
 FrameViewer::~FrameViewer() {}
 void FrameViewer::init()
 {
-  addInput(&d_frame);
+  bindInputData(&d_frame);
   d_frame.setDirtyValue();
 }
 
@@ -47,10 +47,6 @@ void FrameViewer::update()
 }
 
 void FrameViewer::reinit() { update(); }
-void FrameViewer::handleEvent(sofa::core::objectmodel::Event* e)
-{
-  if (sofa::simulation::AnimateBeginEvent::checkEventType(e)) this->update();
-}
 
 }  // namespace common
 }  // namespace OR

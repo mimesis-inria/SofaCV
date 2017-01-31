@@ -4,7 +4,7 @@
 #include "initplugin.h"
 #include "SofaORCommon/cvMat.h"
 
-#include <sofa/core/DataEngine.h>
+#include "SofaORCommon/ImplicitDataEngine.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -15,10 +15,10 @@ namespace OR
 {
 namespace common
 {
-class FrameViewer: public core::DataEngine
+class FrameViewer: public ImplicitDataEngine
 {
  public:
-  SOFA_CLASS(FrameViewer, core::DataEngine);
+  SOFA_CLASS(FrameViewer, ImplicitDataEngine);
 
  public:
   FrameViewer();
@@ -30,7 +30,6 @@ class FrameViewer: public core::DataEngine
 
   sofa::Data<common::cvMat> d_frame;
   std::string m_winID;
-  void handleEvent(sofa::core::objectmodel::Event* event);
 };
 
 }  // namespace common

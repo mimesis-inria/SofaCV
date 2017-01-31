@@ -29,9 +29,9 @@ class CameraCalib
   CameraCalib(const cv::Mat_<double>& _cameraMatrix, const cv::Mat_<double>& _distCoefs,
               double _error)
   {
-    common::matrix::cvMat2sofaMat<3, 3, double>(_cameraMatrix, cameraMatrix);
-    common::matrix::cvMat2sofaVector(_distCoefs, distCoefs);
-    error = _error;
+      common::matrix::cvMat2sofaMat<3, 3, double>(_cameraMatrix, cameraMatrix);
+      common::matrix::cvMat2sofaVector(_distCoefs, distCoefs);
+      error = _error;
   }
   inline friend std::istream &operator>>(std::istream &in, CameraCalib &s)
   {
