@@ -13,11 +13,10 @@ set(HEADER_FILES
   cvMat.h
   cvMatUtils.h
   FrameViewer.h
-  StereoViewer.h
-  CameraCalib.h
-  StereoCalib.h
+  #StereoViewer.h
+  #CameraCalib.h
+  #StereoCalib.h
   CalibLoader.h
-  CVFilter.h
   ImplicitDataEngine.h)
 
 set(SOURCE_FILES
@@ -27,11 +26,10 @@ set(SOURCE_FILES
   cvMat.cpp
   cvMatUtils.cpp
   FrameViewer.cpp
-  StereoViewer.cpp
-  CameraCalib.cpp
-  StereoCalib.cpp
+  #StereoViewer.cpp
+  #CameraCalib.cpp
+  #StereoCalib.cpp
   CalibLoader.cpp
-  CVFilter.cpp
   ImplicitDataEngine.cpp)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
