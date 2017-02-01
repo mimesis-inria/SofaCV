@@ -1,8 +1,6 @@
 #ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 #define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 
-#include <SofaORCommon/CameraCalib.h>
-#include <SofaORCommon/StereoCalib.h>
 #include <SofaORCommon/cvDMatch.h>
 #include <SofaORCommon/cvKeypoint.h>
 #include <SofaORCommon/cvMat.h>
@@ -31,9 +29,10 @@ class ImplicitDataEngine : public core::DataEngine
   {
   }
   virtual ~ImplicitDataEngine() {}
- protected:
+ private:
   bool _bindData(core::objectmodel::BaseData* data, const std::string& alias)
   {
+    std::cout << "_bindData " << getName() << std::endl;
     const std::multimap<std::string, core::objectmodel::BaseData*>& dataMap =
         this->getDataAliases();
 
@@ -43,20 +42,31 @@ class ImplicitDataEngine : public core::DataEngine
         data->setParent(d.second, "@" + this->getPathName() + "." + alias);
         return true;
       }
-    ImplicitDataEngine* engine = getContext()->get<ImplicitDataEngine>();
+    ImplicitDataEngine* engine = getPreviousEngineInGraph();
     if (engine)
       return engine->_bindData(data, alias);
     else
       return false;
   }
 
+  ImplicitDataEngine* getPreviousEngineInGraph()
+  {
+    std::vector<ImplicitDataEngine*> engines;
+    getContext()->get<ImplicitDataEngine>(
+        &engines);
+    for (size_t i = 0; i < engines.size(); ++i)
+      if (engines[i]->getName() == getName())
+        return (i) ? (engines[i - 1]) : (NULL);
+    return NULL;
+  }
+
+ protected:
   // to call instead of addInput(&data);
   void bindInputData(core::objectmodel::BaseData* data)
   {
     if (!data->isSet())
     {
-      ImplicitDataEngine* engine =
-          this->getContext()->get<ImplicitDataEngine>();
+      ImplicitDataEngine* engine = getPreviousEngineInGraph();
       if (engine)
       {
         bool isBinded = false;

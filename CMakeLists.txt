@@ -14,9 +14,6 @@ set(HEADER_FILES
   cvMatUtils.h
   FrameViewer.h
   #StereoViewer.h
-  #CameraCalib.h
-  #StereoCalib.h
-  CalibLoader.h
   ImplicitDataEngine.h)
 
 set(SOURCE_FILES
@@ -27,9 +24,6 @@ set(SOURCE_FILES
   cvMatUtils.cpp
   FrameViewer.cpp
   #StereoViewer.cpp
-  #CameraCalib.cpp
-  #StereoCalib.cpp
-  CalibLoader.cpp
   ImplicitDataEngine.cpp)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
