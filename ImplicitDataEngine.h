@@ -32,7 +32,6 @@ class ImplicitDataEngine : public core::DataEngine
  private:
   bool _bindData(core::objectmodel::BaseData* data, const std::string& alias)
   {
-    std::cout << "_bindData " << getName() << std::endl;
     const std::multimap<std::string, core::objectmodel::BaseData*>& dataMap =
         this->getDataAliases();
 
@@ -81,15 +80,15 @@ class ImplicitDataEngine : public core::DataEngine
 
         if (!isBinded)
         {
-          msg_error("BindData")
-              << "couldn't bind input implicitly. Link is broken";
+          msg_warning(getName() + "::bindInputData()")
+              << "couldn't bind input data " << data->getName() << " implicitly. Link is broken";
         }
         else
           addInput(data);
       }
       else
-        msg_error("BindData")
-            << "couldn't bind input implicitly. Link is broken";
+        msg_warning(getName() + "::bindInputData()")
+            << "couldn't bind input data " << data->getName() << " implicitly. Link is broken";
     }
     else
       addInput(data);
