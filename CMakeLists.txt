@@ -14,7 +14,8 @@ set(HEADER_FILES
   cvMatUtils.h
   FrameViewer.h
   #StereoViewer.h
-  ImplicitDataEngine.h)
+  ImplicitDataEngine.h
+  PCViewer.h)
 
 set(SOURCE_FILES
   initplugin.cpp
@@ -24,7 +25,8 @@ set(SOURCE_FILES
   cvMatUtils.cpp
   FrameViewer.cpp
   #StereoViewer.cpp
-  ImplicitDataEngine.cpp)
+  ImplicitDataEngine.cpp
+  PCViewer.cpp)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
