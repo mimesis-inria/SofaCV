@@ -34,25 +34,49 @@ void PCViewer::init()
 
 void PCViewer::update()
 {
-  if (!d_positions.isDirty()) return;
   updateAllInputsIfDirty();
   cleanDirty();
+
+  m_positions = d_positions.getValue();
   const helper::vector<Vec3b>& c = d_colors.getValue();
   m_colors.resize(c.size());
   for (size_t i = 0; i < c.size(); ++i)
-    m_colors[i].set(c[i][0] / 255.0f, c[i][1] / 255.0f, c[i][2] / 255.0f, 1.0f);
+    m_colors[i].set(c[i][2] / 255.0f, c[i][1] / 255.0f, c[i][0] / 255.0f, 1.0f);
+}
+
+void PCViewer::computeBBox(const core::ExecParams* params, bool)
+{
+  static const double max_double = std::numeric_limits<double>::max();
+
+  if (m_positions.size() == 0)
+  {
+    double maxBBox[3] = {1, 1, 1};
+    double minBBox[3] = {-1, -1, -1};
+    this->f_bbox.setValue(
+        params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
+    return;
+  }
+  double maxBBox[3] = {-max_double, -max_double, -max_double};
+  double minBBox[3] = {max_double, max_double, max_double};
+  double r = d_size.getValue();
+  for (const Vec3d& p : m_positions)
+    for (int i = 0; i < 3; ++i)
+    {
+      if (p[i] + r > maxBBox[i]) maxBBox[i] = p[i] + r;
+      if (p[i] - r < minBBox[i]) minBBox[i] = p[i] - r;
+    }
+  this->f_bbox.setValue(
+      params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
 void PCViewer::draw(const core::visual::VisualParams*)
 {
   core::visual::DrawToolGL dt;
-  if (d_positions.getValue().size() > m_colors.size())
-    dt.drawPoints(d_positions.getValue(), d_size.getValue(),
+  if (m_positions.size() != m_colors.size())
+    dt.drawPoints(m_positions, d_size.getValue(),
                   defaulttype::Vec4f(1.0f, 0.0f, 0.0f, 1.0f));
   else
-    dt.drawPoints(d_positions.getValue(), d_size.getValue(), m_colors);
-  dt.drawSpheres(d_positions.getValue(), d_size.getValue(),
-                 defaulttype::Vec4f(1.0f, 0.0f, 0.0f, 1.0f));
+    dt.drawPoints(m_positions, d_size.getValue(), m_colors);
 }
 
 void PCViewer::reinit() { update(); }

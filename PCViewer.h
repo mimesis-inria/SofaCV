@@ -25,6 +25,7 @@ class PCViewer : public ImplicitDataEngine
 
   void init();
   void update();
+  void computeBBox(const core::ExecParams*, bool);
   void draw(const core::visual::VisualParams*);
   void reinit();
 
@@ -35,6 +36,7 @@ class PCViewer : public ImplicitDataEngine
 
 private:
   std::vector<defaulttype::Vec4f> m_colors;
+  std::vector<Vec3d> m_positions;
 };
 
 }  // namespace common
