@@ -33,11 +33,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(SofaFramework REQUIRED)
 find_package(SofaGui REQUIRED)
 
-if (SOFAOR_ENABLE_IGTLINK)
-  find_package(OpenIGTLink REQUIRED)
-  include_directories(${OpenIGTLink_INCLUDE_DIRS})
-endif ()
-
+find_package(OpenIGTLink REQUIRED)
+include_directories(${OpenIGTLink_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} PUBLIC SofaCore SofaSimulationCommon SofaGuiQt SofaGuiCommon ${OpenIGTLink_LIBRARIES} ${OpenCV_LIBRARIES})
