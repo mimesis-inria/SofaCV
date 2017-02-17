@@ -27,16 +27,12 @@ PCViewer::PCViewer()
 PCViewer::~PCViewer() {}
 void PCViewer::init()
 {
-  bindInputData(&d_positions);
-  bindInputData(&d_colors);
-  setDirtyValue();
+  trackData(&d_positions);
+  trackData(&d_colors);
 }
 
 void PCViewer::update()
 {
-  updateAllInputsIfDirty();
-  cleanDirty();
-
   m_positions = d_positions.getValue();
   const helper::vector<Vec3b>& c = d_colors.getValue();
   m_colors.resize(c.size());

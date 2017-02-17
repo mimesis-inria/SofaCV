@@ -7,7 +7,9 @@
 
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>
+#include <sofa/core/objectmodel/IdleEvent.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
+#include <sofa/simulation/AnimateEndEvent.h>
 
 namespace sofa
 {
@@ -15,11 +17,50 @@ namespace OR
 {
 namespace common
 {
-class ImplicitDataEngine : public core::DataEngine
+/**
+ *  \brief from a set of Data inputs computes a set of Data outputs while hiding
+ * the data tracking mechanisms
+ *
+ * Implementation good rules:
+ *
+ * void init()
+ * {
+ *    bindInputData(&d_data); // indicate all inputs you want to bind
+ *
+ *    // add this line before bindInputData() if you want to
+ *    // force this data to be explicitely linked in the xml scene
+ *    if (d_data.isSet())
+ *      bindInputData(&d_optionalData);
+ *
+ *    // use this call to use a callback function
+ *    // called when the input is modified, just before update()
+ *    bindInputData(&d_data,
+ * (ImplicitDataEngine::DataCallback)&DerivedClass::func);
+ * }
+ *
+ * // optional (called each time a data is modified in the gui)
+ * // it is not always desired. You should use data callbacks instead
+ * void reinit()
+ * {
+ *   // perform some action
+ *   ImplicitDataEngine::reinit();
+ * }
+ *
+ * void update()
+ * {
+ *  // perform your general computations
+ * }
+ *
+ */
+class ImplicitDataEngine : public core::objectmodel::BaseObject
 {
  public:
-  SOFA_CLASS(ImplicitDataEngine, core::DataEngine);
+  typedef void (ImplicitDataEngine::*DataCallback)(
+      core::objectmodel::BaseData*);
+  SOFA_CLASS(ImplicitDataEngine, core::objectmodel::BaseObject);
 
+  /// Constructor. d_isLeft is only for stereo (L/R) data engines
+  /// (leave untouched otherwise)
   ImplicitDataEngine()
       : d_isLeft(initData(&d_isLeft, true, "left",
                           "set to true by default, allows for distinction "
@@ -29,79 +70,71 @@ class ImplicitDataEngine : public core::DataEngine
   {
   }
   virtual ~ImplicitDataEngine() {}
- private:
-  bool _bindData(core::objectmodel::BaseData* data, const std::string& alias)
+  virtual void init() {}
+  /// perform your general computations here
+  virtual void update() {}
+  /// Sets m_needsRefresh to true to propagate modifications to other engines
+  /// Override with an empty reinit to avoid idle refreshing (in DataGrabbers
+  /// for instance)
+  virtual void reinit()
   {
-    const std::multimap<std::string, core::objectmodel::BaseData*>& dataMap =
-        this->getDataAliases();
+    std::cout << "Propagating from " << getName() << std::endl;
+    core::objectmodel::IdleEvent ie;
+    this->getContext()->getRootContext()->propagateEvent(
+        core::ExecParams::defaultInstance(), &ie);
 
-    for (auto& d : dataMap)
-      if (d.first == alias)
-      {
-        data->setParent(d.second, "@" + this->getPathName() + "." + alias);
-        return true;
-      }
-    ImplicitDataEngine* engine = getPreviousEngineInGraph();
-    if (engine)
-      return engine->_bindData(data, alias);
-    else
-      return false;
-  }
-
-  ImplicitDataEngine* getPreviousEngineInGraph()
-  {
-    std::vector<ImplicitDataEngine*> engines;
-    getContext()->get<ImplicitDataEngine>(
-        &engines);
-    for (size_t i = 0; i < engines.size(); ++i)
-      if (engines[i]->getName() == getName())
-        return (i) ? (engines[i - 1]) : (NULL);
-    return NULL;
   }
 
  protected:
-  // to call instead of addInput(&data);
-  void bindInputData(core::objectmodel::BaseData* data)
-  {
-    if (!data->isSet())
-    {
-      ImplicitDataEngine* engine = getPreviousEngineInGraph();
-      if (engine)
-      {
-        bool isBinded = false;
-        if (d_isLeft.getValue())
-        {
-          isBinded = engine->_bindData(data, data->getName() + "1_out");
-          if (!isBinded)
-            isBinded = engine->_bindData(data, data->getName() + "_out");
-        }
-        else
-          isBinded = engine->_bindData(data, data->getName() + "2_out");
+  /// default callback function for bindInputData. BaseData is the dirty data,
+  /// ImplicitDataEngine is the data's owner
+  void defaultDataCallback(core::objectmodel::BaseData*) {}
+  /// Add a new input to this engine, and binds it to its parent if not set
+  /// through XML
+  void trackData(
+      core::objectmodel::BaseData* data, bool trackOnly = false,
+      DataCallback callback = &ImplicitDataEngine::defaultDataCallback);
 
-        if (!isBinded)
-        {
-          msg_warning(getName() + "::bindInputData()")
-              << "couldn't bind input data " << data->getName() << " implicitly. Link is broken";
-        }
-        else
-          addInput(data);
-      }
-      else
-        msg_warning(getName() + "::bindInputData()")
-            << "couldn't bind input data " << data->getName() << " implicitly. Link is broken";
-    }
-    else
-      addInput(data);
-  }
-
-  Data<bool> d_isLeft;
-
- protected:
-  void getInputFromContext() {}
+  /// default handleEvent behavior. Can be overloaded.
+  /// First checks for dirty data and call their respective callbacks
+  /// Then calls update
   virtual void handleEvent(sofa::core::objectmodel::Event* e)
   {
-    if (sofa::simulation::AnimateBeginEvent::checkEventType(e)) this->update();
+    if (sofa::core::objectmodel::IdleEvent::checkEventType(e))
+    {
+      std::cout << getName() << "idleEvent Propagated" << std::endl;
+      if (checkData())
+      {
+        cleanData();
+        update();
+      }
+    }
+    if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
+    {
+      if (checkData())
+      {
+        std::cout << getName() << " AnimateEvent" << std::endl;
+        cleanData();
+        update();
+      }
+    }
   }
+
+ public:
+  Data<bool> d_isLeft;
+
+protected:
+  bool checkData();
+  void cleanData();
+private:
+  void _trackData(core::objectmodel::BaseData* data, DataCallback callback);
+  bool _bindData(core::objectmodel::BaseData* data, const std::string& alias);
+  ImplicitDataEngine* getPreviousEngineInGraph();
+
+  typedef std::pair<core::DataTracker*, DataCallback> trackPair;
+  typedef std::pair<core::objectmodel::BaseData*, trackPair> trackedData;
+  std::map<core::objectmodel::BaseData*, trackPair> m_trackers;
+  DataCallback m_callback;
 };
 
 }  // namespace common

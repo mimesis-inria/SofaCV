@@ -30,14 +30,11 @@ FrameViewer::FrameViewer()
 FrameViewer::~FrameViewer() {}
 void FrameViewer::init()
 {
-  bindInputData(&d_frame);
-  d_frame.setDirtyValue();
+  trackData(&d_frame);
 }
 
 void FrameViewer::update()
 {
-  updateAllInputsIfDirty();
-  cleanDirty();
   std::cout << "Viewing" << std::endl;
   if (!d_frame.getValue().empty())
   {
