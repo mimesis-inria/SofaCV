@@ -6,6 +6,10 @@ namespace OR
 {
 namespace common
 {
+
+int ImplicitDataEngine::tagID = 0;
+
+
 bool ImplicitDataEngine::checkData()
 {
   bool hasDirtyValues = false;
@@ -17,7 +21,7 @@ bool ImplicitDataEngine::checkData()
     t.first->update();
     if (t.second.first->isDirty())
     {
-      std::cout << t.first->getName() << " is DIRTY" << std::endl;
+//      std::cout << t.first->getName() << " is DIRTY" << std::endl;
       m_callback = t.second.second;
       (this->*m_callback)(t.first);
       hasDirtyValues = true;
@@ -33,7 +37,7 @@ void ImplicitDataEngine::cleanData()
   {
     if (t.second.first->isDirty())
     {
-      std::cout << t.first->getName() << " CLEANING DIRT VALUE!!" << std::endl;
+//      std::cout << t.first->getName() << " CLEANING DIRT VALUE!!" << std::endl;
       t.second.first->clean();
     }
   }

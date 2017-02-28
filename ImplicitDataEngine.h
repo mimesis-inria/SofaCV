@@ -1,6 +1,8 @@
 #ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 #define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 
+#include "PropagateEventByTagVisitor.h"
+
 #include <SofaORCommon/cvDMatch.h>
 #include <SofaORCommon/cvKeypoint.h>
 #include <SofaORCommon/cvMat.h>
@@ -54,6 +56,8 @@ namespace common
  */
 class ImplicitDataEngine : public core::objectmodel::BaseObject
 {
+  static int tagID;
+
  public:
   typedef void (ImplicitDataEngine::*DataCallback)(
       core::objectmodel::BaseData*);
@@ -68,6 +72,7 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
                           "stereo data",
                           true, true))
   {
+    this->addTag(sofa::core::objectmodel::Tag(tagID++));
   }
   virtual ~ImplicitDataEngine() {}
   virtual void init() {}
@@ -80,9 +85,9 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   {
     std::cout << "Propagating from " << getName() << std::endl;
     core::objectmodel::IdleEvent ie;
-    this->getContext()->getRootContext()->propagateEvent(
+    simulation::PropagateEventByTagVisitor v(
         core::ExecParams::defaultInstance(), &ie);
-
+    this->getContext()->getRootContext()->executeVisitor(&v);
   }
 
  protected:
@@ -123,10 +128,11 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
  public:
   Data<bool> d_isLeft;
 
-protected:
+ protected:
   bool checkData();
   void cleanData();
-private:
+
+ private:
   void _trackData(core::objectmodel::BaseData* data, DataCallback callback);
   bool _bindData(core::objectmodel::BaseData* data, const std::string& alias);
   ImplicitDataEngine* getPreviousEngineInGraph();

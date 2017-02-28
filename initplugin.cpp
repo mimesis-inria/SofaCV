@@ -38,7 +38,7 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-  return "FrameViewer;PCViewer";
+  return "FrameViewer;PCViewer;SofaORAnimationLoop";
 }
 
 }  // namespace common
@@ -51,3 +51,4 @@ const char* getModuleComponentList()
 
 SOFA_LINK_CLASS(FrameViewer);
 SOFA_LINK_CLASS(PCViewer);
+SOFA_LINK_CLASS(SofaORAnimationLoop);

@@ -15,7 +15,9 @@ set(HEADER_FILES
   FrameViewer.h
   #StereoViewer.h
   ImplicitDataEngine.h
-  PCViewer.h)
+  PCViewer.h
+  PropagateEventByTagVisitor.h
+  SofaORAnimationLoop.h)
 
 set(SOURCE_FILES
   initplugin.cpp
@@ -26,7 +28,9 @@ set(SOURCE_FILES
   FrameViewer.cpp
   #StereoViewer.cpp
   ImplicitDataEngine.cpp
-  PCViewer.cpp)
+  PCViewer.cpp
+  PropagateEventByTagVisitor.cpp
+  SofaORAnimationLoop.cpp)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
