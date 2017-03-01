@@ -20,7 +20,7 @@ namespace simulation
 {
 
 /**
-Visitor used to propagate an event in the the data structure.
+Visitor used to propagate an event in the data structure.
 Propagation is done top-down until the event is handled.
 
     @author The SOFA team </www.sofa-framework.org>
@@ -33,6 +33,7 @@ public:
     ~PropagateEventByTagVisitor();
 
     Visitor::Result processNodeTopDown(simulation::Node* node);
+    void processNodeBottomUp(simulation::Node* node);
     void processObject(simulation::Node*, core::objectmodel::BaseObject* obj);
 
     virtual const char* getClassName() const { return "PropagateEventByTagVisitor"; }

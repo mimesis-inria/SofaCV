@@ -30,7 +30,7 @@ FrameViewer::FrameViewer()
 FrameViewer::~FrameViewer() {}
 void FrameViewer::init()
 {
-  trackData(&d_frame);
+  addInput(&d_frame);
 }
 
 void FrameViewer::update()
@@ -42,8 +42,6 @@ void FrameViewer::update()
     cv::waitKey(1);
   }
 }
-
-void FrameViewer::reinit() { update(); }
 
 }  // namespace common
 }  // namespace OR

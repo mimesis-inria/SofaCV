@@ -1,8 +1,6 @@
 #ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 #define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 
-#include "PropagateEventByTagVisitor.h"
-
 #include <SofaORCommon/cvDMatch.h>
 #include <SofaORCommon/cvKeypoint.h>
 #include <SofaORCommon/cvMat.h>
@@ -12,6 +10,7 @@
 #include <sofa/core/objectmodel/IdleEvent.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
 #include <sofa/simulation/AnimateEndEvent.h>
+#include <sofa/simulation/PropagateEventVisitor.h>
 
 namespace sofa
 {
@@ -72,10 +71,12 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
                           "stereo data",
                           true, true))
   {
-    this->addTag(sofa::core::objectmodel::Tag(tagID++));
+    //    this->addTag(sofa::core::objectmodel::Tag(tagID++));
   }
   virtual ~ImplicitDataEngine() {}
-  virtual void init() {}
+  virtual void init()
+  {
+  }
   /// perform your general computations here
   virtual void update() {}
   /// Sets m_needsRefresh to true to propagate modifications to other engines
@@ -83,10 +84,11 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   /// for instance)
   virtual void reinit()
   {
-    std::cout << "Propagating from " << getName() << std::endl;
+    update();
+    std::cout << std::endl << "Propagating from " << getName() << std::endl;
     core::objectmodel::IdleEvent ie;
-    simulation::PropagateEventByTagVisitor v(
-        core::ExecParams::defaultInstance(), &ie);
+    simulation::PropagateEventVisitor v(core::ExecParams::defaultInstance(),
+                                        &ie);
     this->getContext()->getRootContext()->executeVisitor(&v);
   }
 
@@ -96,9 +98,17 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   void defaultDataCallback(core::objectmodel::BaseData*) {}
   /// Add a new input to this engine, and binds it to its parent if not set
   /// through XML
-  void trackData(
+  void addInput(
       core::objectmodel::BaseData* data, bool trackOnly = false,
       DataCallback callback = &ImplicitDataEngine::defaultDataCallback);
+  void removeInput(core::objectmodel::BaseData* data);
+
+  void addDataCallback(core::objectmodel::BaseData* data,
+                       DataCallback callback);
+  void removeDataCallback(core::objectmodel::BaseData* data);
+
+  void addOutput(core::objectmodel::BaseData* data);
+  void removeOutput(core::objectmodel::BaseData* data);
 
   /// default handleEvent behavior. Can be overloaded.
   /// First checks for dirty data and call their respective callbacks
@@ -107,20 +117,18 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   {
     if (sofa::core::objectmodel::IdleEvent::checkEventType(e))
     {
-      std::cout << getName() << "idleEvent Propagated" << std::endl;
-      if (checkData())
+      if (checkInputs())
       {
-        cleanData();
         update();
+        clean();
       }
     }
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
-      if (checkData())
+      if (checkInputs())
       {
-        std::cout << getName() << " AnimateEvent" << std::endl;
-        cleanData();
         update();
+        clean();
       }
     }
   }
@@ -129,18 +137,23 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   Data<bool> d_isLeft;
 
  protected:
-  bool checkData();
-  void cleanData();
+  bool checkInputs();
+  void clean();
 
  private:
-  void _trackData(core::objectmodel::BaseData* data, DataCallback callback);
+  typedef std::pair<core::DataTracker*, DataCallback> trackPair;
+  typedef std::pair<core::objectmodel::BaseData*, trackPair> trackedData;
+  typedef std::map<core::objectmodel::BaseData*, trackPair> TrackMap;
+
+  void _trackData(core::objectmodel::BaseData* data, DataCallback callback,
+                  TrackMap& map);
   bool _bindData(core::objectmodel::BaseData* data, const std::string& alias);
   ImplicitDataEngine* getPreviousEngineInGraph();
 
-  typedef std::pair<core::DataTracker*, DataCallback> trackPair;
-  typedef std::pair<core::objectmodel::BaseData*, trackPair> trackedData;
-  std::map<core::objectmodel::BaseData*, trackPair> m_trackers;
+  TrackMap m_inputs;
+  TrackMap m_trackers;
   DataCallback m_callback;
+  std::map<core::objectmodel::BaseData*, core::DataTracker*> m_outputs;
 };
 
 }  // namespace common

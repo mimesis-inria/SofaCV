@@ -27,8 +27,8 @@ PCViewer::PCViewer()
 PCViewer::~PCViewer() {}
 void PCViewer::init()
 {
-  trackData(&d_positions);
-  trackData(&d_colors);
+  addInput(&d_positions);
+  addInput(&d_colors);
 }
 
 void PCViewer::update()

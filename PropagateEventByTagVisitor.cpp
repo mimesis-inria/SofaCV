@@ -24,20 +24,32 @@ bool compareEnginesByTag(sofa::OR::common::ImplicitDataEngine* e1, sofa::OR::com
     return (t1 < t2);
 }
 
+void PropagateEventByTagVisitor::processNodeBottomUp(simulation::Node* node)
+{
+    for_each(this, node, node->object, &PropagateEventByTagVisitor::processObject);
+}
+
 Visitor::Result PropagateEventByTagVisitor::processNodeTopDown(simulation::Node* node)
 {
-    std::vector<sofa::OR::common::ImplicitDataEngine*> engines;
-    node->getTreeObjects<sofa::OR::common::ImplicitDataEngine>(&engines);
-
-    std::sort(engines.begin(), engines.end(), &compareEnginesByTag);
-
-    for (sofa::OR::common::ImplicitDataEngine* engine : engines)
-        this->processObject(node, engine);
+    for_each(this, node, node->object, &PropagateEventByTagVisitor::processObject);
 
     if( m_event->isHandled() )
         return Visitor::RESULT_PRUNE;
     else
         return Visitor::RESULT_CONTINUE;
+
+    //    std::vector<sofa::OR::common::ImplicitDataEngine*> engines;
+//    node->getTreeObjects<sofa::OR::common::ImplicitDataEngine>(&engines);
+
+//    std::sort(engines.begin(), engines.end(), &compareEnginesByTag);
+
+//    for (sofa::OR::common::ImplicitDataEngine* engine : engines)
+//        this->processObject(node, engine);
+
+//    if( m_event->isHandled() )
+//        return Visitor::RESULT_PRUNE;
+//    else
+//        return Visitor::RESULT_CONTINUE;
 }
 
 void PropagateEventByTagVisitor::processObject(simulation::Node*, core::objectmodel::BaseObject* obj)

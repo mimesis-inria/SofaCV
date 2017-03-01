@@ -26,7 +26,6 @@ class FrameViewer: public ImplicitDataEngine
 
   void init();
   void update();
-  void reinit();
 
   sofa::Data<common::cvMat> d_frame;
   std::string m_winID;
