@@ -101,8 +101,7 @@ void ImplicitDataEngine::_trackData(core::objectmodel::BaseData* data,
 {
   core::DataTracker* tracker = new core::DataTracker();
   tracker->trackData(*data);
-  data->cleanDirty();
-  tracker->clean();
+  data->setDirtyValue();
   map.insert(trackedData(data, trackPair(tracker, callback)));
 }
 
