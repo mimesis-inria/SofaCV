@@ -62,7 +62,6 @@ void ImplicitDataEngine::clean()
     {
       p.second->clean();
       p.first->setDirtyValue();
-      std::cout << p.first->getName() << std::endl;
     }
   }
 }

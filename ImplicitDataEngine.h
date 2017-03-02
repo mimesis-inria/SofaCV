@@ -71,7 +71,7 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
                           "stereo data",
                           true, true))
   {
-    //    this->addTag(sofa::core::objectmodel::Tag(tagID++));
+      f_listening.setValue(true);
   }
   virtual ~ImplicitDataEngine() {}
   virtual void init()
