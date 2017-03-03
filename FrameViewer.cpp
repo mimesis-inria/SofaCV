@@ -23,22 +23,26 @@ FrameViewer::FrameViewer()
   static int i = 0;
   m_winID = std::string("FrameViewer");
   m_winID += std::to_string(i);
-  cv::namedWindow(m_winID, CV_WINDOW_AUTOSIZE);
+  cv::namedWindow(m_winID, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO | CV_GUI_EXPANDED);
   i++;
 }
 
 FrameViewer::~FrameViewer() {}
-void FrameViewer::init()
-{
-  addInput(&d_frame);
-}
-
+void FrameViewer::init() { addInput(&d_frame); }
 void FrameViewer::update()
 {
+  cv::Mat img = d_frame.getValue();
   std::cout << "Viewing" << std::endl;
   if (!d_frame.getValue().empty())
   {
-    cv::imshow(m_winID, d_frame.getValue());
+    if (d_frame.getValue().type() == CV_32FC1)
+    {
+      msg_warning("FrameViewer::update()")
+          << "CV_32F matrices will be normalized into a CV_8U matrix. Consider "
+             "converting first to optimize performances";
+      cv::normalize(d_frame.getValue(), img, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+    }
+    cv::imshow(m_winID, img);
     cv::waitKey(1);
   }
 }
