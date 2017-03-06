@@ -69,25 +69,23 @@ void PCViewer::computeBBox(const core::ExecParams* params, bool)
 
 void PCViewer::draw(const core::visual::VisualParams*)
 {
-    glPointSize(d_size.getValue());
-    glDisable(GL_LIGHTING);
-    glBegin(GL_POINTS);
-    for (size_t i = 0 ; i < m_positions.size() ; ++i)
-    {
-        glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-        glVertex3f(m_positions[i].x(), m_positions[i].y(), m_positions[i].z());
-    }
-    glEnd();
-    glPointSize(1);
+	glPointSize(d_size.getValue());
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POINTS);
+	for (size_t i = 0; i < m_positions.size(); ++i)
+	{
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		glVertex3f(m_positions[i].x(), m_positions[i].y(), m_positions[i].z());
+	}
+	glEnd();
+	glPointSize(1);
 
-//  core::visual::DrawToolGL dt;
-//  if (m_positions.size() != m_colors.size())
-//    dt.drawPoints(m_positions, d_size.getValue(),
-//                  defaulttype::Vec4f(1.0f, 0.0f, 0.0f, 1.0f));
-//  else
-//    dt.drawPoints(m_positions, d_size.getValue(), m_colors);
-
-
+	//  core::visual::DrawToolGL dt;
+	//  if (m_positions.size() != m_colors.size())
+	//    dt.drawPoints(m_positions, d_size.getValue(),
+	//                  defaulttype::Vec4f(1.0f, 0.0f, 0.0f, 1.0f));
+	//  else
+	//    dt.drawPoints(m_positions, d_size.getValue(), m_colors);
 }
 
 void PCViewer::reinit() { update(); }
