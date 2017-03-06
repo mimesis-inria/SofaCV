@@ -8,24 +8,29 @@ namespace common
 {
 int ImplicitDataEngine::tagID = 0;
 
+void ImplicitDataEngine::checkData()
+{
+	// Calling callbacks of all dirty data registered with "addDataCallback" and
+	// cleaning them too
+	for (std::map<core::objectmodel::BaseData*, trackPair>::value_type& t :
+			 m_trackers)
+	{
+		t.first->updateIfDirty();
+		if (t.second.first->isDirty())
+		{
+			m_callback = t.second.second;
+			(this->*m_callback)(t.first);
+			t.first->cleanDirty();
+			t.second.first->clean();
+		}
+	}
+}
+
 bool ImplicitDataEngine::checkInputs()
 {
   bool hasDirtyValues = false;
 
-  // Calling callbacks of all dirty data registered with "addDataCallback" and
-  // cleaning them too
-  for (std::map<core::objectmodel::BaseData*, trackPair>::value_type& t :
-       m_trackers)
-  {
-    t.first->updateIfDirty();
-    if (t.second.first->isDirty())
-    {
-      m_callback = t.second.second;
-      (this->*m_callback)(t.first);
-      t.first->cleanDirty();
-      t.second.first->clean();
-    }
-  }
+	checkData();
 
   // Calling callbacks of all dirty inputs registered with "addInput" returning
   // true if any of the inputs is dirty

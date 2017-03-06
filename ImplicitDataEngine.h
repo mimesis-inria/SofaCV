@@ -138,7 +138,8 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
 
  protected:
   bool checkInputs();
-  void clean();
+	void checkData();
+	void clean();
 
  private:
   typedef std::pair<core::DataTracker*, DataCallback> trackPair;

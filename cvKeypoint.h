@@ -1,6 +1,8 @@
 #ifndef SOFA_OR_COMMON_CVKEYPOINT_H
 #define SOFA_OR_COMMON_CVKEYPOINT_H
 
+//#include "DataTypes.h"
+
 #include <iostream>
 #include <opencv2/core.hpp>
 
@@ -10,6 +12,7 @@ namespace OR
 {
 namespace common
 {
+
 class cvKeypoint : public cv::KeyPoint
 {
  public:
@@ -43,6 +46,13 @@ class cvKeypoint : public cv::KeyPoint
     return out;
   }
 };
+
+//template<>
+//struct cvKeypointTypeInfo< cvKeypoint > : public ConversionTypeInfo< cvKeypoint >
+//{
+//		static std::string name() { return "cvKeypoint"; }
+//};
+
 
 }  // namespace common
 }  // namespace OR
