@@ -15,8 +15,7 @@ set(HEADER_FILES
   FrameViewer.h
   #StereoViewer.h
   ImplicitDataEngine.h
-  PCViewer.h
-  DataTypes.h)
+  PCViewer.h)
 
 set(SOURCE_FILES
   initplugin.cpp

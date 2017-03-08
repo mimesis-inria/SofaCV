@@ -1,8 +1,7 @@
 #ifndef SOFA_OR_COMMON_CVDMATCH_H
 #define SOFA_OR_COMMON_CVDMATCH_H
 
-#include "DataTypes.h"
-
+#include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
 #include <opencv2/core/types.hpp>
 
@@ -58,8 +57,7 @@ class cvDMatch : public cv::DMatch
 namespace defaulttype
 {
 template <>
-struct DataTypeInfo<OR::common::cvDMatch>
-		: public NonScalarTypeInfo<OR::common::cvDMatch>
+struct DataTypeName<OR::common::cvDMatch>
 {
 	static const char* name() { return "cvDMatch"; }
 };

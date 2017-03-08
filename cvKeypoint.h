@@ -1,7 +1,7 @@
 #ifndef SOFA_OR_COMMON_CVKEYPOINT_H
 #define SOFA_OR_COMMON_CVKEYPOINT_H
 
-#include "DataTypes.h"
+#include <sofa/defaulttype/DataTypeInfo.h>
 
 #include <opencv2/core.hpp>
 
@@ -54,8 +54,7 @@ class cvKeypoint : public cv::KeyPoint
 namespace defaulttype
 {
 template <>
-struct DataTypeInfo<OR::common::cvKeypoint>
-		: public NonScalarTypeInfo<OR::common::cvKeypoint>
+struct DataTypeName<OR::common::cvKeypoint>
 {
 	static const char* name() { return "cvKeypoint"; }
 };
