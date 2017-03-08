@@ -1,51 +1,107 @@
-//#ifndef SOFA_OR_COMMON_DATATYPES_H
-//#define SOFA_OR_COMMON_DATATYPES_H
+#ifndef SOFA_OR_COMMON_DATATYPES_H
+#define SOFA_OR_COMMON_DATATYPES_H
 
-//#include <sofa/defaulttype/DataTypeInfo.h>
+#include <sofa/defaulttype/DataTypeInfo.h>
 
-//namespace sofa
-//{
-//namespace OR
-//{
-//namespace common
-//{
+namespace sofa
+{
+namespace defaulttype
+{
+template <class TDataType>
+struct NonScalarTypeInfo
+{
+	typedef TDataType DataType;
+	typedef DataType BaseType;
+	typedef DataType ValueType;
+	typedef long long ConvType;
+	typedef NonScalarTypeInfo<TDataType> BaseTypeInfo;
+	typedef NonScalarTypeInfo<TDataType> ValueTypeInfo;
 
-//template <class TSrcType, class TDstType>
-//struct ConversionType
-//{
-//  typedef TSrcType SrcType;
-//  typedef TDstType DstType;
-//  static const char* Name() { return "unknown"; }
-//};
+	enum
+	{
+		ValidInfo = 1
+	};
+	enum
+	{
+		FixedSize = 1
+	};
+	enum
+	{
+		ZeroConstructor = 1
+	};
+	enum
+	{
+		SimpleCopy = 1
+	};
+	enum
+	{
+		SimpleLayout = 1
+	};
+	enum
+	{
+		Integer = 0
+	};
+	enum
+	{
+		Scalar = 1
+	};
+	enum
+	{
+		Text = 0
+	};
+	enum
+	{
+		CopyOnWrite = 1
+	};
+	enum
+	{
+		Container = 0
+	};
 
-//typedef ConversionType<common::cvKeypoint, defaulttype::Vec2i> cvKeypoint2Vec2i;
-//template <>
-//inline const char* cvKeypoint2Sofa::Name()
-//{
-//  return "cvKeypoint2Sofa";
-//}
+	enum
+	{
+		Size = 1
+	};
+	static size_t size() { return 1; }
+	static size_t byteSize() { return sizeof(DataType); }
+	static size_t size(const DataType& /*data*/) { return 1; }
+	static bool setSize(DataType& /*data*/, size_t /*size*/) { return false; }
+	template <typename T>
+	static void getValue(const DataType& /*data*/, size_t /*index*/, T& /*value*/)
+	{
+		//				if (index != 0) return;
+		//				value = (T)data;
+	}
 
-//typedef ConversionType<defaulttype::Vec2i, common::cvKeypoint> Vec2i2cvKeypoint;
-//template <>
-//inline const char* Sofa2cvKeypoint::Name()
-//{
-//  return "Sofa2cvKeypoint";
-//}
+	template <typename T>
+	static void setValue(DataType& /*data*/, size_t /*index*/, const T& /*value*/)
+	{
+		//				if (index != 0) return;
+		//				data = (DataType)value;
+	}
 
-//template <class ConversionType>
-//  struct ConversionTypeInfo : public VirtualTypeInfo<ConversionType>
-//{
-//  static std::string name()
-//  {
-//    std::ostringstream o;
-//    o << "ConversionType<" << ConversionType::SrcType::name() << "," << ConversionType::SrcType::name() << ">";
-//    return o.str();
-//  }
-//};
+	static void getValueString(const DataType& data, size_t index,
+														 std::string& value)
+	{
+		if (index != 0) return;
+		std::ostringstream o;
+		o << data;
+		value = o.str();
+	}
 
-//} // namespace common
-//} // namespace OR
-//} // namespace sofa
+	static void setValueString(DataType& data, size_t index,
+														 const std::string& value)
+	{
+		if (index != 0) return;
+		std::istringstream i(value);
+		i >> data;
+	}
 
- 
-//#endif SOFA_OR_COMMON_DATATYPES_H
+	static const void* getValuePtr(const DataType& data) { return &data; }
+	static void* getValuePtr(DataType& data) { return &data; }
+};
+
+}  // namespace defaulttype
+}  // namespace sofa
+
+#endif  // SOFA_OR_COMMON_DATATYPES_H

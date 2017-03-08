@@ -1,10 +1,11 @@
 #ifndef SOFA_OR_COMMON_CVKEYPOINT_H
 #define SOFA_OR_COMMON_CVKEYPOINT_H
 
-//#include "DataTypes.h"
+#include "DataTypes.h"
+
+#include <opencv2/core.hpp>
 
 #include <iostream>
-#include <opencv2/core.hpp>
 
 namespace sofa
 {
@@ -12,11 +13,10 @@ namespace OR
 {
 namespace common
 {
-
 class cvKeypoint : public cv::KeyPoint
 {
  public:
-  cvKeypoint(const cv::KeyPoint &kp)
+	cvKeypoint(const cv::KeyPoint& kp)
       : cv::KeyPoint(kp.pt, kp.size, kp.angle, kp.response, kp.octave,
                      kp.class_id)
   {
@@ -33,29 +33,35 @@ class cvKeypoint : public cv::KeyPoint
   {
   }
 
-  inline friend std::istream &operator>>(std::istream &in, cvKeypoint &s)
+	inline friend std::istream& operator>>(std::istream& in, cvKeypoint& s)
   {
-    in >> s.pt.x >> s.pt.y >> s.size >> s.angle >> s.response >> s.octave >> s.class_id;
+		in >> s.pt.x >> s.pt.y >> s.size >> s.angle >> s.response >> s.octave >>
+				s.class_id;
     return in;
   }
 
-  inline friend std::ostream &operator<<(std::ostream &out, const cvKeypoint &s)
+	inline friend std::ostream& operator<<(std::ostream& out, const cvKeypoint& s)
   {
-    out << s.pt.x << ' ' << s.pt.y << ' ' << s.size << ' ' << s.angle
-        << ' ' << s.response << ' ' << s.octave << ' ' << s.class_id << ' ';
+		out << s.pt.x << ' ' << s.pt.y << ' ' << s.size << ' ' << s.angle << ' '
+				<< s.response << ' ' << s.octave << ' ' << s.class_id << ' ';
     return out;
   }
 };
 
-//template<>
-//struct cvKeypointTypeInfo< cvKeypoint > : public ConversionTypeInfo< cvKeypoint >
-//{
-//		static std::string name() { return "cvKeypoint"; }
-//};
-
-
 }  // namespace common
 }  // namespace OR
+
+namespace defaulttype
+{
+template <>
+struct DataTypeInfo<OR::common::cvKeypoint>
+		: public NonScalarTypeInfo<OR::common::cvKeypoint>
+{
+	static const char* name() { return "cvKeypoint"; }
+};
+
+}  // namespace defaulttype
+
 }  // namespace sofa
 
 #endif  // SOFA_OR_COMMON_CVKEYPOINT_H

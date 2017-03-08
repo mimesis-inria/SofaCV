@@ -1,6 +1,8 @@
 #ifndef SOFA_OR_COMMON_CVMAT_H
 #define SOFA_OR_COMMON_CVMAT_H
 
+#include "DataTypes.h"
+
 #include <iostream>
 #include <opencv2/core.hpp>
 
@@ -70,6 +72,18 @@ class cvMat : public cv::Mat
 
 }  // namespace common
 }  // namespace OR
+
+namespace defaulttype
+{
+template <>
+struct DataTypeInfo<OR::common::cvMat>
+		: public NonScalarTypeInfo<OR::common::cvMat>
+{
+	static const char* name() { return "cvMat"; }
+};
+
+}  // namespace defaulttype
+
 }  // namespace sofa
 
 #endif  // SOFA_OR_COMMON_CVMAT_H
