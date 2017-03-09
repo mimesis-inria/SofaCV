@@ -113,21 +113,12 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
   /// Then calls update
   virtual void handleEvent(sofa::core::objectmodel::Event* e)
   {
-    if (sofa::core::objectmodel::IdleEvent::checkEventType(e))
-    {
-      if (checkInputs())
-      {
-        update();
-        clean();
-      }
-    }
-    if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
-    {
-      if (checkInputs())
-      {
-        update();
-        clean();
-      }
+		if ((sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
+				 sofa::simulation::AnimateBeginEvent::checkEventType(e)) &&
+				checkInputs())
+		{
+			update();
+			clean();
     }
   }
 
