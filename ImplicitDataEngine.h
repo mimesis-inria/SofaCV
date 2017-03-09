@@ -71,12 +71,10 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
                           "stereo data",
                           true, true))
   {
-      f_listening.setValue(true);
+		f_listening.setValue(true);
   }
   virtual ~ImplicitDataEngine() {}
-  virtual void init()
-  {
-  }
+	virtual void init() {}
   /// perform your general computations here
   virtual void update() {}
   /// Sets m_needsRefresh to true to propagate modifications to other engines
@@ -143,8 +141,8 @@ class ImplicitDataEngine : public core::objectmodel::BaseObject
 
  private:
   typedef std::pair<core::DataTracker*, DataCallback> trackPair;
-  typedef std::pair<core::objectmodel::BaseData*, trackPair> trackedData;
-  typedef std::map<core::objectmodel::BaseData*, trackPair> TrackMap;
+	typedef std::pair<core::objectmodel::BaseData*, trackPair*> trackedData;
+	typedef std::map<core::objectmodel::BaseData*, trackPair*> TrackMap;
 
   void _trackData(core::objectmodel::BaseData* data, DataCallback callback,
                   TrackMap& map);

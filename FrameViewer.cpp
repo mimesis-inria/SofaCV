@@ -23,7 +23,8 @@ FrameViewer::FrameViewer()
   static int i = 0;
   m_winID = std::string("FrameViewer");
   m_winID += std::to_string(i);
-  cv::namedWindow(m_winID, CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO | CV_GUI_EXPANDED);
+	cv::namedWindow(m_winID,
+									CV_WINDOW_NORMAL | CV_WINDOW_KEEPRATIO | CV_GUI_EXPANDED);
   i++;
 }
 
@@ -43,6 +44,7 @@ void FrameViewer::update()
       cv::normalize(d_frame.getValue(), img, 0, 255, cv::NORM_MINMAX, CV_8UC1);
     }
     cv::imshow(m_winID, img);
+		std::cout << "frameviewer" << std::endl;
     cv::waitKey(1);
   }
 }

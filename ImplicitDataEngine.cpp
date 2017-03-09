@@ -12,16 +12,16 @@ void ImplicitDataEngine::checkData()
 {
 	// Calling callbacks of all dirty data registered with "addDataCallback" and
 	// cleaning them too
-	for (std::map<core::objectmodel::BaseData*, trackPair>::value_type& t :
+	for (std::map<core::objectmodel::BaseData*, trackPair*>::value_type& t :
 			 m_trackers)
 	{
 		t.first->updateIfDirty();
-		if (t.second.first->isDirty())
+		if (t.second->first->isDirty())
 		{
-			m_callback = t.second.second;
+			m_callback = t.second->second;
 			(this->*m_callback)(t.first);
 			t.first->cleanDirty();
-			t.second.first->clean();
+			t.second->first->clean();
 		}
 	}
 }
@@ -34,13 +34,13 @@ bool ImplicitDataEngine::checkInputs()
 
   // Calling callbacks of all dirty inputs registered with "addInput" returning
   // true if any of the inputs is dirty
-  for (std::map<core::objectmodel::BaseData*, trackPair>::value_type& t :
+	for (std::map<core::objectmodel::BaseData*, trackPair*>::value_type& t :
        m_inputs)
   {
     t.first->updateIfDirty();
-    if (t.second.first->isDirty())
+		if (t.second->first->isDirty())
     {
-      m_callback = t.second.second;
+			m_callback = t.second->second;
       (this->*m_callback)(t.first);
       hasDirtyValues = true;
     }
@@ -51,11 +51,11 @@ bool ImplicitDataEngine::checkInputs()
 void ImplicitDataEngine::clean()
 {
   // Cleaning all inputs
-  for (std::map<core::objectmodel::BaseData*, trackPair>::value_type& t :
+	for (std::map<core::objectmodel::BaseData*, trackPair*>::value_type& t :
        m_inputs)
   {
-    t.first->cleanDirty();
-    t.second.first->clean();
+		t.first->cleanDirty();
+		t.second->first->clean();
   }
   // Setting modified output values to dirty.
   // TODO: Only set dirtyValue if the output was changed from within, so that
@@ -106,7 +106,7 @@ void ImplicitDataEngine::_trackData(core::objectmodel::BaseData* data,
   core::DataTracker* tracker = new core::DataTracker();
   tracker->trackData(*data);
   data->setDirtyValue();
-  map.insert(trackedData(data, trackPair(tracker, callback)));
+	map.insert(trackedData(data, new trackPair(tracker, callback)));
 }
 
 void ImplicitDataEngine::addDataCallback(core::objectmodel::BaseData* data,
@@ -153,6 +153,7 @@ void ImplicitDataEngine::addInput(core::objectmodel::BaseData* data,
 
 void ImplicitDataEngine::addOutput(core::objectmodel::BaseData* data)
 {
+	if (m_inputs.find(data) != m_inputs.end()) return;
   core::DataTracker* tracker = new core::DataTracker();
   tracker->trackData(*data);
   data->cleanDirty();
@@ -162,16 +163,19 @@ void ImplicitDataEngine::addOutput(core::objectmodel::BaseData* data)
 
 void ImplicitDataEngine::removeInput(core::objectmodel::BaseData* data)
 {
-  m_inputs.erase(m_inputs.find(data));
+	if (m_inputs.find(data) != m_inputs.end())
+		m_inputs.erase(m_inputs.find(data));
 }
 void ImplicitDataEngine::removeOutput(core::objectmodel::BaseData* data)
 {
-  m_outputs.erase(m_outputs.find(data));
+	if (m_outputs.find(data) != m_outputs.end())
+		m_outputs.erase(m_outputs.find(data));
 }
 
 void ImplicitDataEngine::removeDataCallback(core::objectmodel::BaseData* data)
 {
-  m_trackers.erase(m_trackers.find(data));
+	if (m_outputs.find(data) != m_outputs.end())
+		m_trackers.erase(m_trackers.find(data));
 }
 
 }  // namespace common
