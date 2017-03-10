@@ -20,7 +20,7 @@ int PCViewerClass =
 PCViewer::PCViewer()
     : d_size(initData(&d_size, 1.0f, "size", "point size")),
       d_positions(
-          initData(&d_positions, "positions", "point cloud's positions")),
+					initData(&d_positions, "points", "point cloud's positions")),
       d_colors(initData(&d_colors, "colors", "point cloud's point colors"))
 {
   f_listening.setValue(true);

@@ -98,13 +98,13 @@ void FrameViewer::perspectiveDraw()
 	glTexCoord2f(0, 1);
 
 	glTexCoord2f(0, 1);
-	glVertex3f(-m_x0, -m_y0, 0.002);
-	glTexCoord2f(1, 1);
-	glVertex3f(m_x0, -m_y0, 0.002);
-	glTexCoord2f(1, 0);
-	glVertex3f(m_x0, m_y0, 0.002);
-	glTexCoord2f(0, 0);
 	glVertex3f(-m_x0, m_y0, 0.002);
+	glTexCoord2f(1, 1);
+	glVertex3f(m_x0, m_y0, 0.002);
+	glTexCoord2f(1, 0);
+	glVertex3f(m_x0, -m_y0, 0.002);
+	glTexCoord2f(0, 0);
+	glVertex3f(-m_x0, -m_y0, 0.002);
 	glEnd();
 
 	// glEnable(GL_DEPTH_TEST);
