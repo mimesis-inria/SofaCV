@@ -174,7 +174,7 @@ void ImplicitDataEngine::removeOutput(core::objectmodel::BaseData* data)
 
 void ImplicitDataEngine::removeDataCallback(core::objectmodel::BaseData* data)
 {
-	if (m_outputs.find(data) != m_outputs.end())
+	if (m_trackers.find(data) != m_trackers.end())
 		m_trackers.erase(m_trackers.find(data));
 }
 
