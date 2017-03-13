@@ -7,7 +7,8 @@
 #include "SofaORCommon/ImplicitDataEngine.h"
 
 #include <sofa/helper/OptionsGroup.h>
-#include <sofa/core/visual/VisualManager.h>
+#include <SofaBaseVisual/VisualModelImpl.h>
+#include <sofa/helper/Quater.h>
 
 #include <opencv2/opencv.hpp>
 
@@ -17,7 +18,7 @@ namespace OR
 {
 namespace common
 {
-class FrameViewer : public ImplicitDataEngine
+class FrameViewer : virtual public ImplicitDataEngine
 {
  public:
 	SOFA_CLASS(FrameViewer, ImplicitDataEngine);
@@ -26,21 +27,34 @@ class FrameViewer : public ImplicitDataEngine
   FrameViewer();
   virtual ~FrameViewer();
 
-  void init();
+	void init();
   void update();
 	void draw(const core::visual::VisualParams *);
 	void computeBBox(const core::ExecParams* params, bool);
 
-  sofa::Data<common::cvMat> d_frame;
-	sofa::Data<float> d_scale;
-	sofa::Data<helper::OptionsGroup> d_mode;
+	Data<common::cvMat> d_frame;
+	Data<defaulttype::Vec3f> d_translation;
+	Data<defaulttype::Vec3f> d_rotation;
+	Data<float> d_scale;
+	Data<helper::OptionsGroup> d_mode;
 	std::string m_winID;
 
 private:
-	float m_x0, m_y0;
+	float x0, y0;
+	helper::vector<defaulttype::Vec3f> m_vecCoord;
 
 	void perspectiveDraw();
 	void orthoDraw();
+
+	void applyTranslation(const float dx, const float dy, const float dz);
+
+	void applyRotation (const float rx, const float ry, const float rz);
+
+	void applyRotation(const sofa::defaulttype::Quat q);
+
+	void applyScale(const float sx, const float sy, const float sz);
+
+
 };
 
 }  // namespace common
