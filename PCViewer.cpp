@@ -31,6 +31,7 @@ void PCViewer::init()
 {
   addInput(&d_positions);
   addInput(&d_colors);
+	update();
 }
 
 void PCViewer::update()
