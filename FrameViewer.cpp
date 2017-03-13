@@ -54,16 +54,14 @@ void FrameViewer::init()
 void FrameViewer::update()
 {
 	// retrieve new image, and, give the new dimensions, reapply scale
-	float _x0 = (float)d_frame.getValue().cols / 2;
-	float _y0 = (float)d_frame.getValue().rows / 2;
+	x0 = (float)d_frame.getValue().cols;
+	y0 = (float)d_frame.getValue().rows;
 
-	x0 = _x0;
-	y0 = _y0;
 	m_vecCoord.clear();
-	m_vecCoord.push_back(defaulttype::Vec3f(-x0, y0, .0f));
+	m_vecCoord.push_back(defaulttype::Vec3f(0, y0, .0f));
 	m_vecCoord.push_back(defaulttype::Vec3f(x0, y0, .0f));
-	m_vecCoord.push_back(defaulttype::Vec3f(x0, -y0, .0f));
-	m_vecCoord.push_back(defaulttype::Vec3f(-x0, -y0, .0f));
+	m_vecCoord.push_back(defaulttype::Vec3f(x0, 0, .0f));
+	m_vecCoord.push_back(defaulttype::Vec3f(0, 0, .0f));
 
 	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
 	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
