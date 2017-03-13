@@ -64,10 +64,10 @@ void FrameViewer::update()
 	m_vecCoord.push_back(defaulttype::Vec3f(0, 0, .0f));
 
 	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
-	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
-			d_translation.getValue()[2]);
 	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
 			d_rotation.getValue()[2]);
+	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
+			d_translation.getValue()[2]);
 }
 
 void FrameViewer::perspectiveDraw()
