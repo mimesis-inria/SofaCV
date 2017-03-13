@@ -65,11 +65,11 @@ void FrameViewer::update()
 	m_vecCoord.push_back(defaulttype::Vec3f(x0, -y0, .0f));
 	m_vecCoord.push_back(defaulttype::Vec3f(-x0, -y0, .0f));
 
-	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
-			d_rotation.getValue()[2]);
+	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
 	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
 			d_translation.getValue()[2]);
-	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
+	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
+			d_rotation.getValue()[2]);
 }
 
 void FrameViewer::perspectiveDraw()
