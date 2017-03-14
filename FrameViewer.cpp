@@ -92,8 +92,12 @@ void FrameViewer::perspectiveDraw()
 	//		float eps = 0.0;
 	//		float z0 = 0.0;
 
-	glBegin(GL_QUADS);  // we draw a quad on the entire screen (0,1 - 1,1 - 1,0
-											// - 0,0)
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthMask(GL_FALSE);
+
+	glBegin(GL_QUADS);
+
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 
 	glTexCoord2f(0, 1);
@@ -112,6 +116,8 @@ void FrameViewer::perspectiveDraw()
 	glEnable(GL_LIGHTING);     // enable light
 	glDisable(GL_TEXTURE_2D);  // disable texture 2D
 														 // glDepthMask (GL_TRUE);		// enable zBuffer
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
 }
 
 void FrameViewer::orthoDraw()
@@ -131,7 +137,7 @@ void FrameViewer::orthoDraw()
 	// BACKGROUND TEXTURING
 	// glDepthMask (GL_FALSE);		// disable the writing of
 	// zBuffer
-	glDisable(GL_DEPTH_TEST);
+//	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);  // enable the texture
 	glDisable(GL_LIGHTING);   // disable the light
 
@@ -146,7 +152,12 @@ void FrameViewer::orthoDraw()
 	// BACKGROUND DRAWING
 	// glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthMask(GL_FALSE);
+
 	glBegin(GL_QUADS);  // we draw a quad on the entire screen (0,0 1,0 1,1 0,1)
+
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
@@ -161,8 +172,10 @@ void FrameViewer::orthoDraw()
 	// glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);     // enable light
 	glDisable(GL_TEXTURE_2D);  // disable texture 2D
-	glEnable(GL_DEPTH_TEST);
-	// glDepthMask (GL_TRUE);		// enable zBuffer
+
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+
 
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
