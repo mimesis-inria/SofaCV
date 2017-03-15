@@ -46,7 +46,7 @@ void FrameViewer::init()
 	update();
 }
 
-//void FrameViewer::reinit()
+// void FrameViewer::reinit()
 //{
 //	update();
 //}
@@ -65,9 +65,9 @@ void FrameViewer::update()
 
 	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
 	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
-			d_rotation.getValue()[2]);
+								d_rotation.getValue()[2]);
 	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
-			d_translation.getValue()[2]);
+									 d_translation.getValue()[2]);
 }
 
 void FrameViewer::perspectiveDraw()
@@ -134,10 +134,6 @@ void FrameViewer::orthoDraw()
 	glPushMatrix();
 	glLoadIdentity();
 
-	// BACKGROUND TEXTURING
-	// glDepthMask (GL_FALSE);		// disable the writing of
-	// zBuffer
-//	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);  // enable the texture
 	glDisable(GL_LIGHTING);   // disable the light
 
@@ -145,20 +141,22 @@ void FrameViewer::orthoDraw()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, d_frame.getValue().cols,
 							 d_frame.getValue().rows, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE,
 							 imageString.str().c_str());
+	// glTexImage2D (GL_TEXTURE_2D, 0, GL_LUMINANCE, m_imageWidth,
+	// m_imageHeight, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, m_imgData.c_str() );
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 									GL_LINEAR);  // Linear Filtering
 
-	// BACKGROUND DRAWING
-	// glEnable(GL_DEPTH_TEST);
+	//		float eps = 0.0;
+	//		float z0 = 0.0;
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(GL_FALSE);
 
-	glBegin(GL_QUADS);  // we draw a quad on the entire screen (0,0 1,0 1,1 0,1)
+	glBegin(GL_QUADS);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
 	glTexCoord2f(1, 1);
@@ -167,15 +165,15 @@ void FrameViewer::orthoDraw()
 	glVertex2f(1, 1);
 	glTexCoord2f(0, 0);
 	glVertex2f(0, 1);
+
 	glEnd();
 
 	// glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);     // enable light
 	glDisable(GL_TEXTURE_2D);  // disable texture 2D
-
+														 // glDepthMask (GL_TRUE);		// enable zBuffer
 	glDisable(GL_BLEND);
 	glDepthMask(GL_TRUE);
-
 
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -216,13 +214,17 @@ void FrameViewer::computeBBox(const core::ExecParams *params, bool)
 	double maxBBox[3] = {-std::numeric_limits<double>::max(),
 											 -std::numeric_limits<double>::max(),
 											 -std::numeric_limits<double>::max()};
-	for (unsigned int i = 0; i < x.size(); i++)
+
+	if (d_mode.getValue().getSelectedId() == 0)
 	{
-		const defaulttype::Vec3f &p = x[i];
-		for (int c = 0; c < 3; c++)
+		for (unsigned int i = 0; i < x.size(); i++)
 		{
-			if (p[c] > maxBBox[c]) maxBBox[c] = p[c];
-			if (p[c] < minBBox[c]) minBBox[c] = p[c];
+			const defaulttype::Vec3f &p = x[i];
+			for (int c = 0; c < 3; c++)
+			{
+				if (p[c] > maxBBox[c]) maxBBox[c] = p[c];
+				if (p[c] < minBBox[c]) minBBox[c] = p[c];
+			}
 		}
 	}
 	this->f_bbox.setValue(

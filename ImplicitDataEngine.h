@@ -53,7 +53,7 @@ namespace common
  * }
  *
  */
-class ImplicitDataEngine : public core::objectmodel::BaseObject
+class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
 {
   static int tagID;
 
