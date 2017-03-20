@@ -33,9 +33,12 @@ class FrameViewer : virtual public ImplicitDataEngine
 	void computeBBox(const core::ExecParams* params, bool);
 
 	Data<common::cvMat> d_frame;
-	Data<defaulttype::Vec3f> d_translation;
-	Data<defaulttype::Vec3f> d_rotation;
-	Data<float> d_scale;
+	Data<defaulttype::Mat3x4d> d_P;
+	Data<float> d_depth;
+
+//	Data<defaulttype::Vec3f> d_translation;
+//	Data<defaulttype::Vec3f> d_rotation;
+//	Data<float> d_scale;
 	Data<helper::OptionsGroup> d_mode;
 	std::string m_winID;
 
@@ -46,13 +49,13 @@ private:
 	void perspectiveDraw();
 	void orthoDraw();
 
-	void applyTranslation(const float dx, const float dy, const float dz);
+//	void applyTranslation(const float dx, const float dy, const float dz);
 
-	void applyRotation (const float rx, const float ry, const float rz);
+//	void applyRotation (const float rx, const float ry, const float rz);
 
-	void applyRotation(const sofa::defaulttype::Quat q);
+//	void applyRotation(const sofa::defaulttype::Quat q);
 
-	void applyScale(const float sx, const float sy, const float sz);
+//	void applyScale(const float sx, const float sy, const float sz);
 
 
 };

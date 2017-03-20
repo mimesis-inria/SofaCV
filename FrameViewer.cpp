@@ -1,5 +1,7 @@
 #include "FrameViewer.h"
 
+#include "SofaORCommon/CameraUtils.h"
+
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
 
@@ -18,15 +20,21 @@ SOFA_DECL_CLASS(FrameViewer)
 
 int FrameViewerClass =
     core::RegisterObject(
-        "debug component to visualize images using OpenCV highgui")
+				"debug component to project images in OpenGL using the a projection matrix")
         .add<FrameViewer>();
 
 FrameViewer::FrameViewer()
 		: d_frame(initData(&d_frame, "img", "frame to display in opencv window")),
-			d_translation(
-					initData(&d_translation, "translation", "image translation")),
-			d_rotation(initData(&d_rotation, "rotation", "image rotation")),
-			d_scale(initData(&d_scale, 1.0f, "scale", "image scale")),
+			d_P(initData(&d_P, "P", "camera's projection matrix (3x4)")),
+			d_depth(initData(&d_depth, 1.0f, "depth",
+											 "distance to the camera at which to render the image")),
+			//			d_translation(
+			//					initData(&d_translation,
+			//"translation", "image translation")),
+			//			d_rotation(initData(&d_rotation, "rotation",
+			//"image rotation")),
+			//			d_scale(initData(&d_scale, 1.0f, "scale", "image
+			// scale")),
 			d_mode(
 					initData(&d_mode, "mode", "viewer mode (PERSPECTIVE, ORTHO, HIDDEN)"))
 {
@@ -42,6 +50,8 @@ FrameViewer::~FrameViewer() {}
 void FrameViewer::init()
 {
 	addInput(&d_frame);
+	addInput(&d_P);
+	addInput(&d_depth);
 
 	update();
 }
@@ -57,19 +67,21 @@ void FrameViewer::update()
 	x0 = (float)d_frame.getValue().cols;
 	y0 = (float)d_frame.getValue().rows;
 
-	m_vecCoord.clear();
-	m_vecCoord.push_back(defaulttype::Vec3f(0, y0, .0f));
-	m_vecCoord.push_back(defaulttype::Vec3f(x0, y0, .0f));
-	m_vecCoord.push_back(defaulttype::Vec3f(x0, 0, .0f));
-	m_vecCoord.push_back(defaulttype::Vec3f(0, 0, .0f));
+//	m_vecCoord.clear();
+//	m_vecCoord.push_back(defaulttype::Vec3f(0, y0, .0f));
+//	m_vecCoord.push_back(defaulttype::Vec3f(x0, y0, .0f));
+//	m_vecCoord.push_back(defaulttype::Vec3f(x0, 0, .0f));
+//	m_vecCoord.push_back(defaulttype::Vec3f(0, 0, .0f));
 
-	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
-	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
-								d_rotation.getValue()[2]);
-	applyTranslation(d_translation.getValue()[0], d_translation.getValue()[1],
-									 d_translation.getValue()[2]);
+	//	applyScale(d_scale.getValue(), d_scale.getValue(), d_scale.getValue());
+	//	applyRotation(d_rotation.getValue()[0], d_rotation.getValue()[1],
+	//								d_rotation.getValue()[2]);
+	//	applyTranslation(d_translation.getValue()[0],
+	// d_translation.getValue()[1],
+	//									 d_translation.getValue()[2]);
 }
 
+// Render from the viewpoint of the opengl's context
 void FrameViewer::perspectiveDraw()
 {
 	std::stringstream imageString;
@@ -96,20 +108,24 @@ void FrameViewer::perspectiveDraw()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(GL_FALSE);
 
+	defaulttype::Vector3 p1;
+	defaulttype::Vector3 p2;
+	defaulttype::Vector3 p3;
+	defaulttype::Vector3 p4;
+	common::camera::getCornersPosition(p1, p2, p3, p4, d_frame.getValue().cols,
+																		 d_frame.getValue().rows, d_P.getValue(),
+																		 d_depth.getValue());
+
 	glBegin(GL_QUADS);
-
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
-
-	glTexCoord2f(0, 1);
-
-	glTexCoord2f(0, 1);
-	glVertex3f(m_vecCoord[0][0], m_vecCoord[0][1], m_vecCoord[0][2]);
-	glTexCoord2f(1, 1);
-	glVertex3f(m_vecCoord[1][0], m_vecCoord[1][1], m_vecCoord[1][2]);
 	glTexCoord2f(1, 0);
-	glVertex3f(m_vecCoord[2][0], m_vecCoord[2][1], m_vecCoord[2][2]);
+	glVertex3f(p4[0], p4[1], p4[2]);
 	glTexCoord2f(0, 0);
-	glVertex3f(m_vecCoord[3][0], m_vecCoord[3][1], m_vecCoord[3][2]);
+	glVertex3f(p1[0], p1[1], p1[2]);
+	glTexCoord2f(0, 1);
+	glVertex3f(p2[0], p2[1], p2[2]);
+	glTexCoord2f(1, 1);
+	glVertex3f(p3[0], p3[1], p3[2]);
 	glEnd();
 
 	// glEnable(GL_DEPTH_TEST);
@@ -188,6 +204,15 @@ void FrameViewer::draw(const core::visual::VisualParams *)
 	GLfloat modelviewMatrixData[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelviewMatrixData);
 
+	std::cout << "GLProj" << std::endl;
+	for (int i = 0 ; i < 16 ; ++i)
+		std::cout << projectionMatrixData[i] << " ";
+
+	std::cout << std::endl << "GLModelview" << std::endl;
+	for (int i = 0 ; i < 16 ; ++i)
+		std::cout << modelviewMatrixData[i] << " ";
+	std::cout << std::endl;
+
 	if (d_frame.getValue().data)
 	{
 		switch (d_mode.getValue().getSelectedId())
@@ -206,7 +231,19 @@ void FrameViewer::draw(const core::visual::VisualParams *)
 
 void FrameViewer::computeBBox(const core::ExecParams *params, bool)
 {
-	const helper::vector<defaulttype::Vec3f> &x = m_vecCoord;
+
+	helper::vector<defaulttype::Vec3f> x;
+	defaulttype::Vector3 p1;
+	defaulttype::Vector3 p2;
+	defaulttype::Vector3 p3;
+	defaulttype::Vector3 p4;
+	common::camera::getCornersPosition(p1, p2, p3, p4, d_frame.getValue().cols,
+																		 d_frame.getValue().rows, d_P.getValue(),
+																		 d_depth.getValue());
+	x.push_back(p1);
+	x.push_back(p2);
+	x.push_back(p3);
+	x.push_back(p4);
 
 	double minBBox[3] = {std::numeric_limits<double>::max(),
 											 std::numeric_limits<double>::max(),
@@ -215,8 +252,8 @@ void FrameViewer::computeBBox(const core::ExecParams *params, bool)
 											 -std::numeric_limits<double>::max(),
 											 -std::numeric_limits<double>::max()};
 
-	if (d_mode.getValue().getSelectedId() == 0)
-	{
+//	if (d_mode.getValue().getSelectedId() == 0)
+//	{
 		for (unsigned int i = 0; i < x.size(); i++)
 		{
 			const defaulttype::Vec3f &p = x[i];
@@ -226,41 +263,41 @@ void FrameViewer::computeBBox(const core::ExecParams *params, bool)
 				if (p[c] < minBBox[c]) minBBox[c] = p[c];
 			}
 		}
-	}
+//	}
 	this->f_bbox.setValue(
 			params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
-void FrameViewer::applyTranslation(const float dx, const float dy,
-																	 const float dz)
-{
-	defaulttype::Vec3f d(dx, dy, dz);
+//void FrameViewer::applyTranslation(const float dx, const float dy,
+//																	 const float dz)
+//{
+//	defaulttype::Vec3f d(dx, dy, dz);
 
-	for (unsigned int i = 0; i < m_vecCoord.size(); i++) m_vecCoord[i] += d;
-}
+//	for (unsigned int i = 0; i < m_vecCoord.size(); i++) m_vecCoord[i] += d;
+//}
 
-void FrameViewer::applyRotation(const float rx, const float ry, const float rz)
-{
-	defaulttype::Quat q = helper::Quater<float>::createQuaterFromEuler(
-			defaulttype::Vec3f(rx, ry, rz) * M_PI / 180.0);
-	applyRotation(q);
-}
+//void FrameViewer::applyRotation(const float rx, const float ry, const float rz)
+//{
+//	defaulttype::Quat q = helper::Quater<float>::createQuaterFromEuler(
+//			defaulttype::Vec3f(rx, ry, rz) * M_PI / 180.0);
+//	applyRotation(q);
+//}
 
-void FrameViewer::applyRotation(const defaulttype::Quat q)
-{
-	for (unsigned int i = 0; i < m_vecCoord.size(); i++)
-		m_vecCoord[i] = q.rotate(m_vecCoord[i]);
-}
+//void FrameViewer::applyRotation(const defaulttype::Quat q)
+//{
+//	for (unsigned int i = 0; i < m_vecCoord.size(); i++)
+//		m_vecCoord[i] = q.rotate(m_vecCoord[i]);
+//}
 
-void FrameViewer::applyScale(const float sx, const float sy, const float sz)
-{
-	for (unsigned int i = 0; i < m_vecCoord.size(); i++)
-	{
-		m_vecCoord[i][0] *= sx;
-		m_vecCoord[i][1] *= sy;
-		m_vecCoord[i][2] *= sz;
-	}
-}
+//void FrameViewer::applyScale(const float sx, const float sy, const float sz)
+//{
+//	for (unsigned int i = 0; i < m_vecCoord.size(); i++)
+//	{
+//		m_vecCoord[i][0] *= sx;
+//		m_vecCoord[i][1] *= sy;
+//		m_vecCoord[i][2] *= sz;
+//	}
+//}
 
 }  // namespace common
 }  // namespace OR
