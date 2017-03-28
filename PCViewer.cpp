@@ -58,7 +58,7 @@ void PCViewer::computeBBox(const core::ExecParams* params, bool)
   double maxBBox[3] = {-max_double, -max_double, -max_double};
   double minBBox[3] = {max_double, max_double, max_double};
   double r = d_size.getValue();
-  for (const Vec3d& p : m_positions)
+	for (const Vec3f& p : m_positions)
     for (int i = 0; i < 3; ++i)
     {
       if (p[i] + r > maxBBox[i]) maxBBox[i] = p[i] + r;

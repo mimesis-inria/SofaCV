@@ -13,7 +13,7 @@ namespace common
 {
 class PCViewer : public ImplicitDataEngine
 {
-  typedef defaulttype::Vec3d Vec3d;
+	typedef defaulttype::Vec3f Vec3f;
   typedef defaulttype::Vec<3, uint8_t> Vec3b;
 
  public:
@@ -31,12 +31,12 @@ class PCViewer : public ImplicitDataEngine
 
   Data<float> d_size;
   // INPUTS
-  Data<helper::vector<Vec3d> > d_positions;
+	Data<helper::vector<Vec3f> > d_positions;
   Data<helper::vector<Vec3b> > d_colors;
 
 private:
   std::vector<defaulttype::Vec4f> m_colors;
-  std::vector<Vec3d> m_positions;
+	std::vector<Vec3f> m_positions;
 };
 
 }  // namespace common
