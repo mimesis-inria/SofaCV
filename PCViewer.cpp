@@ -68,7 +68,7 @@ void PCViewer::computeBBox(const core::ExecParams* params, bool)
       params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
-void PCViewer::draw(const core::visual::VisualParams*)
+void PCViewer::draw(const core::visual::VisualParams* p)
 {
 	glPointSize(d_size.getValue());
 	glDisable(GL_LIGHTING);
