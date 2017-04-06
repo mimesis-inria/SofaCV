@@ -18,9 +18,12 @@ int PCViewerClass =
         .add<PCViewer>();
 
 PCViewer::PCViewer()
-    : d_size(initData(&d_size, 1.0f, "size", "point size")),
-      d_positions(
-					initData(&d_positions, "points", "point cloud's positions")),
+		: d_size(initData(&d_size, 1.0f, "size", "point size")),
+			d_R(initData(&d_R, "R",
+									 "rotation to inverse to reproject in world coord system")),
+			d_T(initData(&d_T, "T",
+									 "translation to reproject in world coord system")),
+			d_positions(initData(&d_positions, "points", "point cloud's positions")),
       d_colors(initData(&d_colors, "colors", "point cloud's point colors"))
 {
   f_listening.setValue(true);
@@ -30,14 +33,15 @@ PCViewer::~PCViewer() {}
 void PCViewer::init()
 {
   addInput(&d_positions);
-  addInput(&d_colors);
+	addInput(&d_T);
+	addInput(&d_colors);
 	update();
 }
 
 void PCViewer::update()
 {
-  m_positions = d_positions.getValue();
-  const helper::vector<Vec3b>& c = d_colors.getValue();
+	m_positions = d_positions.getValue();
+	const helper::vector<Vec3b>& c = d_colors.getValue();
   m_colors.resize(c.size());
   for (size_t i = 0; i < c.size(); ++i)
     m_colors[i].set(c[i][2] / 255.0f, c[i][1] / 255.0f, c[i][0] / 255.0f, 1.0f);
@@ -68,15 +72,35 @@ void PCViewer::computeBBox(const core::ExecParams* params, bool)
       params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
-void PCViewer::draw(const core::visual::VisualParams* p)
+void PCViewer::draw(const core::visual::VisualParams*)
 {
+
+
 	glPointSize(d_size.getValue());
 	glDisable(GL_LIGHTING);
 	glBegin(GL_POINTS);
+
+	defaulttype::Vector3 t(-1.2115, -1.2353, 3.5539);
+//	t.x() /= 2000;
+//	t.y() /= 2000;
+//	std::cout << t << std::endl << std::endl;
+//	std::cout << "AAAH!!! Finally!" << std::endl;
+//	defaulttype::Matrix3 Rinv;
+//	Rinv.invert(d_R.getValue());
+
 	for (size_t i = 0; i < m_positions.size(); ++i)
 	{
+		Vec3f pt = m_positions[i];
+		if (d_T.isSet() && d_R.isSet())
+		{
+				pt -= t;
+//				pt = Rinv * pt;
+				std::cout << pt << std::endl;
+		}
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-		glVertex3f(m_positions[i].x(), m_positions[i].y(), m_positions[i].z());
+		glVertex3f(pt.x(),
+							 pt.y(),
+							 pt.z());
 	}
 	glEnd();
 	glPointSize(1);

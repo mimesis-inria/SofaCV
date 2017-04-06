@@ -12,8 +12,7 @@ set(HEADER_FILES
   cvDMatch.h
   cvMat.h
   cvMatUtils.h
-  CameraUtils.h
-  FrameViewer.h
+#  FrameViewer.h
   #StereoViewer.h
   ImplicitDataEngine.h
   PCViewer.h)
@@ -24,8 +23,7 @@ set(SOURCE_FILES
   cvDMatch.cpp
   cvMat.cpp
   cvMatUtils.cpp
-  CameraUtils.cpp
-  FrameViewer.cpp
+#  FrameViewer.cpp
   #StereoViewer.cpp
   ImplicitDataEngine.cpp
   PCViewer.cpp)

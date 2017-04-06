@@ -1,11 +1,9 @@
 #include "FrameViewer.h"
 
-#include "SofaORCommon/CameraUtils.h"
-
 #include <sofa/core/ObjectFactory.h>
-#include <sofa/simulation/AnimateBeginEvent.h>
-
 #include <sofa/core/visual/DrawToolGL.h>
+
+#include <sofa/simulation/AnimateBeginEvent.h>
 #include <sofa/helper/gl/RAII.h>
 #include <sofa/helper/system/gl.h>
 #include <sofa/helper/system/glut.h>
@@ -204,14 +202,14 @@ void FrameViewer::draw(const core::visual::VisualParams *)
 	GLfloat modelviewMatrixData[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelviewMatrixData);
 
-	std::cout << "GLProj" << std::endl;
-	for (int i = 0 ; i < 16 ; ++i)
-		std::cout << projectionMatrixData[i] << " ";
+//	std::cout << "GLProj" << std::endl;
+//	for (int i = 0 ; i < 16 ; ++i)
+//		std::cout << projectionMatrixData[i] << " ";
 
-	std::cout << std::endl << "GLModelview" << std::endl;
-	for (int i = 0 ; i < 16 ; ++i)
-		std::cout << modelviewMatrixData[i] << " ";
-	std::cout << std::endl;
+//	std::cout << std::endl << "GLModelview" << std::endl;
+//	for (int i = 0 ; i < 16 ; ++i)
+//		std::cout << modelviewMatrixData[i] << " ";
+//	std::cout << std::endl;
 
 	if (d_frame.getValue().data)
 	{

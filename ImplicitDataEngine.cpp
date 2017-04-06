@@ -6,8 +6,6 @@ namespace OR
 {
 namespace common
 {
-int ImplicitDataEngine::tagID = 0;
-
 void ImplicitDataEngine::checkData()
 {
 	// Calling callbacks of all dirty data registered with "addDataCallback" and
@@ -118,7 +116,7 @@ void ImplicitDataEngine::addDataCallback(core::objectmodel::BaseData* data,
 void ImplicitDataEngine::addInput(core::objectmodel::BaseData* data,
                                   bool trackOnly, DataCallback callback)
 {
-  if (trackOnly || data->isSet())
+	if (!d_autolink.getValue() || trackOnly || data->isSet())
   {
     _trackData(data, callback, m_inputs);
     return;
@@ -142,8 +140,14 @@ void ImplicitDataEngine::addInput(core::objectmodel::BaseData* data,
           << "couldn't bind input data " << data->getName()
           << " implicitly. Link is broken";
     }
-    else
+		else
+		{
       _trackData(data, callback, m_inputs);
+			msg_advice(getName() + "::" + data->getName())
+					<< "linked to " << data->getLinkPath()
+					<< " implicitly. Please ensure that this makes sense. Otherwise, set "
+						 "autolink to false";
+		}
   }
   else
     msg_warning(getName() + "::bindInputData()")

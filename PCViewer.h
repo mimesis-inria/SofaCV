@@ -29,8 +29,10 @@ class PCViewer : public ImplicitDataEngine
   void draw(const core::visual::VisualParams*);
   void reinit();
 
-  Data<float> d_size;
-  // INPUTS
+	Data<float> d_size;
+	Data<defaulttype::Matrix3> d_R;
+	Data<defaulttype::Vector3> d_T;
+	// INPUTS
 	Data<helper::vector<Vec3f> > d_positions;
   Data<helper::vector<Vec3b> > d_colors;
 
