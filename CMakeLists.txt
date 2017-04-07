@@ -12,10 +12,11 @@ set(HEADER_FILES
   cvDMatch.h
   cvMat.h
   cvMatUtils.h
-#  FrameViewer.h
-  #StereoViewer.h
+  #  FrameViewer.h
+  #  StereoViewer.h
+  #  PCViewer.h
   ImplicitDataEngine.h
-  PCViewer.h)
+  )
 
 set(SOURCE_FILES
   initplugin.cpp
@@ -23,10 +24,11 @@ set(SOURCE_FILES
   cvDMatch.cpp
   cvMat.cpp
   cvMatUtils.cpp
-#  FrameViewer.cpp
-  #StereoViewer.cpp
+  #  FrameViewer.cpp
+  #  StereoViewer.cpp
+  #  PCViewer.cpp
   ImplicitDataEngine.cpp
-  PCViewer.cpp)
+)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

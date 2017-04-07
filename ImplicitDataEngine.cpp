@@ -6,7 +6,7 @@ namespace OR
 {
 namespace common
 {
-void ImplicitDataEngine::checkData()
+void ImplicitDataEngine::checkData(bool call_callback)
 {
 	// Calling callbacks of all dirty data registered with "addDataCallback" and
 	// cleaning them too
@@ -17,7 +17,8 @@ void ImplicitDataEngine::checkData()
 		if (t.second->first->isDirty())
 		{
 			m_callback = t.second->second;
-			(this->*m_callback)(t.first);
+			if (call_callback)
+				(this->*m_callback)(t.first);
 			t.first->cleanDirty();
 			t.second->first->clean();
 		}

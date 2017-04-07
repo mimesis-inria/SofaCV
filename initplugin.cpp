@@ -33,12 +33,12 @@ const char* getModuleVersion() { return "0.1"; }
 const char* getModuleLicense() { return ""; }
 const char* getModuleDescription()
 {
-  return "SofaORCommon plugin, containing data structures and debug/visu components";
+	return "SofaORCommon plugin, containing data structures and utility functions";
 }
 
 const char* getModuleComponentList()
 {
-  return "FrameViewer;PCViewer";
+	return "";
 }
 
 }  // namespace common
@@ -46,8 +46,3 @@ const char* getModuleComponentList()
 }  // namespace OR
 
 }  // namespace sofa
-
-////////// BEGIN CLASS LIST //////////
-
-SOFA_LINK_CLASS(FrameViewer);
-SOFA_LINK_CLASS(PCViewer);

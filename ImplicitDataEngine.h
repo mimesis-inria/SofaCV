@@ -132,7 +132,7 @@ class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
 
  protected:
   bool checkInputs();
-	void checkData();
+	void checkData(bool call_callback = true);
 	void clean();
 
  private:
