@@ -8,6 +8,8 @@ namespace common
 {
 void ImplicitDataEngine::checkData(bool call_callback)
 {
+	std::map<core::objectmodel::BaseData*, trackPair*> dataToUpdate;
+
 	// Calling callbacks of all dirty data registered with "addDataCallback" and
 	// cleaning them too
 	for (std::map<core::objectmodel::BaseData*, trackPair*>::value_type& t :
@@ -17,11 +19,17 @@ void ImplicitDataEngine::checkData(bool call_callback)
 		if (t.second->first->isDirty())
 		{
 			m_callback = t.second->second;
-			if (call_callback)
-				(this->*m_callback)(t.first);
+			if (call_callback) dataToUpdate.insert(t);
 			t.first->cleanDirty();
 			t.second->first->clean();
 		}
+	}
+	for (auto t : dataToUpdate)
+	{
+		m_callback = t.second->second;
+		(this->*m_callback)(t.first);
+		t.first->cleanDirty();
+		t.second->first->clean();
 	}
 }
 
