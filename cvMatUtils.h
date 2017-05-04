@@ -130,14 +130,14 @@ void sofaVector2cvMat(const helper::vector<T>& src, cv::Mat& dst)
 template <int N, class T>
 void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat_<T>& dst)
 {
-  dst = cv::Mat_<T>(src.size(), N);
-  std::memcpy(dst.ptr(), src.data(), src.size() * N * sizeof(T));
+	dst = cv::Mat_<T>(N, 1);
+	std::memcpy(dst.ptr(), src.data(), N * sizeof(T));
 }
 template <int N, class T>
 void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat& dst)
 {
-	dst = cv::Mat_<T>(src.size(), N);
-	std::memcpy(dst.ptr(), src.data(), src.size() * N * sizeof(T));
+	dst = cv::Mat_<T>(N, 1);
+	std::memcpy(dst.ptr(), src.data(), N * sizeof(T));
 }
 
 }  // namespace matrix
