@@ -42,9 +42,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CUR
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${SOFAORCOMMON_VERSION})
 
-#set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
-#set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
-
 add_definitions("-DSOFA_BUILD_SOFAORCOMMON")
 
 ## Install rules for the library; CMake package configurations files
