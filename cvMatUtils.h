@@ -26,26 +26,26 @@ enum VideoMode
 
 namespace matrix
 {
-template <int L, int C, class T = float>
+template <int L, int C, class T = double>
 void cvMat2sofaMat(const cv::Mat_<T>& src, defaulttype::Mat<L, C, T>& dst)
 {
   assert(src.cols == C && src.rows == L);
   std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
 }
-template <int L, int C, class T = float>
+template <int L, int C, class T = double>
 void cvMat2sofaMat(const cv::Mat& src, defaulttype::Mat<L, C, T>& dst)
 {
 	assert(src.cols == C && src.rows == L);
 	std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
 }
 
-template <int L, int C, class T = float>
+template <int L, int C, class T = double>
 void sofaMat2cvMat(const defaulttype::Mat<L, C, T>& src, cv::Mat_<T>& dst)
 {
   dst = cv::Mat_<T>(L, C);
   std::memcpy(dst.ptr(), src.ptr(), L * C * sizeof(T));
 }
-template <int L, int C, class T = float>
+template <int L, int C, class T = double>
 void sofaMat2cvMat(const defaulttype::Mat<L, C, T>& src, cv::Mat& dst)
 {
 	dst = cv::Mat_<T>(L, C);
