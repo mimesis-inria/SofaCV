@@ -30,13 +30,13 @@ template <int L, int C, class T = double>
 void cvMat2sofaMat(const cv::Mat_<T>& src, defaulttype::Mat<L, C, T>& dst)
 {
   assert(src.cols == C && src.rows == L);
-  std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
+	std::memcpy(dst.ptr(), src.ptr(), src.total() * src.elemSize());
 }
 template <int L, int C, class T = double>
 void cvMat2sofaMat(const cv::Mat& src, defaulttype::Mat<L, C, T>& dst)
 {
 	assert(src.cols == C && src.rows == L);
-	std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
+	std::memcpy(dst.ptr(), src.ptr(), src.total() * src.elemSize());
 }
 
 template <int L, int C, class T = double>
