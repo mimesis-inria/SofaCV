@@ -5,9 +5,7 @@
 #include <iostream>
 #include <opencv2/core/types.hpp>
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -52,17 +50,19 @@ class cvDMatch : public cv::DMatch
 };
 
 }  // namespace common
-}  // namespace OR
+}  // namespace sofaor
 
+namespace sofa
+{
 namespace defaulttype
 {
 template <>
-struct DataTypeName<OR::common::cvDMatch>
+struct DataTypeName<sofaor::common::cvDMatch>
 {
 	static const char* name() { return "cvDMatch"; }
 };
 
 }  // namespace defaulttype
-
 }  // namespace sofa
+
 #endif  // SOFA_OR_COMMON_CVDMATCH_H

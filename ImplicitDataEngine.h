@@ -12,9 +12,7 @@
 #include <sofa/simulation/AnimateEndEvent.h>
 #include <sofa/simulation/PropagateEventVisitor.h>
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -53,12 +51,12 @@ namespace common
  * }
  *
  */
-class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
+class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
 {
  public:
   typedef void (ImplicitDataEngine::*DataCallback)(
-      core::objectmodel::BaseData*);
-  SOFA_CLASS(ImplicitDataEngine, core::objectmodel::BaseObject);
+			sofa::core::objectmodel::BaseData*);
+	SOFA_CLASS(ImplicitDataEngine, sofa::core::objectmodel::BaseObject);
 
   /// Constructor. d_isLeft is only for stereo (L/R) data engines
   /// (leave untouched otherwise)
@@ -88,8 +86,8 @@ class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
   {
     update();
     std::cout << std::endl << "Propagating from " << getName() << std::endl;
-    core::objectmodel::IdleEvent ie;
-    simulation::PropagateEventVisitor v(core::ExecParams::defaultInstance(),
+		sofa::core::objectmodel::IdleEvent ie;
+		sofa::simulation::PropagateEventVisitor v(sofa::core::ExecParams::defaultInstance(),
                                         &ie);
     this->getContext()->getRootContext()->executeVisitor(&v);
   }
@@ -97,20 +95,20 @@ class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
  protected:
   /// default callback function for bindInputData. BaseData is the dirty data,
   /// ImplicitDataEngine is the data's owner
-  void defaultDataCallback(core::objectmodel::BaseData*) {}
+	void defaultDataCallback(sofa::core::objectmodel::BaseData*) {}
   /// Add a new input to this engine, and binds it to its parent if not set
   /// through XML
   void addInput(
-      core::objectmodel::BaseData* data, bool trackOnly = false,
+			sofa::core::objectmodel::BaseData* data, bool trackOnly = false,
       DataCallback callback = &ImplicitDataEngine::defaultDataCallback);
-  void removeInput(core::objectmodel::BaseData* data);
+	void removeInput(sofa::core::objectmodel::BaseData* data);
 
-  void addDataCallback(core::objectmodel::BaseData* data,
+	void addDataCallback(sofa::core::objectmodel::BaseData* data,
                        DataCallback callback);
-  void removeDataCallback(core::objectmodel::BaseData* data);
+	void removeDataCallback(sofa::core::objectmodel::BaseData* data);
 
-  void addOutput(core::objectmodel::BaseData* data);
-  void removeOutput(core::objectmodel::BaseData* data);
+	void addOutput(sofa::core::objectmodel::BaseData* data);
+	void removeOutput(sofa::core::objectmodel::BaseData* data);
 
   /// default handleEvent behavior. Can be overloaded.
   /// First checks for dirty data and call their respective callbacks
@@ -127,8 +125,8 @@ class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
   }
 
  public:
-	Data<bool> d_autolink;
-	Data<bool> d_isLeft;
+	sofa::Data<bool> d_autolink;
+	sofa::Data<bool> d_isLeft;
 
  protected:
   bool checkInputs();
@@ -136,23 +134,22 @@ class ImplicitDataEngine : public virtual core::objectmodel::BaseObject
 	void clean();
 
  private:
-  typedef std::pair<core::DataTracker*, DataCallback> trackPair;
-	typedef std::pair<core::objectmodel::BaseData*, trackPair*> trackedData;
-	typedef std::map<core::objectmodel::BaseData*, trackPair*> TrackMap;
+	typedef std::pair<sofa::core::DataTracker*, DataCallback> trackPair;
+	typedef std::pair<sofa::core::objectmodel::BaseData*, trackPair*> trackedData;
+	typedef std::map<sofa::core::objectmodel::BaseData*, trackPair*> TrackMap;
 
-  void _trackData(core::objectmodel::BaseData* data, DataCallback callback,
+	void _trackData(sofa::core::objectmodel::BaseData* data, DataCallback callback,
                   TrackMap& map);
-  bool _bindData(core::objectmodel::BaseData* data, const std::string& alias);
+	bool _bindData(sofa::core::objectmodel::BaseData* data, const std::string& alias);
   ImplicitDataEngine* getPreviousEngineInGraph();
 
   TrackMap m_inputs;
   TrackMap m_trackers;
   DataCallback m_callback;
-  std::map<core::objectmodel::BaseData*, core::DataTracker*> m_outputs;
+	std::map<sofa::core::objectmodel::BaseData*, sofa::core::DataTracker*> m_outputs;
 };
 
 }  // namespace common
-}  // namespace OR
-}  // namespace sofa
+}  // namespace sofaor
 
 #endif  // SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H

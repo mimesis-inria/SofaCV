@@ -7,9 +7,7 @@
 
 #include <iostream>
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -49,18 +47,19 @@ class cvKeypoint : public cv::KeyPoint
 };
 
 }  // namespace common
-}  // namespace OR
+}  // namespace sofaor
 
+namespace sofa
+{
 namespace defaulttype
 {
 template <>
-struct DataTypeName<OR::common::cvKeypoint>
+struct DataTypeName<sofaor::common::cvKeypoint>
 {
 	static const char* name() { return "cvKeypoint"; }
 };
 
 }  // namespace defaulttype
-
 }  // namespace sofa
 
 #endif  // SOFA_OR_COMMON_CVKEYPOINT_H

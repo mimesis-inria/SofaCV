@@ -1,9 +1,7 @@
 #include <sofa/helper/system/config.h>
 #include "initplugin.h"
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -42,7 +40,4 @@ const char* getModuleComponentList()
 }
 
 }  // namespace common
-
-}  // namespace OR
-
-}  // namespace sofa
+}  // namespace sofaor

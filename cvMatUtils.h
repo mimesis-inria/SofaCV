@@ -5,9 +5,7 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -27,46 +25,46 @@ enum VideoMode
 namespace matrix
 {
 template <int L, int C, class T = double>
-void cvMat2sofaMat(const cv::Mat_<T>& src, defaulttype::Mat<L, C, T>& dst)
+void cvMat2sofaMat(const cv::Mat_<T>& src, sofa::defaulttype::Mat<L, C, T>& dst)
 {
   assert(src.cols == C && src.rows == L);
 	std::memcpy(dst.ptr(), src.ptr(), src.total() * src.elemSize());
 }
 template <int L, int C, class T = double>
-void cvMat2sofaMat(const cv::Mat& src, defaulttype::Mat<L, C, T>& dst)
+void cvMat2sofaMat(const cv::Mat& src, sofa::defaulttype::Mat<L, C, T>& dst)
 {
 	assert(src.cols == C && src.rows == L);
 	std::memcpy(dst.ptr(), src.ptr(), src.total() * src.elemSize());
 }
 
 template <int L, int C, class T = double>
-void sofaMat2cvMat(const defaulttype::Mat<L, C, T>& src, cv::Mat_<T>& dst)
+void sofaMat2cvMat(const sofa::defaulttype::Mat<L, C, T>& src, cv::Mat_<T>& dst)
 {
   dst = cv::Mat_<T>(L, C);
   std::memcpy(dst.ptr(), src.ptr(), L * C * sizeof(T));
 }
 template <int L, int C, class T = double>
-void sofaMat2cvMat(const defaulttype::Mat<L, C, T>& src, cv::Mat& dst)
+void sofaMat2cvMat(const sofa::defaulttype::Mat<L, C, T>& src, cv::Mat& dst)
 {
 	dst = cv::Mat_<T>(L, C);
 	std::memcpy(dst.ptr(), src.ptr(), L * C * sizeof(T));
 }
 
 template <int N, class T>
-void cvMat2sofaVector(const cv::Mat_<T>& src, defaulttype::Vec<N, T>& dst)
+void cvMat2sofaVector(const cv::Mat_<T>& src, sofa::defaulttype::Vec<N, T>& dst)
 {
   assert(src.total() == N);
   std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
 }
 template <int N, class T>
-void cvMat2sofaVector(const cv::Mat& src, defaulttype::Vec<N, T>& dst)
+void cvMat2sofaVector(const cv::Mat& src, sofa::defaulttype::Vec<N, T>& dst)
 {
 	assert(src.total() == N);
 	std::memcpy(dst.ptr(), src.data, src.total() * src.elemSize());
 }
 
 template <class T>
-void cvMat2sofaVector(const cv::Mat_<T>& src, helper::vector<T>& dst)
+void cvMat2sofaVector(const cv::Mat_<T>& src, sofa::helper::vector<T>& dst)
 {
   dst.reserve(src.total());
   const T* ptr = reinterpret_cast<T*>(src.data);
@@ -76,7 +74,7 @@ void cvMat2sofaVector(const cv::Mat_<T>& src, helper::vector<T>& dst)
   }
 }
 template <class T>
-void cvMat2sofaVector(const cv::Mat& src, helper::vector<T>& dst)
+void cvMat2sofaVector(const cv::Mat& src, sofa::helper::vector<T>& dst)
 {
 	dst.reserve(src.total());
 	const T* ptr = reinterpret_cast<T*>(src.data);
@@ -87,27 +85,27 @@ void cvMat2sofaVector(const cv::Mat& src, helper::vector<T>& dst)
 }
 
 template <class T>
-void sofaVector2cvMat(const helper::vector<T>& src, cv::Mat_<T>& dst)
+void sofaVector2cvMat(const sofa::helper::vector<T>& src, cv::Mat_<T>& dst)
 {
 	dst = cv::Mat_<T>(src.size(), 1);
 	std::memcpy(dst.ptr(), src.data(), src.size() * sizeof(T));
 }
 
 template <class T>
-void sofaVector2cvMat(const helper::vector<T>& src, cv::Mat& dst)
+void sofaVector2cvMat(const sofa::helper::vector<T>& src, cv::Mat& dst)
 {
 	dst = cv::Mat_<T>(src.size(), 1);
 	std::memcpy(dst.ptr(), src.data(), src.size() * sizeof(T));
 }
 
 template <int N, class T>
-void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat_<T>& dst)
+void sofaVector2cvMat(const sofa::defaulttype::Vec<N, T>& src, cv::Mat_<T>& dst)
 {
 	dst = cv::Mat_<T>(N, 1);
 	std::memcpy(dst.ptr(), src.data(), N * sizeof(T));
 }
 template <int N, class T>
-void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat& dst)
+void sofaVector2cvMat(const sofa::defaulttype::Vec<N, T>& src, cv::Mat& dst)
 {
 	dst = cv::Mat_<T>(N, 1);
 	std::memcpy(dst.ptr(), src.data(), N * sizeof(T));
@@ -116,7 +114,6 @@ void sofaVector2cvMat(const defaulttype::Vec<N, T>& src, cv::Mat& dst)
 }  // namespace matrix
 
 }  // namespace common
-}  // namespace OR
-}  // namespace sofa
+}  // namespace sofaor
 
 #endif  // SOFA_OR_COMMON_CVMATUTILS_H

@@ -5,9 +5,7 @@
 #include <iostream>
 #include <opencv2/core.hpp>
 
-namespace sofa
-{
-namespace OR
+namespace sofaor
 {
 namespace common
 {
@@ -70,18 +68,19 @@ class cvMat : public cv::Mat
 };
 
 }  // namespace common
-}  // namespace OR
+}  // namespace sofaor
 
+namespace sofa
+{
 namespace defaulttype
 {
 template <>
-struct DataTypeName<OR::common::cvMat>
+struct DataTypeName<sofaor::common::cvMat>
 {
 	static const char* name() { return "cvMat"; }
 };
 
 }  // namespace defaulttype
-
 }  // namespace sofa
 
 #endif  // SOFA_OR_COMMON_CVMAT_H
