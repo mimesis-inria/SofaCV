@@ -11,6 +11,7 @@ namespace common
 {
 namespace image
 {
+/// (c.f. see http://www.stereo3d.com/formats.htm)
 enum VideoMode
 {
   MONO = 0,
@@ -22,6 +23,10 @@ enum VideoMode
 
 }  // namespace image
 
+/**
+ * \brief utility conversions from OpenCV vector / matrix data structures to
+ * SOFA & vice versa
+ */
 namespace matrix
 {
 template <int L, int C, class T = double>

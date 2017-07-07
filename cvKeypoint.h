@@ -11,6 +11,9 @@ namespace sofaor
 {
 namespace common
 {
+/**
+ * @brief The cvKeypoint class, Needed to override the stream operators for SOFA
+ */
 class cvKeypoint : public cv::KeyPoint
 {
  public:

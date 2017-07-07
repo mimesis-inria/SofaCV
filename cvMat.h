@@ -9,6 +9,9 @@ namespace sofaor
 {
 namespace common
 {
+/**
+ * @brief The cvMat class, Needed to override the stream operators for SOFA
+ */
 class cvMat : public cv::Mat
 {
  public:
