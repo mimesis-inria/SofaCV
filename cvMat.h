@@ -78,12 +78,13 @@ namespace sofa
 namespace defaulttype
 {
 /**
- *  \brief Implementation of SOFA's DataType interface to pass cv::Mat data structures as sofa::Data
+ *  \brief Implementation of SOFA's DataType interface to pass cv::Mat data
+ * structures as sofa::Data
  */
 template <>
 struct DataTypeName<sofaor::common::cvMat>
 {
-	static const char* name() { return "cvMat"; }
+	static const char *name() { return "cvMat"; }
 };
 
 }  // namespace defaulttype

@@ -46,7 +46,7 @@ class cvDMatch : public cv::DMatch
 
   inline friend std::ostream& operator<<(std::ostream& out, const cvDMatch& s)
   {
-    out << s.distance << ' '  << s.imgIdx << ' ' << s.queryIdx << ' '
+		out << s.distance << ' ' << s.imgIdx << ' ' << s.queryIdx << ' '
         << s.trainIdx << ' ';
     return out;
   }
@@ -60,7 +60,8 @@ namespace sofa
 namespace defaulttype
 {
 /**
- *  \brief Implementation of SOFA's DataType interface to pass cv::DMatch data structures as sofa::Data
+ *  \brief Implementation of SOFA's DataType interface to pass cv::DMatch data
+ * structures as sofa::Data
  */
 template <>
 struct DataTypeName<sofaor::common::cvDMatch>

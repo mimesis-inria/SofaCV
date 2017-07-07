@@ -65,8 +65,8 @@ void ImplicitDataEngine::clean()
   // Setting modified output values to dirty.
   // TODO: Only set dirtyValue if the output was changed from within, so that
   // other engines get notified from the change
-	for (std::map<sofa::core::objectmodel::BaseData*, sofa::core::DataTracker*>::value_type&
-           p : m_outputs)
+	for (std::map<sofa::core::objectmodel::BaseData*,
+								sofa::core::DataTracker*>::value_type& p : m_outputs)
   {
     if (p.second->isDirty())
     {
@@ -79,8 +79,8 @@ void ImplicitDataEngine::clean()
 bool ImplicitDataEngine::_bindData(sofa::core::objectmodel::BaseData* data,
                                    const std::string& alias)
 {
-	const std::multimap<std::string, sofa::core::objectmodel::BaseData*>& dataMap =
-      this->getDataAliases();
+	const std::multimap<std::string, sofa::core::objectmodel::BaseData*>&
+			dataMap = this->getDataAliases();
 
   for (auto& d : dataMap)
     if (d.first == alias)
@@ -114,8 +114,8 @@ void ImplicitDataEngine::_trackData(sofa::core::objectmodel::BaseData* data,
 	map.insert(trackedData(data, new trackPair(tracker, callback)));
 }
 
-void ImplicitDataEngine::addDataCallback(sofa::core::objectmodel::BaseData* data,
-                                         DataCallback callback)
+void ImplicitDataEngine::addDataCallback(
+		sofa::core::objectmodel::BaseData* data, DataCallback callback)
 {
   _trackData(data, callback, m_trackers);
 }
@@ -183,7 +183,8 @@ void ImplicitDataEngine::removeOutput(sofa::core::objectmodel::BaseData* data)
 		m_outputs.erase(m_outputs.find(data));
 }
 
-void ImplicitDataEngine::removeDataCallback(sofa::core::objectmodel::BaseData* data)
+void ImplicitDataEngine::removeDataCallback(
+		sofa::core::objectmodel::BaseData* data)
 {
 	if (m_trackers.find(data) != m_trackers.end())
 		m_trackers.erase(m_trackers.find(data));
