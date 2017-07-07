@@ -77,18 +77,17 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
   }
   virtual ~ImplicitDataEngine() {}
 	virtual void init() {}
-  /// perform your general computations here
+	/// Engine's general computations
   virtual void update() {}
-  /// Sets m_needsRefresh to true to propagate modifications to other engines
-  /// Override with an empty reinit to avoid idle refreshing (in DataGrabbers
-  /// for instance)
+	/// Runs an IdleEvent visitor to propagate the engine's output to the other
+	/// engines
   virtual void reinit()
   {
     update();
     std::cout << std::endl << "Propagating from " << getName() << std::endl;
 		sofa::core::objectmodel::IdleEvent ie;
-		sofa::simulation::PropagateEventVisitor v(sofa::core::ExecParams::defaultInstance(),
-                                        &ie);
+		sofa::simulation::PropagateEventVisitor v(
+				sofa::core::ExecParams::defaultInstance(), &ie);
     this->getContext()->getRootContext()->executeVisitor(&v);
   }
 
@@ -96,18 +95,23 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
   /// default callback function for bindInputData. BaseData is the dirty data,
   /// ImplicitDataEngine is the data's owner
 	void defaultDataCallback(sofa::core::objectmodel::BaseData*) {}
-  /// Add a new input to this engine, and binds it to its parent if not set
-  /// through XML
+	/// Adds a new input to this engine, binds it to its parent if not set
+	/// through XML, and sets a callback if provided
   void addInput(
 			sofa::core::objectmodel::BaseData* data, bool trackOnly = false,
       DataCallback callback = &ImplicitDataEngine::defaultDataCallback);
+	/// Removes the data from the inputs of the engine
 	void removeInput(sofa::core::objectmodel::BaseData* data);
 
+	/// Sets a callback method for data
 	void addDataCallback(sofa::core::objectmodel::BaseData* data,
                        DataCallback callback);
+	/// Removes the callback method for a specific data
 	void removeDataCallback(sofa::core::objectmodel::BaseData* data);
 
+	/// Sets a data as an output for this engine
 	void addOutput(sofa::core::objectmodel::BaseData* data);
+	/// Removes a data from this engine's list of outputs
 	void removeOutput(sofa::core::objectmodel::BaseData* data);
 
   /// default handleEvent behavior. Can be overloaded.
@@ -125,12 +129,17 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
   }
 
  public:
-	sofa::Data<bool> d_autolink;
+	sofa::Data<bool> d_autolink;  ///< If false, engine won't try to implicitely
+																///bind the inputs to previously declared
+																///engine's outputs in graph
 	sofa::Data<bool> d_isLeft;
 
  protected:
+	/// Checks if inputs are dirty, to determine whether or not to call the engine's update method
   bool checkInputs();
+	/// Checks if datas are dirty, and calls their callbacks if necessary
 	void checkData(bool call_callback = true);
+	/// removes the dirty flags on engine's inputs and outputs
 	void clean();
 
  private:
@@ -138,15 +147,17 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
 	typedef std::pair<sofa::core::objectmodel::BaseData*, trackPair*> trackedData;
 	typedef std::map<sofa::core::objectmodel::BaseData*, trackPair*> TrackMap;
 
-	void _trackData(sofa::core::objectmodel::BaseData* data, DataCallback callback,
-                  TrackMap& map);
-	bool _bindData(sofa::core::objectmodel::BaseData* data, const std::string& alias);
+	void _trackData(sofa::core::objectmodel::BaseData* data,
+									DataCallback callback, TrackMap& map);
+	bool _bindData(sofa::core::objectmodel::BaseData* data,
+								 const std::string& alias);
   ImplicitDataEngine* getPreviousEngineInGraph();
 
   TrackMap m_inputs;
   TrackMap m_trackers;
   DataCallback m_callback;
-	std::map<sofa::core::objectmodel::BaseData*, sofa::core::DataTracker*> m_outputs;
+	std::map<sofa::core::objectmodel::BaseData*, sofa::core::DataTracker*>
+			m_outputs;
 };
 
 }  // namespace common

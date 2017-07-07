@@ -3,6 +3,9 @@
 
 namespace sofaor
 {
+/**
+ * \brief Utility classes for SOFA-OR
+ */
 namespace common
 {
 // Here are just several convenient functions to help user to know what contains

@@ -53,6 +53,9 @@ namespace sofa
 {
 namespace defaulttype
 {
+/**
+ *  \brief Implementation of SOFA's DataType interface to pass cv::KeyPoint data structures as sofa::Data
+ */
 template <>
 struct DataTypeName<sofaor::common::cvKeypoint>
 {

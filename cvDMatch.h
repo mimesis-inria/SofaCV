@@ -56,6 +56,9 @@ namespace sofa
 {
 namespace defaulttype
 {
+/**
+ *  \brief Implementation of SOFA's DataType interface to pass cv::DMatch data structures as sofa::Data
+ */
 template <>
 struct DataTypeName<sofaor::common::cvDMatch>
 {
