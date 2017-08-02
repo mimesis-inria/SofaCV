@@ -26,74 +26,57 @@ namespace sofaor
 {
 namespace common
 {
-void ImplicitDataEngine::checkData(bool call_callback)
+// Removes the dirty flag from tracked internal data
+void ImplicitDataEngine::cleanTrackers(bool call_callback)
 {
-	std::map<sofa::core::objectmodel::BaseData*, trackPair*> dataToUpdate;
+  TrackMap dataToUpdate;
 
-	// Calling callbacks of all dirty data registered with "addDataCallback" and
-	// cleaning them too
-	for (std::map<sofa::core::objectmodel::BaseData*, trackPair*>::value_type& t :
-			 m_trackers)
-	{
-		t.first->updateIfDirty();
-		if (t.second->first->isDirty())
-		{
-			m_callback = t.second->second;
-			if (call_callback) dataToUpdate.insert(t);
-			t.first->cleanDirty();
-			t.second->first->clean();
-		}
-	}
-	for (auto t : dataToUpdate)
-	{
-		m_callback = t.second->second;
-		(this->*m_callback)(t.first);
-		t.first->cleanDirty();
-		t.second->first->clean();
-	}
+  // Calling callbacks of all dirty data registered with "addDataCallback" and
+  // cleaning them too
+  for (TrackMap::value_type& t : m_trackers)
+  {
+    if (t.second.first.isDirty())
+    {
+      if (call_callback) dataToUpdate.insert(t);
+    }
+  }
+  for (TrackMap::value_type& t : dataToUpdate)
+  {
+    t.second.first.clean();
+    if (t.second.second) t.second.second->call(t.first);
+  }
 }
 
-bool ImplicitDataEngine::checkInputs()
+// Removes the dirty flag from input data
+bool ImplicitDataEngine::cleanInputs()
 {
   bool hasDirtyValues = false;
 
-	checkData();
-
   // Calling callbacks of all dirty inputs registered with "addInput" returning
   // true if any of the inputs is dirty
-	for (std::map<sofa::core::objectmodel::BaseData*, trackPair*>::value_type& t :
-       m_inputs)
+  for (TrackMap::value_type& t : m_inputs)
   {
-    t.first->updateIfDirty();
-		if (t.second->first->isDirty())
+    if (t.first->isDirty())
     {
-			m_callback = t.second->second;
-      (this->*m_callback)(t.first);
+      t.second.first.clean();
+      t.first->updateIfDirty();
+      t.first->cleanDirty();
+      if (t.second.second) t.second.second->call(t.first);
       hasDirtyValues = true;
     }
   }
   return hasDirtyValues;
 }
 
-void ImplicitDataEngine::clean()
+void ImplicitDataEngine::setDirtyOutputs()
 {
-  // Cleaning all inputs
-	for (std::map<sofa::core::objectmodel::BaseData*, trackPair*>::value_type& t :
-       m_inputs)
+  for (TrackMap::value_type& t : m_outputs)
   {
-		t.first->cleanDirty();
-		t.second->first->clean();
-  }
-  // Setting modified output values to dirty.
-  // TODO: Only set dirtyValue if the output was changed from within, so that
-  // other engines get notified from the change
-	for (std::map<sofa::core::objectmodel::BaseData*,
-								sofa::core::DataTracker*>::value_type& p : m_outputs)
-  {
-    if (p.second->isDirty())
+    if (t.second.first.isDirty())
     {
-      p.second->clean();
-      p.first->setDirtyValue();
+      t.second.first.clean();
+      t.first->setDirtyValue();
+      t.first->setDirtyOutputs();
     }
   }
 }
@@ -101,8 +84,8 @@ void ImplicitDataEngine::clean()
 bool ImplicitDataEngine::_bindData(sofa::core::objectmodel::BaseData* data,
                                    const std::string& alias)
 {
-	const std::multimap<std::string, sofa::core::objectmodel::BaseData*>&
-			dataMap = this->getDataAliases();
+  const std::multimap<std::string, sofa::core::objectmodel::BaseData*>&
+      dataMap = this->getDataAliases();
 
   for (auto& d : dataMap)
     if (d.first == alias)
@@ -128,24 +111,23 @@ ImplicitDataEngine* ImplicitDataEngine::getPreviousEngineInGraph()
 }
 
 void ImplicitDataEngine::_trackData(sofa::core::objectmodel::BaseData* data,
-                                    DataCallback callback, TrackMap& map)
+                                    CallbackFunctor* callback, TrackMap& map)
 {
-	sofa::core::DataTracker* tracker = new sofa::core::DataTracker();
-  tracker->trackData(*data);
-  data->setDirtyValue();
-	map.insert(trackedData(data, new trackPair(tracker, callback)));
+  sofa::core::DataTracker tracker;
+  tracker.trackData(*data);
+  map.insert(std::make_pair(data, std::make_pair(tracker, callback)));
 }
 
 void ImplicitDataEngine::addDataCallback(
-		sofa::core::objectmodel::BaseData* data, DataCallback callback)
+    sofa::core::objectmodel::BaseData* data, CallbackFunctor* callback)
 {
   _trackData(data, callback, m_trackers);
 }
 
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
-                                  bool trackOnly, DataCallback callback)
+                                  bool trackOnly, CallbackFunctor* callback)
 {
-	if (!d_autolink.getValue() || trackOnly || data->isSet())
+  if (!d_autolink.getValue() || trackOnly || data->isSet())
   {
     _trackData(data, callback, m_inputs);
     return;
@@ -169,14 +151,14 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
           << "couldn't bind input data " << data->getName()
           << " implicitly. Link is broken";
     }
-		else
-		{
+    else
+    {
       _trackData(data, callback, m_inputs);
-			msg_advice(getName() + "::" + data->getName())
-					<< "linked to " << data->getLinkPath()
-					<< " implicitly. Please ensure that this makes sense. Otherwise, set "
-						 "autolink to false";
-		}
+      msg_advice(getName() + "::" + data->getName())
+          << "linked to " << data->getLinkPath()
+          << " implicitly. Please ensure that this makes sense. Otherwise, set "
+             "autolink to false";
+    }
   }
   else
     msg_warning(getName() + "::bindInputData()")
@@ -186,30 +168,37 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
 
 void ImplicitDataEngine::addOutput(sofa::core::objectmodel::BaseData* data)
 {
-	if (m_inputs.find(data) != m_inputs.end()) return;
-	sofa::core::DataTracker* tracker = new sofa::core::DataTracker();
-  tracker->trackData(*data);
-  data->cleanDirty();
-  tracker->clean();
-  m_outputs.insert(std::make_pair(data, tracker));
+  if (m_inputs.find(data) != m_inputs.end())
+  {
+    msg_error(getName() + "::addOutput()")
+        << "Cannot add an input data as output";
+    return;
+  }
+  _trackData(data, 0, m_outputs);
+  if (data->isDirty())
+  {
+    data->setDirtyValue();
+    data->setDirtyOutputs();
+  }
 }
 
 void ImplicitDataEngine::removeInput(sofa::core::objectmodel::BaseData* data)
 {
-	if (m_inputs.find(data) != m_inputs.end())
-		m_inputs.erase(m_inputs.find(data));
+  if (m_inputs.find(data) != m_inputs.end())
+    m_inputs.erase(m_inputs.find(data));
 }
+
 void ImplicitDataEngine::removeOutput(sofa::core::objectmodel::BaseData* data)
 {
-	if (m_outputs.find(data) != m_outputs.end())
-		m_outputs.erase(m_outputs.find(data));
+  if (m_outputs.find(data) != m_outputs.end())
+    m_outputs.erase(m_outputs.find(data));
 }
 
 void ImplicitDataEngine::removeDataCallback(
-		sofa::core::objectmodel::BaseData* data)
+    sofa::core::objectmodel::BaseData* data)
 {
-	if (m_trackers.find(data) != m_trackers.end())
-		m_trackers.erase(m_trackers.find(data));
+  if (m_trackers.find(data) != m_trackers.end())
+    m_trackers.erase(m_trackers.find(data));
 }
 
 }  // namespace common

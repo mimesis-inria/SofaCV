@@ -78,16 +78,19 @@ class cvMat : public cv::Mat
   cvMat(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
   inline friend std::istream &operator>>(std::istream &in, cvMat &s)
   {
-    cvMat image;
-    in.read(reinterpret_cast<char *>(&image), sizeof(cvMat *));
+    int cols, rows, type;
+    void *ptr;
+    in >> cols >> rows >> type >> ptr;
+    cvMat image(rows, cols, type, ptr);
     image.copyTo(s);
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
-    out.write(reinterpret_cast<const char *>(&s), sizeof(cvMat *));
+    out << s.cols << s.rows << s.type() << (void *)s.data;
     out << " ";
+
     return out;
   }
 };
@@ -106,7 +109,7 @@ namespace defaulttype
 template <>
 struct DataTypeName<sofaor::common::cvMat>
 {
-	static const char *name() { return "cvMat"; }
+  static const char *name() { return "cvMat"; }
 };
 
 }  // namespace defaulttype
