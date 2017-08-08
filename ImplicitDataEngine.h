@@ -23,9 +23,9 @@
 #ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 #define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 
-#include <SofaORCommon/cvDMatch.h>
-#include <SofaORCommon/cvKeypoint.h>
-#include <SofaORCommon/cvMat.h>
+#include "cvDMatch.h"
+#include "cvKeypoint.h"
+#include "cvMat.h"
 
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>

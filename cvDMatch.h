@@ -23,6 +23,8 @@
 #ifndef SOFA_OR_COMMON_CVDMATCH_H
 #define SOFA_OR_COMMON_CVDMATCH_H
 
+#include "initplugin.h"
+
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
 #include <opencv2/core/types.hpp>
@@ -34,7 +36,7 @@ namespace common
 /**
  * @brief The cvDMatch class, Needed to override the stream operators for SOFA
  */
-class cvDMatch : public cv::DMatch
+class SOFA_SOFAORCOMMON_API cvDMatch : public cv::DMatch
 {
  public:
   cvDMatch()

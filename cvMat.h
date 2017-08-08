@@ -23,6 +23,8 @@
 #ifndef SOFA_OR_COMMON_CVMAT_H
 #define SOFA_OR_COMMON_CVMAT_H
 
+#include "initplugin.h"
+
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
 #include <opencv2/core.hpp>
@@ -34,7 +36,7 @@ namespace common
 /**
  * @brief The cvMat class, Needed to override the stream operators for SOFA
  */
-class cvMat : public cv::Mat
+class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
 {
  public:
   cvMat() : cv::Mat() {}
@@ -88,7 +90,7 @@ class cvMat : public cv::Mat
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
-    out << s.cols << s.rows << s.type() << (void *)s.data;
+    out << s.cols << " " << s.rows << " " << s.type() << " " << (void *)s.data;
     out << " ";
 
     return out;

@@ -1,5 +1,8 @@
 # CMake package configuration file for the SofaORCommon plugin
-
+# It defines the following variables
+#  SofaORCommon_INCLUDE_DIRS - include directories for FooBar
+#  SofaORCommon_LIBRARIES    - libraries to link against
+ 
 @PACKAGE_INIT@
 
 find_package(SofaFramework REQUIRED)
@@ -9,3 +12,7 @@ if(NOT TARGET SofaORCommon)
 endif()
 
 check_required_components(SofaORCommon)
+
+get_filename_component(SofaORCommon_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(SofaORCommon_INCLUDE_DIRS "@CONF_INCLUDE_DIRS@")
+set(SofaORCommon_LIBRARIES SofaORCommon)

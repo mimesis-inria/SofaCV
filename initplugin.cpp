@@ -20,8 +20,19 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#include <sofa/helper/system/config.h>
 #include "initplugin.h"
+#include <sofa/helper/system/config.h>
+
+#ifdef QT_PLUGIN
+#include <QApplication>
+#include <QDebug>
+#include <QQuickPaintedItem>
+
+const int versionMajor = 1;
+const int versionMinor = 0;
+
+static void initResources() { Q_INIT_RESOURCE(SofaORCommon_qml); }
+#endif  // QT_PLUGIN
 
 namespace sofaor
 {
@@ -34,12 +45,12 @@ namespace common
 // the plugin
 
 extern "C" {
-SOFA_SOFAORCOMMONPLUGIN_API void initExternalModule();
-SOFA_SOFAORCOMMONPLUGIN_API const char* getModuleName();
-SOFA_SOFAORCOMMONPLUGIN_API const char* getModuleVersion();
-SOFA_SOFAORCOMMONPLUGIN_API const char* getModuleLicense();
-SOFA_SOFAORCOMMONPLUGIN_API const char* getModuleDescription();
-SOFA_SOFAORCOMMONPLUGIN_API const char* getModuleComponentList();
+SOFA_SOFAORCOMMON_API void initExternalModule();
+SOFA_SOFAORCOMMON_API const char* getModuleName();
+SOFA_SOFAORCOMMON_API const char* getModuleVersion();
+SOFA_SOFAORCOMMON_API const char* getModuleLicense();
+SOFA_SOFAORCOMMON_API const char* getModuleDescription();
+SOFA_SOFAORCOMMON_API const char* getModuleComponentList();
 }
 
 void initExternalModule()
@@ -48,6 +59,9 @@ void initExternalModule()
   if (first)
   {
     first = false;
+#ifdef QT_PLUGIN
+    initResources();
+#endif  // QT_PLUGIN
   }
 }
 

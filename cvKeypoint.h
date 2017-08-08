@@ -23,6 +23,8 @@
 #ifndef SOFA_OR_COMMON_CVKEYPOINT_H
 #define SOFA_OR_COMMON_CVKEYPOINT_H
 
+#include "initplugin.h"
+
 #include <sofa/defaulttype/DataTypeInfo.h>
 
 #include <opencv2/core.hpp>
@@ -36,7 +38,7 @@ namespace common
 /**
  * @brief The cvKeypoint class, Needed to override the stream operators for SOFA
  */
-class cvKeypoint : public cv::KeyPoint
+class SOFA_SOFAORCOMMON_API cvKeypoint : public cv::KeyPoint
 {
  public:
 	cvKeypoint(const cv::KeyPoint& kp)
