@@ -32,7 +32,11 @@
 #include <sofa/core/objectmodel/IdleEvent.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
 #include <sofa/simulation/AnimateEndEvent.h>
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-attributes"
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
 #include <sofa/simulation/PropagateEventVisitor.h>
+#pragma GCC diagnostic pop
 
 namespace sofaor
 {
