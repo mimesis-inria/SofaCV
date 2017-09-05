@@ -37,13 +37,19 @@ void ImplicitDataEngine::cleanTrackers(bool call_callback)
   {
     if (t.second.first.isDirty())
     {
-      if (call_callback) dataToUpdate.insert(t);
+      if (call_callback)
+        dataToUpdate.insert(t);
+      else
+        t.second.first.clean();
     }
   }
   for (TrackMap::value_type& t : dataToUpdate)
   {
     t.second.first.clean();
-    if (t.second.second) t.second.second->call(t.first);
+    if (t.second.second)
+    {
+      t.second.second->call(t.first);
+    }
   }
 }
 
