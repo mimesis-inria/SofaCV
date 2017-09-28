@@ -39,6 +39,8 @@ namespace common
 class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
 {
  public:
+  static const char *Name() { return "cvMat"; }
+
   cvMat() : cv::Mat() {}
   cvMat(int rows, int cols, int type) : cv::Mat(rows, cols, type) {}
   cvMat(cv::Size size, int type) : cv::Mat(size, type) {}
@@ -80,18 +82,39 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
   cvMat(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
   inline friend std::istream &operator>>(std::istream &in, cvMat &s)
   {
+<<<<<<< Updated upstream
     int cols, rows, type;
     void *ptr;
     in >> cols >> rows >> type >> ptr;
     cvMat image(rows, cols, type, ptr);
     image.copyTo(s);
+=======
+    size_t rows, cols, depth, channels;
+    in >> rows >> cols >> depth >> channels;
+
+    //    char separator;
+    //    in.read(&separator, 1);
+
+    //    cvMat image(rows, cols, CV_MAKETYPE(depth, channels));
+    //    if (image.cols * image.rows)
+    //    {
+    //      in.read((char *)image.data, image.total() * image.elemSize());
+    //      image.copyTo(s);
+    //    }
+>>>>>>> Stashed changes
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
+<<<<<<< Updated upstream
     out << s.cols << " " << s.rows << " " << s.type() << " " << (void *)s.data;
     out << " ";
+=======
+    out << s.rows << " " << s.cols << " " << s.depth() << " " << s.channels()
+        /*<< ";"*/;
+    //    out.write((char *)s.data, s.total() * s.elemSize());
+>>>>>>> Stashed changes
 
     return out;
   }
@@ -112,6 +135,117 @@ template <>
 struct DataTypeName<sofaor::common::cvMat>
 {
   static const char *name() { return "cvMat"; }
+};
+
+template <class TDataType>
+struct cvMatTypeInfo
+{
+  typedef TDataType DataType;
+  typedef DataType BaseType;
+  typedef DataType ValueType;
+  typedef long long ConvType;
+  typedef ScalarTypeInfo<TDataType> BaseTypeInfo;
+  typedef ScalarTypeInfo<TDataType> ValueTypeInfo;
+
+  enum
+  {
+    ValidInfo = BaseTypeInfo::ValidInfo
+  };  ///< 1 if this type has valid infos
+  enum
+  {
+    FixedSize = 1
+  };  ///< 1 if this type has a fixed size  -> always 1 Image
+  enum
+  {
+    ZeroConstructor = 0
+  };  ///< 1 if the constructor is equivalent to setting memory to 0  -> I guess
+      ///< so, a default Image is initialzed with nothing
+  enum
+  {
+    SimpleCopy = 0
+  };  ///< 1 if copying the data can be done with a memcpy
+  enum
+  {
+    SimpleLayout = 0
+  };  ///< 1 if the layout in memory is simply N values of the same base type
+  enum
+  {
+    Integer = 0
+  };  ///< 1 if this type uses integer values
+  enum
+  {
+    Scalar = 0
+  };  ///< 1 if this type uses scalar values
+  enum
+  {
+    Text = 0
+  };  ///< 1 if this type uses text values
+  enum
+  {
+    CopyOnWrite = 1
+  };  ///< 1 if this type uses copy-on-write -> it seems to be THE important
+      ///< option not to perform too many copies
+  enum
+  {
+    Container = 0
+  };  ///< 1 if this type is a container
+
+  enum
+  {
+    Size = 1
+  };  ///< largest known fixed size for this type, as returned by size()
+
+  static size_t size() { return 1; }
+  static size_t byteSize() { return 1; }
+
+  static size_t size(const DataType & /*data*/) { return 1; }
+
+  static bool setSize(DataType & /*data*/, size_t /*size*/) { return false; }
+
+  template <typename T>
+  static void getValue(const DataType & /*data*/, size_t /*index*/,
+                       T & /*value*/)
+  {
+    return;
+  }
+
+  template <typename T>
+  static void setValue(DataType & /*data*/, size_t /*index*/,
+                       const T & /*value*/)
+  {
+    return;
+  }
+
+  static void getValueString(const DataType &data, size_t index,
+                             std::string &value)
+  {
+    if (index != 0) return;
+    std::ostringstream o;
+    o << data;
+    value = o.str();
+  }
+
+  static void setValueString(DataType &data, size_t index,
+                             const std::string &value)
+  {
+    if (index != 0) return;
+    std::istringstream i(value);
+    i >> data;
+  }
+
+  static const void *getValuePtr(const DataType &) { return NULL; }
+
+  static void *getValuePtr(DataType &) { return NULL; }
+};
+
+template <>
+struct DataTypeInfo<sofaor::common::cvMat>
+    : public cvMatTypeInfo<sofaor::common::cvMat>
+{
+  static std::string name()
+  {
+    return "cvMat";
+  }
 };
 
 }  // namespace defaulttype

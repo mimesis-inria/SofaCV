@@ -20,82 +20,68 @@
  * Contact information: contact-mimesis@inria.fr                               *
  ******************************************************************************/
 
+#ifndef SOFA_OR_COMMON_FROMPYTHON_H
+#define SOFA_OR_COMMON_FROMPYTHON_H
+
 #include "initplugin.h"
-#include <sofa/config.h>
-#include <sofa/helper/system/config.h>
 
-#ifdef QT_PLUGIN
-#include <QApplication>
-#include <QDebug>
-#include <QQuickPaintedItem>
-
-const int versionMajor = 1;
-const int versionMinor = 0;
-
-static void initResources() { Q_INIT_RESOURCE(SofaORCommon_qml); }
-#endif  // QT_PLUGIN
-
-#ifdef SOFA_HAVE_SOFAPYTHON
-#include <SofaPython/PythonFactory.h>
-#include "python/Binding_cvMatData.h"
-#endif
+#include <sstream>
+#include "SofaORCommon/ImplicitDataEngine.h"
+#include "SofaORCommon/cvMat.h"
 
 namespace sofaor
 {
-/**
- * \brief Utility classes for SOFA-OR
- */
 namespace common
 {
-}  // namespace common
-}  // namespace sofaor
+/**
+ * @brief The ProjectPoints class
+ *
+ * Projects a 2D point cloud in 3D or vice-versa using a linked CameraSettings
+ * component
+ */
+class FromPython : public common::ImplicitDataEngine
+{
+ public:
+  SOFA_CLASS(FromPython, common::ImplicitDataEngine);
 
-namespace sofa
-{
-namespace component
-{
-// Here are just several convenient functions to help user to know what contains
-// the plugin
-extern "C" {
-SOFA_SOFAORCOMMON_API void initExternalModule();
-SOFA_SOFAORCOMMON_API const char* getModuleName();
-SOFA_SOFAORCOMMON_API const char* getModuleVersion();
-SOFA_SOFAORCOMMON_API const char* getModuleLicense();
-SOFA_SOFAORCOMMON_API const char* getModuleDescription();
-SOFA_SOFAORCOMMON_API const char* getModuleComponentList();
-}
-
-void initExternalModule()
-{
-  static bool first = true;
-  if (first)
+  FromPython()
+      : d_in(initData(&d_in, "img", "image buffer as sent  from python")),
+        d_out(initData(&d_out, "img_out", ""))
   {
-    first = false;
-#ifdef QT_PLUGIN
-    initResources();
-#endif  // QT_PLUGIN
-#ifdef SOFA_HAVE_SOFAPYTHON
-    if (PythonFactory::s_sofaPythonModule)
-    {
-      simulation::PythonEnvironment::gil lock(__func__);
-
-      // adding new bindings for Data<cvMat>
-      SP_ADD_CLASS_IN_FACTORY(cvMatData, sofa::Data<sofaor::common::cvMat>)
-    }
-#endif
   }
-}
 
-const char* getModuleName() { return "SofaORCommon"; }
-const char* getModuleVersion() { return "0.1"; }
-const char* getModuleLicense() { return ""; }
-const char* getModuleDescription()
-{
-  return "SofaORCommon plugin, containing data structures and utility "
-         "functions";
-}
+  ~FromPython() {}
+  void init()
+  {
+    addInput(&d_in);
+    addOutput(&d_out);
+    update();
+  }
 
-const char* getModuleComponentList() { return ""; }
+  void update()
+  {
+    std::stringstream ss;
+    ss << d_in.getValue();
+    cvMat& img = *d_out.beginEdit();
+    ss >> img;
+    d_out.endEdit();
+  }
+
+  virtual void handleEvent(sofa::core::objectmodel::Event* e)
+  {
+    if (sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
+        sofa::simulation::AnimateBeginEvent::checkEventType(e))
+    {
+      update();
+      setDirtyOutputs();
+    }
+  }
+
+  sofa::Data<std::string>
+      d_in;                 ///< [INPUT] string buffer as received from Python
+  sofa::Data<cvMat> d_out;  ///< [OUTPUT] output image
+};
 
 }  // namespace common
 }  // namespace sofaor
+#endif  // SOFA_OR_COMMON_FROMPYTHON_H
