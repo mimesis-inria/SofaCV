@@ -80,41 +80,17 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
 
   cvMat(const cv::Mat &m, const cv::Rect &roi) : cv::Mat(m, roi) {}
   cvMat(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
-  inline friend std::istream &operator>>(std::istream &in, cvMat &s)
+  inline friend std::istream &operator>>(std::istream &in, cvMat &/*s*/)
   {
-<<<<<<< Updated upstream
-    int cols, rows, type;
-    void *ptr;
-    in >> cols >> rows >> type >> ptr;
-    cvMat image(rows, cols, type, ptr);
-    image.copyTo(s);
-=======
     size_t rows, cols, depth, channels;
     in >> rows >> cols >> depth >> channels;
 
-    //    char separator;
-    //    in.read(&separator, 1);
-
-    //    cvMat image(rows, cols, CV_MAKETYPE(depth, channels));
-    //    if (image.cols * image.rows)
-    //    {
-    //      in.read((char *)image.data, image.total() * image.elemSize());
-    //      image.copyTo(s);
-    //    }
->>>>>>> Stashed changes
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
-<<<<<<< Updated upstream
-    out << s.cols << " " << s.rows << " " << s.type() << " " << (void *)s.data;
-    out << " ";
-=======
-    out << s.rows << " " << s.cols << " " << s.depth() << " " << s.channels()
-        /*<< ";"*/;
-    //    out.write((char *)s.data, s.total() * s.elemSize());
->>>>>>> Stashed changes
+    out << s.rows << " " << s.cols << " " << s.depth() << " " << s.channels();
 
     return out;
   }
