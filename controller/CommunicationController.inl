@@ -60,6 +60,7 @@ void CommunicationController<DataTypes>::init()
 {
     // Should drop sent messages if exceed HWM.
     // WARNING: does not work
+
     if(d_job.getValue().getSelectedItem() == "receiver" && d_pattern.getValue().getSelectedItem() == "publish/subscribe")
         d_HWM.setDisplayed(false); // Put to true if problem solved
     else
@@ -70,6 +71,7 @@ void CommunicationController<DataTypes>::init()
 
     d_data.resize(d_nbDataField.getValue());
     openCommunication();
+
 }
 
 template<class DataTypes>
@@ -204,6 +206,8 @@ void CommunicationController<DataTypes>::convertStringStreamToData(stringstream*
     {
         WriteAccessor<Data<DataTypes>> data = d_data[i];
         (*stream) >> data;
+        //std::cout << " data " << (double)d_data[i] << std::endl;
+
     }
 }
 
@@ -238,11 +242,14 @@ void CommunicationController<DataTypes>::sendData()
 template<class DataTypes>
 void CommunicationController<DataTypes>::receiveData()
 {
+    std::cout << " ok receive 0 " << std::endl;
+
     if(d_pattern.getValue().getSelectedItem() == "request/reply")
         sendRequest();
 
     zmq::message_t message;
     bool status = m_socket->recv(&message);
+
     if(status)
     {
         char messageChar[message.size()];
@@ -250,8 +257,12 @@ void CommunicationController<DataTypes>::receiveData()
 
         stringstream stream;
         unsigned int nbDataFieldReceived = 0;
+
+        std::cout << " ok receive 0 " << message.size() << std::endl;
+
         for(unsigned int i=0; i<message.size(); i++)
         {
+
             if(messageChar[i]==' ' || i==message.size()-1)
                 nbDataFieldReceived++;
 
@@ -266,6 +277,9 @@ void CommunicationController<DataTypes>::receiveData()
     }
     else
         msg_warning(this) << "Problem with communication";
+
+    std::cout << " ok receive 1 " << std::endl;
+
 }
 
 
