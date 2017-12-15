@@ -114,11 +114,12 @@ if(SofaQtQuickGUI_FOUND)
 endif (SofaQtQuickGUI_FOUND)
 
 add_library(${PROJECT_NAME} SHARED ${SofaORCommon_FILES} ${PYTHON_FILES})
-target_link_libraries(${PROJECT_NAME} ${SofaORCommon_LIBRARIES})
 
 #COMMUNICATION CONTROLLER
 if(SOFAOR_COMMUNICATIONCONTROLLER)
-    target_link_libraries(${PROJECT_NAME} PUBLIC ${SofaORCommon_LIBRARIES} "-lzmq")
+    target_link_libraries(${PROJECT_NAME} ${SofaORCommon_LIBRARIES} "-lzmq")
+else() 
+    target_link_libraries(${PROJECT_NAME} ${SofaORCommon_LIBRARIES})
 endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
