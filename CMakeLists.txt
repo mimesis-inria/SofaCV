@@ -11,6 +11,8 @@ find_package(SofaQtQuickGUI QUIET)
 
 include_directories( . )
 
+option(SOFAOR_COMMUNICATIONCONTROLLER "Enables Communication component, requires to install ZMQ library" OFF)
+
 set(HEADER_FILES
   initplugin.h
   cvKeypoint.h
@@ -29,6 +31,20 @@ set(SOURCE_FILES
   ImplicitDataEngine.cpp
 )
 
+#COMMUNICATION CONTROLLER
+if(SOFAOR_COMMUNICATIONCONTROLLER)
+
+    list(APPEND HEADER_FILES
+        controller/CommunicationController.h
+        controller/CommunicationController.inl
+            )
+
+    list(APPEND SOURCE_FILES
+        controller/CommunicationController.cpp
+            )
+endif()
+
+
 find_package(SofaPython QUIET)
 if( SofaPython_FOUND )
     set(PYTHON_FILES
@@ -40,6 +56,7 @@ if( SofaPython_FOUND )
         python/Binding_cvMatData.h)
     sofa_set_python_directory(${PROJECT_NAME} "python")
 endif()
+
 
 set(SofaORCommon_FILES
     ${HEADER_FILES}
@@ -98,6 +115,11 @@ endif (SofaQtQuickGUI_FOUND)
 
 add_library(${PROJECT_NAME} SHARED ${SofaORCommon_FILES} ${PYTHON_FILES})
 target_link_libraries(${PROJECT_NAME} ${SofaORCommon_LIBRARIES})
+
+#COMMUNICATION CONTROLLER
+if(SOFAOR_COMMUNICATIONCONTROLLER)
+    target_link_libraries(${PROJECT_NAME} PUBLIC ${SofaORCommon_LIBRARIES} "-lzmq")
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
