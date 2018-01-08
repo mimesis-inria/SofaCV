@@ -107,38 +107,14 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
 
   /// Constructor. d_isLeft is only for stereo (L/R) data engines
   /// (leave untouched otherwise)
-  ImplicitDataEngine()
-      : d_autolink(initData(&d_autolink, false, "autolink",
-                            "if set to true, allows implicit link setting "
-                            "between components' data. This makes scene "
-                            "writing less cumbersome but can potentially lead "
-                            "to undefined / unexpected "
-                            "behaviors. To use sparsely & wisely!")),
-        d_isLeft(initData(&d_isLeft, true, "left",
-                          "set to true by default, allows for distinction "
-                          "between left and right data when dealing with "
-                          "stereo data",
-                          true, true))
-  {
-    f_listening.setValue(true);
-  }
+  ImplicitDataEngine();
   virtual ~ImplicitDataEngine() {}
   virtual void init() {}
   /// Engine's general computations
   virtual void update() {}
   /// Runs an IdleEvent visitor to propagate the engine's output to the other
   /// engines
-  virtual void reinit()
-  {
-    std::cout << "Reinit..." << getName() << std::endl;
-    cleanTrackers();
-    update();
-    std::cout << std::endl << "Propagating from " << getName() << std::endl;
-    sofa::core::objectmodel::IdleEvent ie;
-    sofa::simulation::PropagateEventVisitor v(
-        sofa::core::ExecParams::defaultInstance(), &ie);
-    this->getContext()->getRootContext()->executeVisitor(&v);
-  }
+  virtual void reinit();
 
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set
@@ -162,15 +138,7 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
   /// default handleEvent behavior. Can be overloaded.
   /// First checks for dirty data and call their respective callbacks
   /// Then calls update
-  virtual void handleEvent(sofa::core::objectmodel::Event* e)
-  {
-    if (sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
-        sofa::simulation::AnimateBeginEvent::checkEventType(e))
-    {
-      if (cleanInputs()) update();
-      setDirtyOutputs();
-    }
-  }
+  virtual void handleEvent(sofa::core::objectmodel::Event* e);
 
  public:
   sofa::Data<bool> d_autolink;  ///< If false, engine won't try to implicitely

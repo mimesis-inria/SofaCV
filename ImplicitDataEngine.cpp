@@ -1,24 +1,24 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #include "ImplicitDataEngine.h"
 
@@ -130,6 +130,34 @@ void ImplicitDataEngine::addDataCallback(
   _trackData(data, callback, m_trackers);
 }
 
+ImplicitDataEngine::ImplicitDataEngine()
+    : d_autolink(initData(&d_autolink, false, "autolink",
+                          "if set to true, allows implicit link setting "
+                          "between components' data. This makes scene "
+                          "writing less cumbersome but can potentially lead "
+                          "to undefined / unexpected "
+                          "behaviors. To use sparsely & wisely!")),
+      d_isLeft(initData(&d_isLeft, true, "left",
+                        "set to true by default, allows for distinction "
+                        "between left and right data when dealing with "
+                        "stereo data",
+                        true, true))
+{
+  f_listening.setValue(true);
+}
+
+void ImplicitDataEngine::reinit()
+{
+  std::cout << "Reinit..." << getName() << std::endl;
+  cleanTrackers();
+  update();
+  std::cout << std::endl << "Propagating from " << getName() << std::endl;
+  sofa::core::objectmodel::IdleEvent ie;
+  sofa::simulation::PropagateEventVisitor v(
+      sofa::core::ExecParams::defaultInstance(), &ie);
+  this->getContext()->getRootContext()->executeVisitor(&v);
+}
+
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
                                   bool trackOnly, CallbackFunctor* callback)
 {
@@ -198,6 +226,16 @@ void ImplicitDataEngine::removeOutput(sofa::core::objectmodel::BaseData* data)
 {
   if (m_outputs.find(data) != m_outputs.end())
     m_outputs.erase(m_outputs.find(data));
+}
+
+void ImplicitDataEngine::handleEvent(sofa::core::objectmodel::Event* e)
+{
+  if (sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
+      sofa::simulation::AnimateBeginEvent::checkEventType(e))
+  {
+    if (cleanInputs()) update();
+    setDirtyOutputs();
+  }
 }
 
 void ImplicitDataEngine::removeDataCallback(
