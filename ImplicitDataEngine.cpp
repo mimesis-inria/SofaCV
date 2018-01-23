@@ -35,7 +35,7 @@ void ImplicitDataEngine::cleanTrackers(bool call_callback)
   // cleaning them too
   for (TrackMap::value_type& t : m_trackers)
   {
-    if (t.second.first.isDirty())
+    if (t.second.first.isDirty() || t.first->isDirty())
     {
       if (call_callback)
         dataToUpdate.insert(t);
@@ -62,7 +62,7 @@ bool ImplicitDataEngine::cleanInputs()
   // true if any of the inputs is dirty
   for (TrackMap::value_type& t : m_inputs)
   {
-    if (t.first->isDirty())
+    if (t.first->isDirty() || t.second.first.isDirty())
     {
       t.second.first.clean();
       t.first->updateIfDirty();
@@ -136,22 +136,16 @@ ImplicitDataEngine::ImplicitDataEngine()
                           "between components' data. This makes scene "
                           "writing less cumbersome but can potentially lead "
                           "to undefined / unexpected "
-                          "behaviors. To use sparsely & wisely!")),
-      d_isLeft(initData(&d_isLeft, true, "left",
-                        "set to true by default, allows for distinction "
-                        "between left and right data when dealing with "
-                        "stereo data",
-                        true, true))
+                          "behaviors. To use sparsely & wisely!"))
 {
   f_listening.setValue(true);
 }
 
 void ImplicitDataEngine::reinit()
 {
-  std::cout << "Reinit..." << getName() << std::endl;
   cleanTrackers();
   update();
-  std::cout << std::endl << "Propagating from " << getName() << std::endl;
+  setDirtyOutputs();
   sofa::core::objectmodel::IdleEvent ie;
   sofa::simulation::PropagateEventVisitor v(
       sofa::core::ExecParams::defaultInstance(), &ie);
@@ -170,14 +164,7 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
   if (engine)
   {
     bool isBinded = false;
-    if (d_isLeft.getValue())
-    {
-      isBinded = engine->_bindData(data, data->getName() + "1_out");
-      if (!isBinded)
-        isBinded = engine->_bindData(data, data->getName() + "_out");
-    }
-    else
-      isBinded = engine->_bindData(data, data->getName() + "2_out");
+    isBinded = engine->_bindData(data, data->getName() + "_out");
 
     if (!isBinded)
     {

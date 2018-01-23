@@ -1,24 +1,24 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
 #define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
@@ -100,6 +100,9 @@ class CallbackFunctor
 #define SOFAOR_ADD_CALLBACK(data, callback) \
   addDataCallback(data, new Callback(this, callback))
 
+#define SOFAOR_ADD_INPUT_CALLBACK(data, callback, trackOnly) \
+  addInput(data, trackOnly, new Callback(this, callback))
+
 class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
 {
  public:
@@ -119,6 +122,9 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set
   /// through XML, and sets a callback if provided
+  /// trackOnly allows you to have an engine with autolink, but with some
+  /// variables (flagged trackOnly) that would not be looked for using the
+  /// autolink (optional)
   void addInput(sofa::core::objectmodel::BaseData* data, bool trackOnly = false,
                 CallbackFunctor* functor = NULL);
   /// Removes the data from the inputs of the engine
@@ -143,13 +149,12 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
  public:
   sofa::Data<bool> d_autolink;  ///< If false, engine won't try to implicitely
                                 /// bind the inputs to previously declared
-  /// engine's outputs in graph
-  sofa::Data<bool> d_isLeft;
+
+  void setDirtyOutputs();
 
  protected:
   void cleanTrackers(bool call_callback = true);
   bool cleanInputs();
-  void setDirtyOutputs();
 
   //  /// Checks if inputs are dirty, to determine whether or not to call the
   //  /// engine's update method
@@ -171,6 +176,7 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
                  const std::string& alias);
   ImplicitDataEngine* getPreviousEngineInGraph();
 
+ protected:
   TrackMap m_inputs;
   TrackMap m_trackers;
   TrackMap m_outputs;
