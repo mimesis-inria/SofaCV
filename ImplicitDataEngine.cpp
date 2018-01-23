@@ -130,6 +130,17 @@ void ImplicitDataEngine::addDataCallback(
   _trackData(data, callback, m_trackers);
 }
 
+ImplicitDataEngine::ImplicitDataEngine()
+    : d_autolink(initData(&d_autolink, false, "autolink",
+                          "if set to true, allows implicit link setting "
+                          "between components' data. This makes scene "
+                          "writing less cumbersome but can potentially lead "
+                          "to undefined / unexpected "
+                          "behaviors. To use sparsely & wisely!"))
+{
+  f_listening.setValue(true);
+}
+
 void ImplicitDataEngine::reinit()
 {
   cleanTrackers();
