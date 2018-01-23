@@ -1,24 +1,24 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #include "ImplicitDataEngine.h"
 
@@ -35,7 +35,7 @@ void ImplicitDataEngine::cleanTrackers(bool call_callback)
   // cleaning them too
   for (TrackMap::value_type& t : m_trackers)
   {
-    if (t.second.first.isDirty())
+    if (t.second.first.isDirty() || t.first->isDirty())
     {
       if (call_callback)
         dataToUpdate.insert(t);
@@ -62,7 +62,7 @@ bool ImplicitDataEngine::cleanInputs()
   // true if any of the inputs is dirty
   for (TrackMap::value_type& t : m_inputs)
   {
-    if (t.first->isDirty())
+    if (t.first->isDirty() || t.second.first.isDirty())
     {
       t.second.first.clean();
       t.first->updateIfDirty();
@@ -130,6 +130,17 @@ void ImplicitDataEngine::addDataCallback(
   _trackData(data, callback, m_trackers);
 }
 
+void ImplicitDataEngine::reinit()
+{
+  cleanTrackers();
+  update();
+  setDirtyOutputs();
+  sofa::core::objectmodel::IdleEvent ie;
+  sofa::simulation::PropagateEventVisitor v(
+      sofa::core::ExecParams::defaultInstance(), &ie);
+  this->getContext()->getRootContext()->executeVisitor(&v);
+}
+
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
                                   bool trackOnly, CallbackFunctor* callback)
 {
@@ -142,14 +153,7 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
   if (engine)
   {
     bool isBinded = false;
-    if (d_isLeft.getValue())
-    {
-      isBinded = engine->_bindData(data, data->getName() + "1_out");
-      if (!isBinded)
-        isBinded = engine->_bindData(data, data->getName() + "_out");
-    }
-    else
-      isBinded = engine->_bindData(data, data->getName() + "2_out");
+    isBinded = engine->_bindData(data, data->getName() + "_out");
 
     if (!isBinded)
     {
@@ -198,6 +202,16 @@ void ImplicitDataEngine::removeOutput(sofa::core::objectmodel::BaseData* data)
 {
   if (m_outputs.find(data) != m_outputs.end())
     m_outputs.erase(m_outputs.find(data));
+}
+
+void ImplicitDataEngine::handleEvent(sofa::core::objectmodel::Event* e)
+{
+  if (sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
+      sofa::simulation::AnimateBeginEvent::checkEventType(e))
+  {
+    if (cleanInputs()) update();
+    setDirtyOutputs();
+  }
 }
 
 void ImplicitDataEngine::removeDataCallback(
