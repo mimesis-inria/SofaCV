@@ -113,7 +113,7 @@ class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
   ImplicitDataEngine();
   virtual ~ImplicitDataEngine() {}
   virtual void init() {}
-  /// Engine's general computations
+  /// Engine's general computations (Called anytime an input data is changed)
   virtual void update() {}
   /// Runs an IdleEvent visitor to propagate the engine's output to the other
   /// engines
