@@ -1,24 +1,24 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #ifndef SOFA_OR_COMMON_CVMAT_H
 #define SOFA_OR_COMMON_CVMAT_H
@@ -33,6 +33,154 @@ namespace sofaor
 {
 namespace common
 {
+namespace cvmat
+{
+template <typename T>
+inline void desserialize(std::istream &in, T *data)
+{
+}
+
+template <>
+inline void desserialize<unsigned char>(std::istream &in, unsigned char *buff)
+{
+  std::string tmpDelim;
+  //  uchar *buff = (uchar *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atoi(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<char>(std::istream &in, char *buff)
+{
+  std::string tmpDelim;
+  //  char *buff = (char *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atoi(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<unsigned short>(std::istream &in, unsigned short *buff)
+{
+  std::string tmpDelim;
+  //  ushort *buff = (ushort *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atoi(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<short>(std::istream &in, short *buff)
+{
+  std::string tmpDelim;
+  //  short *buff = (short *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atoi(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<int>(std::istream &in, int *buff)
+{
+  std::string tmpDelim;
+  //  int *buff = (int *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atoi(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<float>(std::istream &in, float *buff)
+{
+  std::string tmpDelim;
+  //  float *buff = (float *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atof(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+
+template <>
+inline void desserialize<double>(std::istream &in, double *buff)
+{
+  std::string tmpDelim;
+  //  double *buff = (double *)(data);
+  bool read = true;
+  while (read)
+  {
+    in >> tmpDelim;
+    if (tmpDelim == "[") continue;
+    if (tmpDelim.find(']') != std::string::npos)
+      break;
+    else
+    {
+      *buff = atof(tmpDelim.c_str());
+      buff++;
+    }
+  }
+}
+}  // namespace cvmat
+
 /**
  * @brief The cvMat class, Needed to override the stream operators for SOFA
  */
@@ -80,17 +228,53 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
 
   cvMat(const cv::Mat &m, const cv::Rect &roi) : cv::Mat(m, roi) {}
   cvMat(const cv::Mat &m, const cv::Range *ranges) : cv::Mat(m, ranges) {}
-  inline friend std::istream &operator>>(std::istream &in, cvMat &/*s*/)
-  {
-    size_t rows, cols, depth, channels;
-    in >> rows >> cols >> depth >> channels;
 
+  template <class T>
+  void desserialize(std::istream &in)
+  {
+    common::cvmat::desserialize<T>(in, (T *)data);
+  }
+
+  inline friend std::istream &operator>>(std::istream &in, cvMat &s)
+  {
+    int rows, cols, type;
+
+    in >> rows >> cols >> type;
+    s.create(rows, cols, type);
+    switch (s.depth())
+    {
+      case CV_8U:
+        s.desserialize<unsigned char>(in);
+        break;
+      case CV_8S:
+        s.desserialize<char>(in);
+        break;
+      case CV_16U:
+        s.desserialize<unsigned short>(in);
+        break;
+      case CV_16S:
+        s.desserialize<short>(in);
+        break;
+      case CV_32S:
+        s.desserialize<int>(in);
+        break;
+      case CV_32F:
+        s.desserialize<float>(in);
+        break;
+      case CV_64F:
+        s.desserialize<double>(in);
+        break;
+      default:
+        msg_error("cvMat::desserialize()") << "Matrix depth type incorrect";
+        break;
+    }
     return in;
   }
 
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
-    out << s.rows << " " << s.cols << " " << s.depth() << " " << s.channels();
+    out << " " << s.rows << " " << s.cols << " " << s.type() << " ";
+    out << *((cv::Mat *)&s);
 
     return out;
   }
@@ -218,10 +402,7 @@ template <>
 struct DataTypeInfo<sofaor::common::cvMat>
     : public cvMatTypeInfo<sofaor::common::cvMat>
 {
-  static std::string name()
-  {
-    return "cvMat";
-  }
+  static std::string name() { return "cvMat"; }
 };
 
 }  // namespace defaulttype
