@@ -103,10 +103,10 @@ class CallbackFunctor
 #define SOFAOR_ADD_INPUT_CALLBACK(data, callback, trackOnly) \
   addInput(data, trackOnly, new Callback(this, callback))
 
-class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
+class ImplicitDataEngine : public sofa::core::DataEngine
 {
  public:
-  SOFA_CLASS(ImplicitDataEngine, sofa::core::objectmodel::BaseObject);
+  SOFA_CLASS2(ImplicitDataEngine, sofa::core::objectmodel::BaseObject, sofa::core::objectmodel::DDGNode);
 
   /// Constructor. d_isLeft is only for stereo (L/R) data engines
   /// (leave untouched otherwise)

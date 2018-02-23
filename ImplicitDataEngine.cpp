@@ -146,10 +146,10 @@ void ImplicitDataEngine::reinit()
   cleanTrackers();
   update();
   setDirtyOutputs();
-  sofa::core::objectmodel::IdleEvent ie;
-  sofa::simulation::PropagateEventVisitor v(
-      sofa::core::ExecParams::defaultInstance(), &ie);
-  this->getContext()->getRootContext()->executeVisitor(&v);
+//  sofa::core::objectmodel::IdleEvent ie;
+//  sofa::simulation::PropagateEventVisitor v(
+//      sofa::core::ExecParams::defaultInstance(), &ie);
+//  this->getContext()->getRootContext()->executeVisitor(&v);
 }
 
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
@@ -158,6 +158,7 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
   if (!d_autolink.getValue() || trackOnly || data->isSet())
   {
     _trackData(data, callback, m_inputs);
+    sofa::core::objectmodel::DDGNode::addInput(data);
     return;
   }
   ImplicitDataEngine* engine = getPreviousEngineInGraph();
@@ -175,6 +176,7 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
     else
     {
       _trackData(data, callback, m_inputs);
+      sofa::core::objectmodel::DDGNode::addInput(data);
       msg_advice(getName() + "::" + data->getName())
           << "linked to " << data->getLinkPath()
           << " implicitly. Please ensure that this makes sense. Otherwise, set "
