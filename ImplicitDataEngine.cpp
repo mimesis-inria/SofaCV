@@ -71,7 +71,6 @@ void ImplicitDataEngine::reinit()
 {
   std::cout << "calling reinit" << std::endl;
   Reinit();
-//  cleanDirty(); // this cleans the datatrackers without updating the data from parent values
 }
 
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
