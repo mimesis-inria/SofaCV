@@ -85,9 +85,7 @@ class ImplicitDataEngine : public sofa::core::DataEngine
   ImplicitDataEngine();
   virtual ~ImplicitDataEngine() {}
 
-  virtual void reinit() final;
   virtual void update() final;
-  virtual void Reinit() = 0;
   virtual void Update() = 0;
 
  protected:
@@ -97,23 +95,11 @@ class ImplicitDataEngine : public sofa::core::DataEngine
   /// variables (flagged trackOnly) that would not be looked for using the
   /// autolink (optional)
   void addInput(sofa::core::objectmodel::BaseData* data, bool trackOnly = false);
-  /// Removes the data from the inputs of the engine
-  void removeInput(sofa::core::objectmodel::BaseData* data);
 
   /// Sets a callback method for data
   void trackData(sofa::core::objectmodel::BaseData* data);
   /// Removes the callback method for a specific data
   void untrackData(sofa::core::objectmodel::BaseData* data);
-
-  /// Sets a data as an output for this engine
-  void addOutput(sofa::core::objectmodel::BaseData* data);
-  /// Removes a data from this engine's list of outputs
-  void removeOutput(sofa::core::objectmodel::BaseData* data);
-
-  /// default handleEvent behavior. Can be overloaded.
-  /// First checks for dirty data and call their respective callbacks
-  /// Then calls update
-  virtual void handleEvent(sofa::core::objectmodel::Event* e) override;
 
  public:
   sofa::Data<bool> d_autolink;  ///< If false, engine won't try to implicitely
