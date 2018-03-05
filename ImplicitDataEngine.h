@@ -86,7 +86,9 @@ class ImplicitDataEngine : public sofa::core::DataEngine
   virtual ~ImplicitDataEngine() {}
 
   virtual void reinit() final;
+  virtual void update() final;
   virtual void Reinit() = 0;
+  virtual void Update() = 0;
 
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set

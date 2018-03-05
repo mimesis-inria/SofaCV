@@ -67,6 +67,21 @@ ImplicitDataEngine::ImplicitDataEngine()
   f_listening.setValue(true);
 }
 
+void ImplicitDataEngine::update()
+{
+  std::cout << getName() << "::update()" << std::endl;
+  const DDGLinkContainer& inputs = getInputs();
+  for(size_t i=0, iend=inputs.size() ; i<iend ; ++i )
+  {
+      static_cast<sofa::core::objectmodel::BaseData*>(inputs[i])->updateIfDirty();
+  }
+  cleanDirty();
+  std::cout << getName() << "::cleanDirty()" << std::endl;
+
+  std::cout << getName() << "::Update()" << std::endl;
+  Update();
+}
+
 void ImplicitDataEngine::reinit()
 {
   std::cout << "calling reinit" << std::endl;
@@ -113,8 +128,8 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
 void ImplicitDataEngine::addOutput(sofa::core::objectmodel::BaseData* data)
 {
     sofa::core::objectmodel::DDGNode::addOutput(data);
-    data->setDirtyValue();
-    setDirtyValue();
+//    data->setDirtyValue();
+//    setDirtyValue();
 }
 
 /// Prevent Engine from updating this data from its parent values
@@ -133,16 +148,16 @@ void ImplicitDataEngine::handleEvent(sofa::core::objectmodel::Event* e)
   if (sofa::core::objectmodel::IdleEvent::checkEventType(e) ||
       sofa::simulation::AnimateBeginEvent::checkEventType(e))
   {
-      std::cout << getName() << " updateIfDirty()" << std::endl;
-      updateIfDirty(); // is isDirty() true????????
+//      std::cout << getName() << " updateIfDirty()" << std::endl;
+//      updateIfDirty(); // is isDirty() true????????
   }
 }
 
 void ImplicitDataEngine::trackData(sofa::core::objectmodel::BaseData* data)
 {
-    data->cleanDirty();
-    m_dataTracker.trackData(*data);
-    m_dataTracker.clean(*data);
+//    data->cleanDirty();
+//    m_dataTracker.trackData(*data);
+//    m_dataTracker.clean(*data);
 }
 
 void ImplicitDataEngine::untrackData(
