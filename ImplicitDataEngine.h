@@ -103,7 +103,7 @@ class CallbackFunctor
 #define SOFAOR_ADD_INPUT_CALLBACK(data, callback, trackOnly) \
   addInput(data, trackOnly, new Callback(this, callback))
 
-class ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
+class SOFA_SOFAORCOMMON_API ImplicitDataEngine : public virtual sofa::core::objectmodel::BaseObject
 {
  public:
   SOFA_CLASS(ImplicitDataEngine, sofa::core::objectmodel::BaseObject);
