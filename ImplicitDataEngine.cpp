@@ -72,7 +72,7 @@ void ImplicitDataEngine::update()
   const DDGLinkContainer& inputs = getInputs();
   for(size_t i=0, iend=inputs.size() ; i<iend ; ++i )
   {
-      static_cast<sofa::core::objectmodel::BaseData*>(inputs[i])->updateIfDirty();
+    static_cast<sofa::core::objectmodel::BaseData*>(inputs[i])->updateIfDirty();
   }
   cleanDirty();
   Update();

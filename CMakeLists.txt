@@ -20,6 +20,8 @@ set(HEADER_FILES
   cvMat.h
   cvMatUtils.h
   ImplicitDataEngine.h
+  DependencyGraphVisitor.h
+  DependencyGraphAnimationLoop.h
   )
 
 set(SOURCE_FILES
@@ -29,6 +31,8 @@ set(SOURCE_FILES
   cvMat.cpp
   cvMatUtils.cpp
   ImplicitDataEngine.cpp
+  DependencyGraphVisitor.cpp
+  DependencyGraphAnimationLoop.cpp
 )
 
 #COMMUNICATION CONTROLLER
