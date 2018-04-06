@@ -46,15 +46,16 @@ class DependencyGraphVisitor : public sofa::simulation::Visitor
 
     for (const auto& obj : objs)
     {
-        std::cout << obj->getName() << std::endl;
       // retrieve all data fields in component
       for (const auto& p : obj->getDataFields())
       {
-        // keep only those with no outputs (leafs)
-        if (p->getOutputs().empty() && !p->getInputs().empty())
-        {
-          printInput(p, 0);
-        }
+        if (p->getValueTypeInfo()->name() == "cvMat")
+
+          // keep only those with no outputs (leafs)
+          if (p->getOutputs().empty() && !p->getInputs().empty())
+          {
+            printInput(p, 0);
+          }
       }
     }
     return RESULT_CONTINUE;
