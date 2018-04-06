@@ -2,10 +2,9 @@
 #define SOFA_DATA_DEPENDENCY_GRAPH_VISITOR_H
 
 #include <SofaSimulationGraph/DAGSimulation.h>
-#include <sofa/simulation/Visitor.h>
 #include <sofa/core/objectmodel/BaseObject.h>
 #include <sofa/core/objectmodel/DDGNode.h>
-
+#include <sofa/simulation/Visitor.h>
 
 #include <algorithm>
 #include <fstream>
@@ -27,9 +26,9 @@ class DependencyGraphVisitor : public sofa::simulation::Visitor
 
   void printInput(sofa::core::objectmodel::DDGNode* data, int level)
   {
-    for (int i = 0 ; i < level ; ++i)
-      std::cout << "\t";
-    std::cout << data->getOwner()->getName() << "::" << data->getName() << std::endl;
+    for (int i = 0; i < level; ++i) std::cout << "\t";
+    std::cout << data->getOwner()->getName() << "::" << data->getName()
+              << std::endl;
 
     level++;
     for (auto input : data->getInputs())
@@ -38,24 +37,22 @@ class DependencyGraphVisitor : public sofa::simulation::Visitor
     }
   }
 
-  sofa::simulation::Visitor::Result processNodeTopDown(sofa::simulation::Node* node)
+  sofa::simulation::Visitor::Result processNodeTopDown(
+      sofa::simulation::Node* node)
   {
-    std::vector<sofa::core::objectmodel::BaseObject*> objs;
+    std::vector<sofa::core::objectmodel::DDGNode*> objs;
     node->getContext()->getObjects(objs);
-    std::cout << "Number of objects in node: " << objs.size() << std::endl;
 
     for (const auto& obj : objs)
     {
-      // retrieve all data fields in component
-      for (const auto& p : obj->getDataFields())
+      if (obj->getOutputs().empty())
       {
-        if (p->getValueTypeInfo()->name() == "cvMat")
-
-          // keep only those with no outputs (leafs)
-          if (p->getOutputs().empty() && !p->getInputs().empty())
-          {
-            printInput(p, 0);
-          }
+        const sofa::core::objectmodel::DDGNode::DDGLinkContainer& inputs =
+            obj->getInputs();
+        for (auto input : inputs)
+        {
+          printInput(input, 0);
+        }
       }
     }
     return RESULT_CONTINUE;
@@ -63,4 +60,3 @@ class DependencyGraphVisitor : public sofa::simulation::Visitor
 };
 
 #endif  // SOFA_DATA_DEPENDENCY_GRAPH_VISITOR_H
-
