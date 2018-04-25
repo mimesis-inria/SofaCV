@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(SofaCV)
 
+if (CMAKE_VERSION GREATER 3.9)
+  cmake_policy(SET CMP0053 OLD)
+  cmake_policy(SET CMP0054 OLD)
+  cmake_policy(SET CMP0017 NEW)
+endif ()
+
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
 set(${PROJECT_NAME}_MINOR_VERSION 1)
 set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION})
@@ -13,10 +19,10 @@ include_directories( src/ )
 
 set(HEADER_FILES
   src/initplugin.h
-  src/cvKeypoint.h
-  src/cvDMatch.h
-  src/cvMat.h
-  src/cvMatUtils.h
+  src/Keypoint.h
+  src/DMatch.h
+  src/Mat.h
+  src/MatUtils.h
   src/ImplicitDataEngine.h
   src/DependencyGraphVisitor.h
   src/DependencyGraphAnimationLoop.h
@@ -24,10 +30,10 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
   src/initplugin.cpp
-  src/cvKeypoint.cpp
-  src/cvDMatch.cpp
-  src/cvMat.cpp
-  src/cvMatUtils.cpp
+  src/Keypoint.cpp
+  src/DMatch.cpp
+  src/Mat.cpp
+  src/MatUtils.cpp
   src/ImplicitDataEngine.cpp
   src/DependencyGraphVisitor.cpp
   src/DependencyGraphAnimationLoop.cpp
@@ -36,12 +42,12 @@ set(SOURCE_FILES
 find_package(SofaPython QUIET)
 if( SofaPython_FOUND )
   set(PYTHON_FILES
-    src/python/SofaOR/__init__.py
+    src/python/SofaCV/__init__.py
     )
 
-  list(APPEND SOURCE_FILES python/Binding_cvMatData.cpp)
+  list(APPEND SOURCE_FILES src/python/Binding_MatData.cpp)
   list(APPEND HEADER_FILES
-    src/python/Binding_cvMatData.h)
+    src/python/Binding_MatData.h)
   sofa_set_python_directory(${PROJECT_NAME} "python")
 endif()
 
@@ -70,9 +76,9 @@ if(SofaQtQuickGUI_FOUND)
   add_definitions("-DSOFA_BUILD_${PROJECT_NAME}_PLUGIN")
 
   set(QML_FILES
-    src/gui/qml/SofaDataTypes/SofaDataType_cvMat.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_cvDMatch.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_cvKeypoint.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_Mat.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_DMatch.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_Keypoint.qml
     )
 
   set(QRC_FILES

@@ -32,23 +32,20 @@
 const int versionMajor = 1;
 const int versionMinor = 0;
 
-static void initResources() { Q_INIT_RESOURCE(SofaORCommon_qml); }
+static void initResources() { Q_INIT_RESOURCE(SofaCV_qml); }
 #endif  // QT_PLUGIN
 
 #ifdef SOFA_HAVE_SOFAPYTHON
 #include <SofaPython/PythonFactory.h>
-#include "python/Binding_cvMatData.h"
+#include "python/Binding_MatData.h"
 #endif
 
-namespace sofaor
+namespace sofacv
 {
 /**
- * \brief Utility classes for SOFA-OR
+ * \brief Main namespace for SofaCV
  */
-namespace common
-{
-}  // namespace common
-}  // namespace sofaor
+}  // namespace sofacv
 
 namespace sofa
 {
@@ -57,12 +54,12 @@ namespace component
 // Here are just several convenient functions to help user to know what contains
 // the plugin
 extern "C" {
-SOFA_SOFAORCOMMON_API void initExternalModule();
-SOFA_SOFAORCOMMON_API const char* getModuleName();
-SOFA_SOFAORCOMMON_API const char* getModuleVersion();
-SOFA_SOFAORCOMMON_API const char* getModuleLicense();
-SOFA_SOFAORCOMMON_API const char* getModuleDescription();
-SOFA_SOFAORCOMMON_API const char* getModuleComponentList();
+SOFA_SOFACV_API void initExternalModule();
+SOFA_SOFACV_API const char* getModuleName();
+SOFA_SOFACV_API const char* getModuleVersion();
+SOFA_SOFACV_API const char* getModuleLicense();
+SOFA_SOFACV_API const char* getModuleDescription();
+SOFA_SOFACV_API const char* getModuleComponentList();
 }
 
 void initExternalModule()
@@ -79,23 +76,22 @@ void initExternalModule()
     {
       simulation::PythonEnvironment::gil lock(__func__);
 
-      // adding new bindings for Data<cvMat>
-      SP_ADD_CLASS_IN_FACTORY(cvMatData, sofa::Data<sofaor::common::cvMat>)
+      // adding new bindings for Data<Mat>
+      SP_ADD_CLASS_IN_FACTORY(MatData, sofa::Data<sofacv::Mat>)
     }
 #endif
   }
 }
 
-const char* getModuleName() { return "SofaORCommon"; }
+const char* getModuleName() { return "SofaCV"; }
 const char* getModuleVersion() { return "0.1"; }
 const char* getModuleLicense() { return ""; }
 const char* getModuleDescription()
 {
-  return "SofaORCommon plugin, containing data structures and utility "
-         "functions";
+  return "SofaCV plugin, containing data structures and utility "
+         "functions for computer vision";
 }
 
 const char* getModuleComponentList() { return ""; }
 
-}  // namespace common
-}  // namespace sofaor
+}  // namespace sofacv

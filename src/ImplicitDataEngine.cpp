@@ -22,9 +22,7 @@
 
 #include "ImplicitDataEngine.h"
 
-namespace sofaor
-{
-namespace common
+namespace sofacv
 {
 
 bool ImplicitDataEngine::_bindData(sofa::core::objectmodel::BaseData* data,
@@ -126,5 +124,4 @@ void ImplicitDataEngine::untrackData(
     // need a way to remove a data from a DataTracker...
 }
 
-}  // namespace common
-}  // namespace sofaor
+}  // namespace sofacv

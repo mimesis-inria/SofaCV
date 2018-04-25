@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>SofaDataTypes/SofaDataType_Mat.qml</file>
+        <file>SofaDataTypes/SofaDataType_DMatch.qml</file>
+        <file>SofaDataTypes/SofaDataType_Keypoint.qml</file>
+    </qresource>
+</RCC>

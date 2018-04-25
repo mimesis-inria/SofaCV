@@ -20,12 +20,8 @@
  * Contact information: contact-mimesis@inria.fr                               *
  ******************************************************************************/
 
-#ifndef SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
-#define SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
-
-#include "cvDMatch.h"
-#include "cvKeypoint.h"
-#include "cvMat.h"
+#ifndef SOFACV_IMPLICITDATAENGINE_H
+#define SOFACV_IMPLICITDATAENGINE_H
 
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>
@@ -34,9 +30,7 @@
 #include <sofa/simulation/AnimateEndEvent.h>
 #include <sofa/simulation/PropagateEventVisitor.h>
 
-namespace sofaor
-{
-namespace common
+namespace sofacv
 {
 /**
  *  \brief from a set of Data inputs computes a set of Data outputs while hiding
@@ -111,7 +105,6 @@ class ImplicitDataEngine : public sofa::core::DataEngine
   ImplicitDataEngine* getPreviousEngineInGraph();
 };
 
-}  // namespace common
-}  // namespace sofaor
+}  // namespace sofacv
 
-#endif  // SOFA_OR_PROCESSOR_IMPLICITDATAENGINE_H
+#endif  // SOFACV_IMPLICITDATAENGINE_H

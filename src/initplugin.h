@@ -20,15 +20,15 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#ifndef SOFAORCOMMONPLUGIN_H
-#define SOFAORCOMMONPLUGIN_H
+#ifndef SOFACV_INITPLUGIN_H
+#define SOFACV_INITPLUGIN_H
 
 #include <sofa/helper/system/config.h>
 
-#ifdef SOFA_BUILD_SOFAORCOMMON_PLUGIN
-#define SOFA_SOFAORCOMMON_API SOFA_EXPORT_DYNAMIC_LIBRARY
+#ifdef SOFA_BUILD_SOFACV_PLUGIN
+#define SOFA_SOFACV_API SOFA_EXPORT_DYNAMIC_LIBRARY
 #else
-#define SOFA_SOFAORCOMMON_API SOFA_IMPORT_DYNAMIC_LIBRARY
+#define SOFA_SOFACV_API SOFA_IMPORT_DYNAMIC_LIBRARY
 #endif
 
-#endif  // SOFA_BUILD_SOFAORCOMMONPLUGIN
+#endif  // SOFACV_INITPLUGIN_H
