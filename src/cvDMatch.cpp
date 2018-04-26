@@ -20,4 +20,4 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#include "DMatch.h"
+#include "cvDMatch.h"

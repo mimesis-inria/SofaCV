@@ -20,23 +20,21 @@
  * Contact information: contact-mimesis@inria.fr                               *
  ******************************************************************************/
 
-#ifndef SOFA_OR_COMMON_CVMAT_H
-#define SOFA_OR_COMMON_CVMAT_H
+#ifndef SOFACV_CVMAT_H
+#define SOFACV_CVMAT_H
 
-#include "initplugin.h"
+#include "SofaCVPlugin.h"
 
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
 #include <opencv2/core.hpp>
 
-namespace sofaor
-{
-namespace common
+namespace sofacv
 {
 namespace cvmat
 {
 template <typename T>
-inline void desserialize(std::istream &in, T *data)
+inline void desserialize(std::istream &/*in*/, T */*data*/)
 {
 }
 
@@ -54,7 +52,7 @@ inline void desserialize<unsigned char>(std::istream &in, unsigned char *buff)
       break;
     else
     {
-      *buff = atoi(tmpDelim.c_str());
+      *buff = uchar(atoi(tmpDelim.c_str()));
       buff++;
     }
   }
@@ -74,7 +72,7 @@ inline void desserialize<char>(std::istream &in, char *buff)
       break;
     else
     {
-      *buff = atoi(tmpDelim.c_str());
+      *buff = char(atoi(tmpDelim.c_str()));
       buff++;
     }
   }
@@ -94,7 +92,7 @@ inline void desserialize<unsigned short>(std::istream &in, unsigned short *buff)
       break;
     else
     {
-      *buff = atoi(tmpDelim.c_str());
+      *buff = ushort(atoi(tmpDelim.c_str()));
       buff++;
     }
   }
@@ -114,7 +112,7 @@ inline void desserialize<short>(std::istream &in, short *buff)
       break;
     else
     {
-      *buff = atoi(tmpDelim.c_str());
+      *buff = short(atoi(tmpDelim.c_str()));
       buff++;
     }
   }
@@ -154,7 +152,7 @@ inline void desserialize<float>(std::istream &in, float *buff)
       break;
     else
     {
-      *buff = atof(tmpDelim.c_str());
+      *buff = float(atof(tmpDelim.c_str()));
       buff++;
     }
   }
@@ -184,7 +182,7 @@ inline void desserialize<double>(std::istream &in, double *buff)
 /**
  * @brief The cvMat class, Needed to override the stream operators for SOFA
  */
-class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
+class SOFA_SOFACV_API cvMat : public cv::Mat
 {
  public:
   static const char *Name() { return "cvMat"; }
@@ -232,7 +230,7 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
   template <class T>
   void desserialize(std::istream &in)
   {
-    common::cvmat::desserialize<T>(in, (T *)data);
+    cvmat::desserialize<T>(in, (T *)data);
   }
 
   inline friend std::istream &operator>>(std::istream &in, cvMat &s)
@@ -265,7 +263,7 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
         s.desserialize<double>(in);
         break;
       default:
-        msg_error("cvMat::desserialize()") << "Matrix depth type incorrect";
+        msg_error("cvmat::desserialize()") << "Matrix depth type incorrect";
         break;
     }
     return in;
@@ -274,14 +272,13 @@ class SOFA_SOFAORCOMMON_API cvMat : public cv::Mat
   inline friend std::ostream &operator<<(std::ostream &out, const cvMat &s)
   {
     out << " " << s.rows << " " << s.cols << " " << s.type() << " ";
-    out << *((cv::Mat *)&s);
+    out << *(dynamic_cast<const cv::Mat *>(&s));
 
     return out;
   }
 };
 
-}  // namespace common
-}  // namespace sofaor
+}  // namespace sofacv
 
 namespace sofa
 {
@@ -292,7 +289,7 @@ namespace defaulttype
  * structures as sofa::Data
  */
 template <>
-struct DataTypeName<sofaor::common::cvMat>
+struct DataTypeName<sofacv::cvMat>
 {
   static const char *name() { return "cvMat"; }
 };
@@ -399,8 +396,8 @@ struct cvMatTypeInfo
 };
 
 template <>
-struct DataTypeInfo<sofaor::common::cvMat>
-    : public cvMatTypeInfo<sofaor::common::cvMat>
+struct DataTypeInfo<sofacv::cvMat>
+    : public cvMatTypeInfo<sofacv::cvMat>
 {
   static std::string name() { return "cvMat"; }
 };
@@ -408,4 +405,4 @@ struct DataTypeInfo<sofaor::common::cvMat>
 }  // namespace defaulttype
 }  // namespace sofa
 
-#endif  // SOFA_OR_COMMON_CVMAT_H
+#endif  // SOFACV_CVMAT_H

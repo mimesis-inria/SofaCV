@@ -23,6 +23,7 @@
 #ifndef SOFACV_IMPLICITDATAENGINE_H
 #define SOFACV_IMPLICITDATAENGINE_H
 
+#include <SofaCVPlugin.h>
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/core/objectmodel/IdleEvent.h>
@@ -69,7 +70,7 @@ namespace sofacv
  */
 
 
-class ImplicitDataEngine : public sofa::core::DataEngine
+class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
 {
  public:
   SOFA_CLASS(ImplicitDataEngine, sofa::core::DataEngine);

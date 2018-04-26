@@ -7,33 +7,39 @@ if (CMAKE_VERSION GREATER 3.9)
   cmake_policy(SET CMP0017 NEW)
 endif ()
 
-set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 1)
+set(${PROJECT_NAME}_MAJOR_VERSION 2)
+set(${PROJECT_NAME}_MINOR_VERSION 0)
 set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION})
 
+find_package(OpenCV 3.0 REQUIRED)
 find_package(SofaFramework REQUIRED)
 find_package(SofaGui REQUIRED)
 find_package(SofaQtQuickGUI QUIET)
 
+include_directories(${OpenCV_INCLUDE_DIRS})
+link_directories(${OpenCV_LIBRARY_DIRS})
+
+add_definitions("-std=c++11")
+
 include_directories( src/ )
 
 set(HEADER_FILES
-  src/initplugin.h
-  src/Keypoint.h
-  src/DMatch.h
-  src/Mat.h
-  src/MatUtils.h
+  src/SofaCVPlugin.h
+  src/cvKeypoint.h
+  src/cvDMatch.h
+  src/cvMat.h
+  src/cvMatUtils.h
   src/ImplicitDataEngine.h
   src/DependencyGraphVisitor.h
   src/DependencyGraphAnimationLoop.h
   )
 
 set(SOURCE_FILES
-  src/initplugin.cpp
-  src/Keypoint.cpp
-  src/DMatch.cpp
-  src/Mat.cpp
-  src/MatUtils.cpp
+  src/SofaCVPlugin.cpp
+  src/cvKeypoint.cpp
+  src/cvDMatch.cpp
+  src/cvMat.cpp
+  src/cvMatUtils.cpp
   src/ImplicitDataEngine.cpp
   src/DependencyGraphVisitor.cpp
   src/DependencyGraphAnimationLoop.cpp
@@ -45,9 +51,9 @@ if( SofaPython_FOUND )
     src/python/SofaCV/__init__.py
     )
 
-  list(APPEND SOURCE_FILES src/python/Binding_MatData.cpp)
+  list(APPEND SOURCE_FILES src/python/Binding_cvMatData.cpp)
   list(APPEND HEADER_FILES
-    src/python/Binding_MatData.h)
+    src/python/Binding_cvMatData.h)
   sofa_set_python_directory(${PROJECT_NAME} "python")
 endif()
 
@@ -76,9 +82,9 @@ if(SofaQtQuickGUI_FOUND)
   add_definitions("-DSOFA_BUILD_${PROJECT_NAME}_PLUGIN")
 
   set(QML_FILES
-    src/gui/qml/SofaDataTypes/SofaDataType_Mat.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_DMatch.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_Keypoint.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_cvMat.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_cvDMatch.qml
+    src/gui/qml/SofaDataTypes/SofaDataType_cvKeypoint.qml
     )
 
   set(QRC_FILES

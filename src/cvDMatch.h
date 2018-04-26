@@ -20,10 +20,10 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#ifndef SOFACV_DMATCH_H
-#define SOFACV_DMATCH_H
+#ifndef SOFACV_CVDMATCH_H
+#define SOFACV_CVDMATCH_H
 
-#include "initplugin.h"
+#include "SofaCVPlugin.h"
 
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
@@ -34,28 +34,28 @@ namespace sofacv
 /**
  * @brief The cvDMatch class, Needed to override the stream operators for SOFA
  */
-class SOFA_SOFAORCOMMON_API DMatch : public cv::DMatch
+class SOFA_SOFACV_API cvDMatch : public cv::DMatch
 {
  public:
-  DMatch()
+  cvDMatch()
   {
     distance = -1.0f;
     imgIdx = -1;
     queryIdx = -1;
     trainIdx = -1;
   }
-  DMatch(const cv::DMatch& o)
+  cvDMatch(const cv::DMatch& o)
   {
     distance = o.distance;
     imgIdx = o.imgIdx;
     queryIdx = o.queryIdx;
     trainIdx = o.trainIdx;
   }
-  DMatch(int _queryIdx, int _trainIdx, float _distance)
+  cvDMatch(int _queryIdx, int _trainIdx, float _distance)
       : cv::DMatch(_queryIdx, _trainIdx, _distance)
   {
   }
-  DMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance)
+  cvDMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance)
       : cv::DMatch(_queryIdx, _trainIdx, _imgIdx, _distance)
   {
   }
@@ -85,12 +85,12 @@ namespace defaulttype
  * structures as sofa::Data
  */
 template <>
-struct DataTypeName<sofacv::DMatch>
+struct DataTypeName<sofacv::cvDMatch>
 {
-    static const char* name() { return "DMatch"; }
+    static const char* name() { return "cvDMatch"; }
 };
 
 }  // namespace defaulttype
 }  // namespace sofa
 
-#endif  // SOFACV_DMATCH_H
+#endif  // SOFACV_CVDMATCH_H

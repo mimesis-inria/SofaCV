@@ -20,7 +20,7 @@
  * Contact information: contact-mimesis@inria.fr                               *
  ******************************************************************************/
 
-#include "initplugin.h"
+#include "SofaCVPlugin.h"
 #include <sofa/config.h>
 #include <sofa/helper/system/config.h>
 
@@ -37,7 +37,7 @@ static void initResources() { Q_INIT_RESOURCE(SofaCV_qml); }
 
 #ifdef SOFA_HAVE_SOFAPYTHON
 #include <SofaPython/PythonFactory.h>
-#include "python/Binding_MatData.h"
+#include "python/Binding_cvMatData.h"
 #endif
 
 namespace sofacv
@@ -77,7 +77,7 @@ void initExternalModule()
       simulation::PythonEnvironment::gil lock(__func__);
 
       // adding new bindings for Data<Mat>
-      SP_ADD_CLASS_IN_FACTORY(MatData, sofa::Data<sofacv::Mat>)
+      SP_ADD_CLASS_IN_FACTORY(cvMatData, sofa::Data<sofacv::cvMat>)
     }
 #endif
   }
@@ -94,4 +94,5 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList() { return ""; }
 
-}  // namespace sofacv
+}  // namespace component
+}  // namespace sofa

@@ -7,9 +7,9 @@ using namespace sofa::defaulttype;
 
 static PyObject* cvMatData_getPtr(PyObject* self, PyObject* /*args*/)
 {
-  Data<sofaor::common::cvMat>* data =
-      sofa::py::unwrap<Data<sofaor::common::cvMat> >(self);
-  sofaor::common::cvMat& image =
+  Data<sofacv::cvMat>* data =
+      sofa::py::unwrap<Data<sofacv::cvMat> >(self);
+  sofacv::cvMat& image =
       *data->beginEdit();  // where should be the endedit?
 
   PyObject* imgdata = PyLong_FromVoidPtr(image.data); // data
@@ -66,13 +66,13 @@ static PyObject* cvMatData_getPtr(PyObject* self, PyObject* /*args*/)
 
 static PyObject* cvMatData_getData(PyObject* self, PyObject* /*args*/)
 {
-  Data<sofaor::common::cvMat>* data =
-      sofa::py::unwrap<Data<sofaor::common::cvMat> >(self);
-  sofaor::common::cvMat& image =
+  Data<sofacv::cvMat>* data =
+      sofa::py::unwrap<Data<sofacv::cvMat> >(self);
+  sofacv::cvMat& image =
       *data->beginEdit();  // where should be the endedit?
 
   PyObject* imgdata = PyString_FromStringAndSize(
-      (char*)image.data, image.total() * image.elemSize());
+      reinterpret_cast<char*>(image.data), long(image.total() * image.elemSize()));
   PyObject* shape = PyTuple_New(3);
   PyTuple_SetItem(shape, 0, PyInt_FromSsize_t(image.rows));        // rows
   PyTuple_SetItem(shape, 1, PyInt_FromSsize_t(image.cols));        // cols
@@ -138,4 +138,4 @@ SP_CLASS_ATTRS_BEGIN(cvMatData)
 // SP_CLASS_ATTR(CVMat, paramName)
 SP_CLASS_ATTRS_END
 
-SP_CLASS_TYPE_PTR_ATTR(cvMatData, sofa::Data<sofaor::common::cvMat>, Data)
+SP_CLASS_TYPE_PTR_ATTR(cvMatData, sofa::Data<sofacv::cvMat>, Data)
