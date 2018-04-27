@@ -21,9 +21,11 @@ link_directories(${OpenCV_LIBRARY_DIRS})
 
 add_definitions("-std=c++11")
 
-include_directories( src/ )
+include_directories(src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(HEADER_FILES
+  SofaCV.h
   src/SofaCVPlugin.h
   src/cvKeypoint.h
   src/cvDMatch.h
@@ -116,8 +118,12 @@ add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_FILES} ${PYTHON_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
+message("-D${PROJECT_NAME}_RESOURCES_DIR=${CMAKE_CURRENT_SOURCE_DIR}/resources")
+target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_RESOURCES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/resources\")
+target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_VERSION=\"${${PROJECT_NAME}_VERSION}\")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
@@ -126,10 +132,15 @@ if ( SofaPython_FOUND )
   target_link_libraries(${PROJECT_NAME} SofaPython)
   add_definitions("-DSOFA_HAVE_SOFAPYTHON")
 endif()
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "${${PROJECT_NAME}_COMPILER_FLAGS}")
 
 sofa_create_package(${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/"
-  DESTINATION "include/${PROJECT_NAME}"
-  FILES_MATCHING PATTERN "*.h" PATTERN "*.inl")
+set(${PROJECT_NAME}_PLUGIN_INSTALL_DIR share/sofa/plugins/${PROJECT_NAME})
+install(DIRECTORY resources/ DESTINATION ${${PROJECT_NAME}_PLUGIN_INSTALL_DIR}/resources)
+
+if(SOFA_BUILD_TESTS)
+    find_package(SofaTest QUIET)
+    if(SofaTest_FOUND)
+        add_subdirectory(SofaCV_test)
+    endif()
+endif()

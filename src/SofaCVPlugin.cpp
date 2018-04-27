@@ -84,7 +84,7 @@ void initExternalModule()
 }
 
 const char* getModuleName() { return "SofaCV"; }
-const char* getModuleVersion() { return "0.1"; }
+const char* getModuleVersion() { return SofaCV_VERSION; }
 const char* getModuleLicense() { return ""; }
 const char* getModuleDescription()
 {
