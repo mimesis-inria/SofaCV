@@ -26,7 +26,7 @@ The SofaCV plugin is not a feature plugin by itself. Instead it provides an API 
 ### Contribution guidelines ###
 
 * __Coding styles:__
-    Sofa is developped using a (slightly) modified Google / gnu codestyle. To contribute, please try to respect this indentation. The following clang-format style can be set in qtCreator's beautifier plugin if you want:
+    SofaCV is developped using a (slightly) modified Google / gnu codestyle. To contribute, please try to respect this indentation. The following clang-format style can be set in qtCreator's beautifier plugin if you want:
 ```
 BasedOnStyle: Google,
 UseTab: Never,
