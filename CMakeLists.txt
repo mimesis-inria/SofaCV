@@ -11,7 +11,7 @@ set(${PROJECT_NAME}_MAJOR_VERSION 2)
 set(${PROJECT_NAME}_MINOR_VERSION 0)
 set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION})
 
-find_package(OpenCV 3.0 REQUIRED)
+find_package(OpenCV 3.2 REQUIRED)
 find_package(SofaFramework REQUIRED)
 find_package(SofaGui REQUIRED)
 find_package(SofaQtQuickGUI QUIET)
@@ -114,12 +114,17 @@ if(SofaQtQuickGUI_FOUND)
   add_definitions(-DQT_PLUGIN)
 endif (SofaQtQuickGUI_FOUND)
 
+set(${PROJECT_NAME}_RESOURCES_PATH \"${CMAKE_CURRENT_SOURCE_DIR}/resources\")
+configure_file("${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.h")
+configure_file("${PROJECT_NAME}.h.in" "${CMAKE_BINARY_DIR}/include/${PROJECT_NAME}.h")
+set(${PROJECT_NAME}_RESOURCES_PATH  \"${CMAKE_INSTALL_PREFIX}/share/sofa/plugins/${PROJECT_NAME}\")
+configure_file("${PROJECT_NAME}.h.in" "${CMAKE_BINARY_DIR}/include/installed${PROJECT_NAME}.h")
+install(FILES "${CMAKE_BINARY_DIR}/include/installed${PROJECT_NAME}.h" DESTINATION "include/${PROJECT_NAME}/" RENAME "${PROJECT_NAME}.h")
+
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_FILES} ${PYTHON_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 
-message("-D${PROJECT_NAME}_RESOURCES_DIR=${CMAKE_CURRENT_SOURCE_DIR}/resources")
-target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_RESOURCES_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/resources\")
 target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_VERSION=\"${${PROJECT_NAME}_VERSION}\")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
@@ -135,8 +140,7 @@ endif()
 
 sofa_create_package(${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})
 
-set(${PROJECT_NAME}_PLUGIN_INSTALL_DIR share/sofa/plugins/${PROJECT_NAME})
-install(DIRECTORY resources/ DESTINATION ${${PROJECT_NAME}_PLUGIN_INSTALL_DIR}/resources)
+install(DIRECTORY resources/ DESTINATION share/sofa/plugins/${PROJECT_NAME})
 
 if(SOFA_BUILD_TESTS)
     find_package(SofaTest QUIET)
