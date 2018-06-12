@@ -3,7 +3,7 @@
 ### What is this repository for? ###
 
 * SofaCV is a plugin for the simulation framework SOFA [link](www.sofa-framework.org). Its purpose is to provide computer vision tools to SOFA. More specifically, its goal is to enable the use of SOFA simulations in augmented reality, and virtual reality applications.
-The SofaCV plugin is not a feature plugin by itself. Instead it provides an API for submodules (mainly Sofa's ImageProcessing and DataAcquisition plugin) such as base datatypes, Python bindings, SofaQtQuick widgets etc.
+The SofaCV plugin is not a standalone plugin by itself. Instead it provides an API for submodules (mainly Sofa's ImageProcessing and DataAcquisition plugin) such as base datatypes, Python bindings, SofaQtQuick widgets etc, along with some utility SOFA Components to read, write or display an image in the scene view.
 
 * Version 2.0
 
