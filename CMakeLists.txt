@@ -21,16 +21,22 @@ link_directories(${OpenCV_LIBRARY_DIRS})
 
 add_definitions("-std=c++11")
 
-include_directories(src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(HEADER_FILES
   SofaCV.h
   src/SofaCVPlugin.h
-  src/cvKeypoint.h
-  src/cvDMatch.h
-  src/cvMat.h
-  src/cvMatUtils.h
+  src/datatypes/cvKeypoint.h
+  src/datatypes/cvDMatch.h
+  src/datatypes/cvMat.h
+  src/datatypes/cvMatUtils.h
+  src/utils/FrameViewer.h
+  src/utils/FrameExporter.h
+  src/utils/PCViewer.h
+  src/acquisition/BaseGrabber.h
+  src/acquisition/BaseFrameGrabber.h
   src/ImplicitDataEngine.h
   src/DependencyGraphVisitor.h
   src/DependencyGraphAnimationLoop.h
@@ -38,10 +44,15 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
   src/SofaCVPlugin.cpp
-  src/cvKeypoint.cpp
-  src/cvDMatch.cpp
-  src/cvMat.cpp
-  src/cvMatUtils.cpp
+  src/datatypes/cvKeypoint.cpp
+  src/datatypes/cvDMatch.cpp
+  src/datatypes/cvMat.cpp
+  src/datatypes/cvMatUtils.cpp
+  src/utils/FrameViewer.cpp
+  src/utils/FrameExporter.cpp
+  src/utils/PCViewer.cpp
+  src/acquisition/BaseGrabber.cpp
+  src/acquisition/BaseFrameGrabber.cpp
   src/ImplicitDataEngine.cpp
   src/DependencyGraphVisitor.cpp
   src/DependencyGraphAnimationLoop.cpp
@@ -128,6 +139,7 @@ target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
 target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_VERSION=\"${${PROJECT_NAME}_VERSION}\")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>")
 target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})

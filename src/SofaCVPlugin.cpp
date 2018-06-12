@@ -23,6 +23,7 @@
 #include "SofaCVPlugin.h"
 #include <sofa/config.h>
 #include <sofa/helper/system/config.h>
+#include <sofa/helper/system/FileRepository.h>
 
 #ifdef QT_PLUGIN
 #include <QApplication>
@@ -39,6 +40,7 @@ static void initResources() { Q_INIT_RESOURCE(SofaCV_qml); }
 #include <SofaPython/PythonFactory.h>
 #include "python/Binding_cvMatData.h"
 #endif
+#include "SofaCV.h"
 
 namespace sofacv
 {
@@ -68,6 +70,7 @@ void initExternalModule()
   if (first)
   {
     first = false;
+    sofa::helper::system::DataRepository.addLastPath(SOFACV_RESOURCES_PATH);
 #ifdef QT_PLUGIN
     initResources();
 #endif  // QT_PLUGIN

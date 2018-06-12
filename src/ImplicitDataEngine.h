@@ -23,7 +23,7 @@
 #ifndef SOFACV_IMPLICITDATAENGINE_H
 #define SOFACV_IMPLICITDATAENGINE_H
 
-#include "SofaCVPlugin.h"
+#include <SofaCVPlugin.h>
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/core/objectmodel/IdleEvent.h>

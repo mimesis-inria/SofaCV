@@ -1,7 +1,7 @@
 #ifndef SOFACV_ALL_H
 #define SOFACV_ALL_H
 
-#define SOFACV_RESOURCES_PATH @SofaCV_RESOURCES_PATH@
+#define SOFACV_RESOURCES_PATH "/home/bruno/dev/plugins-sofa/SofaCV/SofaCV/resources"
 
 #include "src/datatypes/cvMat.h"
 #include "src/datatypes/cvDMatch.h"
