@@ -207,13 +207,13 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
     e6 = addNew<TestEngine>(root);
     e7 = addNew<TestEngine>(root);
 
-    e1.setName("E1");
-    e2.setName("E2");
-    e3.setName("E3");
-    e4.setName("E4");
-    e5.setName("E5");
-    e6.setName("E6");
-    e7.setName("E7");
+    e1->setName("E1");
+    e2->setName("E2");
+    e3->setName("E3");
+    e4->setName("E4");
+    e5->setName("E5");
+    e6->setName("E6");
+    e7->setName("E7");
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E1");
