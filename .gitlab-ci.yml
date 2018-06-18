@@ -41,9 +41,9 @@
     script:
       - BeforeStage build_deps
       - echo " INSTALLING CONFIGURING PLUGIN DEPENDENCIES "
-      # - AddPlugin sofaqtquick "-DAPPLICATION_QTQUICKSOFA=ON -DAPPLICATION_RUNSOFA2=ON -DPLUGIN_SOFAQTQUICKGUI=ON" git@github.com:sofa-framework/SofaQtQuick.git
+      - AddPlugin sofaqtquick "-DAPPLICATION_QTQUICKSOFA=ON -DAPPLICATION_RUNSOFA2=ON -DPLUGIN_SOFAQTQUICKGUI=ON" git@github.com:sofa-framework/SofaQtQuick.git
 
-      - AddProjectPlugin SofaOR
+      - AddProjectPlugin SofaCV
       - AddSofaOption OpenCV_DIR "$opencv_INSTALL_DIR/share/OpenCV"
 
       - echo " BUILDING SOFA "
