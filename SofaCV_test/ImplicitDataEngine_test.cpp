@@ -16,35 +16,40 @@ using sofa::simulation::Simulation;
 #include <SofaSimulationCommon/SceneLoaderXML.h>
 using sofa::core::ExecParams;
 using sofa::simulation::SceneLoaderXML;
+#include <sofa/simulation/AnimateVisitor.h>
+#include <sofa/simulation/UpdateContextVisitor.h>
+#include <sofa/simulation/UpdateMappingVisitor.h>
+#include <sofa/simulation/PropagateEventVisitor.h>
 
 namespace sofa
 {
 class ImplicitDataEngine_test;
 
-struct TestInputComponent : public ImplicitDataEngine
-{
-  SOFA_CLASS(TestInputComponent, ImplicitDataEngine);
+/*
+//struct TestInputComponent : public ImplicitDataEngine
+//{
+//  SOFA_CLASS(TestInputComponent, ImplicitDataEngine);
 
- public:
-  sofa::Data<int> d_a;
-  sofa::Data<int> d_b;
-  sofa::Data<int> d_c;
+// public:
+//  sofa::Data<int> d_a;
+//  sofa::Data<int> d_b;
+//  sofa::Data<int> d_c;
 
-  TestInputComponent()
-  {
-    d_a.setName("a_out");
-    d_b.setName("b_out");
-    d_c.setName("c_out");
-  }
+//  TestInputComponent()
+//  {
+//    d_a.setName("a_out");
+//    d_b.setName("b_out");
+//    d_c.setName("c_out");
+//  }
 
-  void init()
-  {
-    addOutput(&d_a);
-    addOutput(&d_b);
-    addOutput(&d_c);
-  }
-};
-
+//  void init()
+//  {
+//    addOutput(&d_a);
+//    addOutput(&d_b);
+//    addOutput(&d_c);
+//  }
+//};
+*/
 struct StdComponent : public core::objectmodel::BaseObject
 {
  public:
@@ -65,9 +70,10 @@ struct StdComponent : public core::objectmodel::BaseObject
   {
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
+      std::cout << getName() << "::HandleEvent()" << std::endl;
       d_a.setValue(d_a.getValue() + 1);
-      d_b.setValue(d_b.getValue() + 1);
-      d_c.setValue(d_c.getValue() + 1);
+      d_b.setValue(d_b.getValue() + 2);
+      d_c.setValue(d_c.getValue() + 3);
     }
   }
 };
@@ -89,17 +95,15 @@ struct TestEngine : public ImplicitDataEngine
   TestEngine()
       : d_a(initData(&d_a, 0, "a", "")),
         d_b(initData(&d_b, 0, "b", "")),
-        d_c(initData(&d_c, 0, "c", ""))
+        d_c(initData(&d_c, 0, "c", "")),
+        d_a_out(initData(&d_a_out, 0, "a_out", "")),
+        d_b_out(initData(&d_b_out, 0, "b_out", "")),
+        d_c_out(initData(&d_c_out, 0, "c_out", ""))
   {
-    d_a_out.setName("a_out");
-    d_b_out.setName("b_out");
-    d_c_out.setName("c_out");
   }
 
   void init() override
   {
-    //    SOFAOR_ADD_INPUT_CALLBACK(&d_a, &TestEngine::increment, false);
-    //    SOFAOR_ADD_INPUT_CALLBACK(&d_b, &TestEngine::decrement, true);
     addInput(&d_a);
     addInput(&d_b);
     addInput(&d_c);
@@ -111,20 +115,11 @@ struct TestEngine : public ImplicitDataEngine
 
   void Update() override
   {
+    std::cout << getName() << "::Update()" << std::endl;
     d_a_out.setValue(d_a.getValue() + 1);
     d_b_out.setValue(d_b.getValue() + 1);
     d_c_out.setValue(d_c.getValue() + 1);
   }
-
- private:
-  //  void increment(sofa::core::objectmodel::BaseData* data)
-  //  {
-  //    d_a.setValue(d_a.getValue() + 1);
-  //  }
-  //  void decrement(sofa::core::objectmodel::BaseData* data)
-  //  {
-  //    d_b.setValue(d_b.getValue() - 1);
-  //  }
 };
 
 struct ImplicitDataEngine_test : public sofa::BaseTest
@@ -136,57 +131,81 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
   sofa::TestEngine::SPtr e4;
   sofa::TestEngine::SPtr e5;
   sofa::TestEngine::SPtr e6;
-  sofa::TestEngine::SPtr e7;
+  sofa::StdComponent::SPtr e7;
   core::objectmodel::BaseObjectDescription desc;
 
   ImplicitDataEngine_test() {}
 
-  void testInit() {}
-
-  void testStep1()
+  void testInit()
   {
-    sofa::simulation::getSimulation()->init(this->root.get());
-    e1->d_a.setValue(1);
-    e1->d_b.setValue(2);
-    e1->d_c.setValue(3);
+      sofa::simulation::getSimulation()->init(this->root.get());
 
-    // Simulate an update from runSofa's GUI for instance:
-    e1->reinit();
+      //    EXPECT_FALSE(e1->d_autolink.getValue());
+      EXPECT_EQ(e1->d_a.getValue(), 1);
+      EXPECT_EQ(e1->d_b.getValue(), 2);
+      EXPECT_EQ(e1->d_c.getValue(), 3);
 
-    //    EXPECT_FALSE(e1->d_autolink.getValue());
-    EXPECT_EQ(e1->d_a.getValue(), 1);
-    EXPECT_EQ(e1->d_b.getValue(), 2);
-    EXPECT_EQ(e1->d_c.getValue(), 3);
+      EXPECT_FALSE(e2->d_autolink.getValue());
+      EXPECT_EQ(e2->d_a.getValue(), 1);
+      EXPECT_EQ(e2->d_b.getValue(), 0);
+      EXPECT_EQ(e2->d_c.getValue(), 0);
 
-    EXPECT_FALSE(e2->d_autolink.getValue());
-    EXPECT_EQ(e2->d_a.getValue(), 2);
-    EXPECT_EQ(e2->d_b.getValue(), 0);
-    EXPECT_EQ(e2->d_c.getValue(), 0);
+      EXPECT_FALSE(e3->d_autolink.getValue());
+      EXPECT_EQ(e3->d_a.getValue(), 0);
+      EXPECT_EQ(e3->d_b.getValue(), 2);
+      EXPECT_EQ(e3->d_c.getValue(), 0);
 
-    EXPECT_FALSE(e3->d_autolink.getValue());
-    EXPECT_EQ(e3->d_a.getValue(), 0);
-    EXPECT_EQ(e3->d_b.getValue(), 1);
-    EXPECT_EQ(e3->d_c.getValue(), 0);
+      EXPECT_FALSE(e4->d_autolink.getValue());
+      EXPECT_EQ(e4->d_a.getValue(), 0);
+      EXPECT_EQ(e4->d_b.getValue(), 0);
+      EXPECT_EQ(e4->d_c.getValue(), 3);
 
-    EXPECT_FALSE(e4->d_autolink.getValue());
-    EXPECT_EQ(e4->d_a.getValue(), 0);
-    EXPECT_EQ(e4->d_b.getValue(), 0);
-    EXPECT_EQ(e4->d_c.getValue(), 3);
+      EXPECT_TRUE(e5->d_autolink.getValue());
+      EXPECT_EQ(e5->d_a.getValue(), 1);
+      EXPECT_EQ(e5->d_b.getValue(), 1);
+      EXPECT_EQ(e5->d_c.getValue(), 4);
 
-    EXPECT_TRUE(e5->d_autolink.getValue());
-    EXPECT_EQ(e5->d_a.getValue(), 1);
-    EXPECT_EQ(e5->d_b.getValue(), 0);
-    EXPECT_EQ(e5->d_c.getValue(), 3);
+      EXPECT_FALSE(e6->d_autolink.getValue());
+      EXPECT_EQ(e6->d_a.getValue(), 1);
+      EXPECT_EQ(e6->d_b.getValue(), 1);
+      EXPECT_EQ(e6->d_c.getValue(), 4);
 
-    EXPECT_FALSE(e6->d_autolink.getValue());
-    EXPECT_EQ(e6->d_a.getValue(), 2);
-    EXPECT_EQ(e6->d_b.getValue(), 1);
-    EXPECT_EQ(e6->d_c.getValue(), 3);
+      EXPECT_EQ(e7->d_a.getValue(), 2);
+      EXPECT_EQ(e7->d_b.getValue(), 2);
+      EXPECT_EQ(e7->d_c.getValue(), 5);
 
-    EXPECT_FALSE(e7->d_autolink.getValue());
-    EXPECT_EQ(e7->d_a.getValue(), 2);
-    EXPECT_EQ(e7->d_b.getValue(), -1);
-    EXPECT_EQ(e7->d_c.getValue(), 3);
+      sofa::simulation::AnimateBeginEvent ev ( 0.1 );
+      sofa::simulation::PropagateEventVisitor act ( sofa::core::ExecParams::defaultInstance(), &ev );
+
+      this->root->execute(act);
+      std::cout << "STEP" << std::endl;
+      EXPECT_EQ(e1->d_a.getValue(), 2);
+      EXPECT_EQ(e1->d_b.getValue(), 3);
+      EXPECT_EQ(e1->d_c.getValue(), 4);
+
+      EXPECT_EQ(e2->d_a.getValue(), 3);
+      EXPECT_EQ(e2->d_b.getValue(), 1);
+      EXPECT_EQ(e2->d_c.getValue(), 1);
+
+      EXPECT_EQ(e3->d_a.getValue(), 1);
+      EXPECT_EQ(e3->d_b.getValue(), 4);
+      EXPECT_EQ(e3->d_c.getValue(), 1);
+
+      EXPECT_EQ(e4->d_a.getValue(), 1);
+      EXPECT_EQ(e4->d_b.getValue(), 1);
+      EXPECT_EQ(e4->d_c.getValue(), 5);
+
+      EXPECT_EQ(e5->d_a.getValue(), 2);
+      EXPECT_EQ(e5->d_b.getValue(), 2);
+      EXPECT_EQ(e5->d_c.getValue(), 6);
+
+      EXPECT_EQ(e6->d_a.getValue(), 2);
+      EXPECT_EQ(e6->d_b.getValue(), 2);
+      EXPECT_EQ(e6->d_c.getValue(), 6);
+
+      EXPECT_EQ(e7->d_a.getValue(), 2);
+      EXPECT_EQ(e7->d_b.getValue(), 2);
+      EXPECT_EQ(e7->d_c.getValue(), 7);
   }
 
   void SetUp()
@@ -205,9 +224,9 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
     e4 = addNew<TestEngine>(root);
     e5 = addNew<TestEngine>(root);
     e6 = addNew<TestEngine>(root);
-    e7 = addNew<TestEngine>(root);
+    e7 = addNew<StdComponent>(root);
 
-    e1->setName("E1");
+    e1->setName("STDC1");
     e2->setName("E2");
     e3->setName("E3");
     e4->setName("E4");
@@ -216,25 +235,25 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
     e7->setName("E7");
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
-    desc.setAttribute("name", "E1");
-    desc.setAttribute("a", "0");
-    desc.setAttribute("b", "0");
-    desc.setAttribute("c", "0");
+    desc.setAttribute("name", "STDC1");
+    desc.setAttribute("a", "1");
+    desc.setAttribute("b", "2");
+    desc.setAttribute("c", "3");
     e1->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E2");
-    desc.setAttribute("a", "@E1.a");
+    desc.setAttribute("a", "@STDC1.a");
     e2->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E3");
-    desc.setAttribute("b", "@E1.b");
+    desc.setAttribute("b", "@STDC1.b");
     e3->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E4");
-    desc.setAttribute("c", "@E1.c");
+    desc.setAttribute("c", "@STDC1.c");
     e4->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
@@ -244,9 +263,9 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E6");
-    desc.setAttribute("a", "@E1.a");
-    desc.setAttribute("b", "@E1.b");
-    desc.setAttribute("c", "@E1.c");
+    desc.setAttribute("a", "@E4.b_out");
+    desc.setAttribute("b", "@E4.a_out");
+    desc.setAttribute("c", "@E4.c_out");
     e6->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
@@ -262,6 +281,6 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 
 /// Checks whether the autolink boolean is set to true on e2
 TEST_F(ImplicitDataEngine_test, testInit) { this->testInit(); }
-TEST_F(ImplicitDataEngine_test, testStep1) { this->testStep1(); }
+//TEST_F(ImplicitDataEngine_test, testStep1) { this->testStep1(); }
 
 }  // namespace sofa
