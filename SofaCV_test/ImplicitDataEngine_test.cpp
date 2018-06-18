@@ -92,8 +92,8 @@ struct TestEngine : public ImplicitDataEngine
         d_c(initData(&d_c, 0, "c", ""))
   {
     d_a_out.setName("a_out");
-    d_b_out.setName("a_out");
-    d_c_out.setName("a_out");
+    d_b_out.setName("b_out");
+    d_c_out.setName("c_out");
   }
 
   void init() override
@@ -207,6 +207,14 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
     e6 = addNew<TestEngine>(root);
     e7 = addNew<TestEngine>(root);
 
+    e1.setName("E1");
+    e2.setName("E2");
+    e3.setName("E3");
+    e4.setName("E4");
+    e5.setName("E5");
+    e6.setName("E6");
+    e7.setName("E7");
+
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E1");
     desc.setAttribute("a", "0");
@@ -236,9 +244,9 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E6");
-    desc.setAttribute("a", "@E1");
-    desc.setAttribute("b", "@E1");
-    desc.setAttribute("c", "@E1");
+    desc.setAttribute("a", "@E1.a");
+    desc.setAttribute("b", "@E1.b");
+    desc.setAttribute("c", "@E1.c");
     e6->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
