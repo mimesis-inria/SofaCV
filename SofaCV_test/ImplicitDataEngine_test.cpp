@@ -207,13 +207,6 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
     e6 = addNew<TestEngine>(root);
     e7 = addNew<TestEngine>(root);
 
-    e1->setName("e1");
-    e2->setName("e2");
-    e3->setName("e3");
-    e4->setName("e4");
-    e5->setName("e5");
-    e6->setName("e6");
-
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E1");
     desc.setAttribute("a", "0");
@@ -223,17 +216,17 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E2");
-    desc.setAttribute("a", "@E1.a_out");
+    desc.setAttribute("a", "@E1.a");
     e2->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E3");
-    desc.setAttribute("b", "@E1.b_out");
+    desc.setAttribute("b", "@E1.b");
     e3->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E4");
-    desc.setAttribute("c", "@E1.c_out");
+    desc.setAttribute("c", "@E1.c");
     e4->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
@@ -243,9 +236,9 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");
     desc.setAttribute("name", "E6");
-    desc.setAttribute("a", "@E1.a_out");
-    desc.setAttribute("b", "@E1.b_out");
-    desc.setAttribute("c", "@E1.c_out");
+    desc.setAttribute("a", "@E1");
+    desc.setAttribute("b", "@E1");
+    desc.setAttribute("c", "@E1");
     e6->parse(&desc);
 
     desc = core::objectmodel::BaseObjectDescription("EngineDesc");

@@ -7,6 +7,7 @@ set(HEADER_FILES
 
 set(SOURCE_FILES
   ImplicitDataEngine_test.cpp
+  BaseFrameGrabber_test.cpp
   )
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
