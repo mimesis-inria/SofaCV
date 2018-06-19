@@ -115,7 +115,7 @@ struct TestFrameGrabber : public BaseFrameGrabber
   }
 };
 
-struct BaseFrameGrabber_test : public sofa::Sofa_test<>
+struct BaseFrameGrabber_test : public sofa::BaseTest
 {
   void testStereoSplitting()
   {

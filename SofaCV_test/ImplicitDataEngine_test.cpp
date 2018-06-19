@@ -66,7 +66,12 @@ struct StdComponent : public core::objectmodel::BaseObject
   {
   }
 
-  void handleEvent(sofa::core::objectmodel::Event* e)
+  void init() override
+  {
+      std::cout << getName() << "::init()" << std::endl;
+  }
+
+  void handleEvent(sofa::core::objectmodel::Event* e) override
   {
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
@@ -104,6 +109,7 @@ struct TestEngine : public ImplicitDataEngine
 
   void init() override
   {
+      std::cout << getName() << "::init()" << std::endl;
     addInput(&d_a);
     addInput(&d_b);
     addInput(&d_c);
@@ -174,11 +180,9 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
       EXPECT_EQ(e7->d_b.getValue(), 2);
       EXPECT_EQ(e7->d_c.getValue(), 5);
 
-      sofa::simulation::AnimateBeginEvent ev ( 0.1 );
-      sofa::simulation::PropagateEventVisitor act ( sofa::core::ExecParams::defaultInstance(), &ev );
-
-      this->root->execute(act);
+      sofa::simulation::getSimulation()->animate(root.get());
       std::cout << "STEP" << std::endl;
+
       EXPECT_EQ(e1->d_a.getValue(), 2);
       EXPECT_EQ(e1->d_b.getValue(), 3);
       EXPECT_EQ(e1->d_c.getValue(), 4);
@@ -216,8 +220,6 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
         simu = new sofa::simulation::graph::DAGSimulation());
 
     root = simu->createNewGraph("root");
-    root->addObject(
-        sofa::core::objectmodel::New<DefaultAnimationLoop>(this->root.get()));
     e1 = addNew<StdComponent>(root);
     e2 = addNew<TestEngine>(root);
     e3 = addNew<TestEngine>(root);
@@ -280,7 +282,11 @@ struct ImplicitDataEngine_test : public sofa::BaseTest
 };
 
 /// Checks whether the autolink boolean is set to true on e2
-TEST_F(ImplicitDataEngine_test, testInit) { this->testInit(); }
+TEST_F(ImplicitDataEngine_test, testInit)
+{
+    this->SetUp();
+    this->testInit();
+}
 //TEST_F(ImplicitDataEngine_test, testStep1) { this->testStep1(); }
 
 }  // namespace sofa

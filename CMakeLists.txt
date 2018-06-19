@@ -37,6 +37,7 @@ set(HEADER_FILES
   src/utils/PCViewer.h
   src/acquisition/BaseGrabber.h
   src/acquisition/BaseFrameGrabber.h
+  src/acquisition/VideoGrabber.h
   src/ImplicitDataEngine.h
   src/DependencyGraphVisitor.h
   src/DependencyGraphAnimationLoop.h
@@ -53,6 +54,7 @@ set(SOURCE_FILES
   src/utils/PCViewer.cpp
   src/acquisition/BaseGrabber.cpp
   src/acquisition/BaseFrameGrabber.cpp
+  src/acquisition/VideoGrabber.cpp
   src/ImplicitDataEngine.cpp
   src/DependencyGraphVisitor.cpp
   src/DependencyGraphAnimationLoop.cpp
@@ -67,7 +69,7 @@ if( SofaPython_FOUND )
   list(APPEND SOURCE_FILES src/python/Binding_cvMatData.cpp)
   list(APPEND HEADER_FILES
     src/python/Binding_cvMatData.h)
-  sofa_set_python_directory(${PROJECT_NAME} "python")
+  sofa_set_python_directory(${PROJECT_NAME} "src/python")
 endif()
 
 
