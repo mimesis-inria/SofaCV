@@ -40,13 +40,13 @@ void ImageFilterModel::handleSofaDataChange()
   // Here, list all potential renderer
   const core::objectmodel::BaseClass* bc = baseComponent->getClass();
   if (bc->hasParent("ImageFilter"))
-    setImageFilter(dynamic_cast<common::ImageFilter*>(baseComponent));
+    setImageFilter(dynamic_cast<ImageFilter*>(baseComponent));
   else
     msg_error("ImageFilterModel")
         << "Component Type " << baseComponent->getClassName() << " unknown";
 }
 
-common::ImageFilter* ImageFilterModel::imageFilter() const
+ImageFilter* ImageFilterModel::imageFilter() const
 {
   if (!m_sofaComponent)
   {
@@ -61,7 +61,7 @@ common::ImageFilter* ImageFilterModel::imageFilter() const
   return m_imageFilter;
 }
 
-void ImageFilterModel::setImageFilter(common::ImageFilter* imageFilter)
+void ImageFilterModel::setImageFilter(ImageFilter* imageFilter)
 {
   m_imageFilter = imageFilter;
 }
@@ -117,7 +117,7 @@ void ImageFilterModelList::handleSofaDataChange()
             new sofacv::gui::ImageFilterModel();
         m_imageFilterModelList.push_back(imageFilterModel);
         imageFilterModel->setImageFilter(
-            dynamic_cast<common::ImageFilter*>(baseComponent));
+            dynamic_cast<ImageFilter*>(baseComponent));
       }
       else
         msg_error("ImageFilterModelList") << "Type unknown";

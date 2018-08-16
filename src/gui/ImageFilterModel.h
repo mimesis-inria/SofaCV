@@ -3,8 +3,8 @@
 
 #include <QObject>
 
-#include "ImageProcessingPlugin.h"
-#include "common/ImageFilter.h"
+#include "SofaCVPlugin.h"
+#include "ImageFilter.h"
 
 #include <SofaQtQuickGUI/SofaComponent.h>
 #include <SofaQtQuickGUI/SofaComponentList.h>
@@ -14,7 +14,7 @@ namespace sofacv
 {
 namespace gui
 {
-class SOFA_IMAGEPROCESSING_API ImageFilterModel : public QObject
+class SOFA_SOFACV_API ImageFilterModel : public QObject
 {
   Q_OBJECT
 
@@ -28,8 +28,8 @@ class SOFA_IMAGEPROCESSING_API ImageFilterModel : public QObject
   sofa::qtquick::SofaComponent* sofaComponent() const;
   void setSofaComponent(sofa::qtquick::SofaComponent* sofaComponent);
 
-  sofacv::common::ImageFilter* imageFilter() const;
-  void setImageFilter(sofacv::common::ImageFilter* imageFilter);
+  sofacv::ImageFilter* imageFilter() const;
+  void setImageFilter(sofacv::ImageFilter* imageFilter);
 
   void display();
 
@@ -41,11 +41,11 @@ class SOFA_IMAGEPROCESSING_API ImageFilterModel : public QObject
 
  private:
   sofa::qtquick::SofaComponent* m_sofaComponent;
-  mutable sofacv::common::ImageFilter*
+  mutable sofacv::ImageFilter*
       m_imageFilter;  // make it more abstract
 };
 
-class SOFA_IMAGEPROCESSING_API ImageFilterModelList : public QObject
+class SOFA_SOFACV_API ImageFilterModelList : public QObject
 {
   Q_OBJECT
 

@@ -1,18 +1,48 @@
-#ifndef SOFACV_COMMON_IMAGEFILTER_NEWGUI_H
-#define SOFACV_COMMON_IMAGEFILTER_NEWGUI_H
+/******************************************************************************
+*       SOFAOR, SOFA plugin for the Operating Room, development version       *
+*                        (c) 2017 INRIA, MIMESIS Team                         *
+*                                                                             *
+* This program is a free software; you can redistribute it and/or modify it   *
+* under the terms of the GNU Lesser General Public License as published by    *
+* the Free Software Foundation; either version 1.0 of the License, or (at     *
+* your option) any later version.                                             *
+*                                                                             *
+* This program is distributed in the hope that it will be useful, but WITHOUT *
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+* for more details.                                                           *
+*                                                                             *
+* You should have received a copy of the GNU Lesser General Public License    *
+* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+*******************************************************************************
+* Authors: Bruno Marques and external contributors (see Authors.txt)          *
+*                                                                             *
+* Contact information: contact-mimesis@inria.fr                               *
+******************************************************************************/
 
-#include "ImageProcessingPlugin.h"
+#ifndef SOFACV_IMAGEFILTER_OLDGUI_H
+#define SOFACV_IMAGEFILTER_OLDGUI_H
 
-#include <SofaCV/SofaCV.h>
+#include "SofaCVPlugin.h"
+#include "datatypes/cvMat.h"
+#include "ImplicitDataEngine.h"
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/OptionsGroup.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
-#include <opencv2/highgui.hpp>
 
 namespace sofacv
 {
-namespace common
-{
+template <class T>
+class ScalarSliderManager;
+
+template <class T, class U>
+class CustomSliderManager;
+
+template <unsigned int N, class T>
+class VecSliderManager;
+
+class DSM;
+
 /**
  *  \brief provides a Debug UI mechanism for image filters
  *
@@ -46,8 +76,13 @@ namespace common
  * }
  *
  */
-class SOFA_IMAGEPROCESSING_API ImageFilter : public ImplicitDataEngine
+class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
 {
+  static void _mouseCallback(int e, int x, int y, int f, void* d)
+  {
+    reinterpret_cast<ImageFilter*>(d)->mouseCallback(e, x, y, f);
+  }
+
  public:
   SOFA_CLASS(ImageFilter, ImplicitDataEngine);
 
@@ -61,13 +96,11 @@ class SOFA_IMAGEPROCESSING_API ImageFilter : public ImplicitDataEngine
    * processing)
    */
   ImageFilter();
-  virtual ~ImageFilter() override;
+  virtual ~ImageFilter();
 
-  void init() override;
+  virtual void init() override;
   virtual void Update() override;
-  void reinit() override;
-  void bindGlTexture(const std::string& imageString);
-  virtual void drawFullFrame();
+  virtual void reinit() override;
 
   /**
    * Implement the filter's behavior in this method;
@@ -76,11 +109,16 @@ class SOFA_IMAGEPROCESSING_API ImageFilter : public ImplicitDataEngine
    * @param debug true if applyFilter is called from the mouse callback or from
    * a modified slider in the Debug UI
    */
-  virtual void applyFilter(const cv::Mat& /*in*/, cv::Mat& /*out*/,
-                           bool /*debug*/ = false) = 0;
+  virtual void applyFilter(const cv::Mat& in, cv::Mat& out,
+                           bool debug = false) = 0;
 
-  sofa::Data<cvMat> d_img;      ///< [INPUT] image to process
-  sofa::Data<cvMat> d_img_out;  ///< [OUTPUT] processed image
+  /// Creates the Debug UI window if not created yet, sets its registered
+  /// trackbars, and activates the necessary callbacks
+  void refreshDebugWindow();
+
+  sofa::Data<cvMat> d_img;        ///< [INPUT] image to process
+  sofa::Data<cvMat> d_img_out;    ///< [OUTPUT] processed image
+  sofa::Data<bool> d_displayDebugWindow;  ///< toggles the Debug UI
   sofa::Data<bool> d_isActive;  ///< Whether the filter is performed or not
   sofa::Data<bool> d_outputImage;
 
@@ -114,135 +152,77 @@ class SOFA_IMAGEPROCESSING_API ImageFilter : public ImplicitDataEngine
    * @param[in] step the discretized interval for the slider
    *
    */
-  void registerData(sofa::Data<uchar>* data, uchar min, uchar max, uchar step);
+  void registerData(sofa::Data<uchar>* data, uchar min, uchar max, uchar step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
-  void registerData(sofa::Data<int>* data, int min, int max, int step);
+  void registerData(sofa::Data<int>* data, int min, int max, int step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<unsigned>* data, unsigned min, unsigned max,
-                    unsigned step);
+                    unsigned step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<double>* data, double min, double max,
-                    double step);
+                    double step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
-  void registerData(sofa::Data<float>* data, float min, float max, float step);
+  void registerData(sofa::Data<float>* data, float min, float max, float step = 1.0f);
 
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec2u>* data, unsigned min,
-                    unsigned max, unsigned step);
+                    unsigned max, unsigned step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec3u>* data, unsigned min,
-                    unsigned max, unsigned step);
+                    unsigned max, unsigned step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec4u>* data, unsigned min,
-                    unsigned max, unsigned step);
+                    unsigned max, unsigned step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec2i>* data, int min,
-                    int max, int step);
+                    int max, int step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec3i>* data, int min,
-                    int max, int step);
+                    int max, int step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec4i>* data, int min,
-                    int max, int step);
+                    int max, int step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec2f>* data, float min,
-                    float max, float step);
+                    float max, float step = 1.0f);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec3f>* data, float min,
-                    float max, float step);
+                    float max, float step = 1.0f);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec4f>* data, float min,
-                    float max, float step);
+                    float max, float step = 1.0f);
 
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec2d>* data, double min,
-                    double max, double step);
+                    double max, double step = 1.0);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec3d>* data, double min,
-                    double max, double step);
+                    double max, double step = 1.0);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<sofa::defaulttype::Vec4d>* data, double min,
-                    double max, double step);
+                    double max, double step = 1.0);
 
   /// unregisters all data passed through @see registerData() for the Debug UI
   void unregisterAllData();
 
-  /// mouse callback (if activated through @see activateMouseCallback()
-
-  bool hasMouseCallback() { return m_isMouseCallbackActive; }
-  void call_MouseCallback(int et, int b, int m, int x, int y)
-  {
-    switch (et)
-    {
-      case 0:
-        et = cv::EVENT_MOUSEMOVE;
-        break;
-      case 1:
-      {
-        switch (b)
-        {
-          case 1:
-            et = cv::EVENT_LBUTTONDOWN;
-            break;
-          case 2:
-            et = cv::EVENT_RBUTTONDOWN;
-            break;
-          case 4:
-            et = cv::EVENT_MBUTTONDOWN;
-            break;
-          default:
-            et = cv::EVENT_LBUTTONDOWN;
-        }
-      }
-      break;
-      case 2:
-      {
-        switch (b)
-        {
-          case 1:
-            et = cv::EVENT_LBUTTONUP;
-            break;
-          case 2:
-            et = cv::EVENT_RBUTTONUP;
-            break;
-          case 4:
-            et = cv::EVENT_MBUTTONUP;
-            break;
-          default:
-            et = cv::EVENT_LBUTTONUP;
-        }
-      }
-      break;
-    }
-
-    int modifier = 0;
-    if (m & 1)
-        modifier += cv::EVENT_FLAG_SHIFTKEY;
-    if (m & 2)
-        modifier += cv::EVENT_FLAG_CTRLKEY;
-    if (m & 4)
-        modifier += cv::EVENT_FLAG_ALTKEY;
-
-    mouseCallback(et, x, y, modifier);
-  }
-
  protected:
+  /// mouse callback (if activated through @see activateMouseCallback()
   virtual void mouseCallback(int, int, int, int) {}
 
  private:
@@ -250,8 +230,11 @@ class SOFA_IMAGEPROCESSING_API ImageFilter : public ImplicitDataEngine
   bool m_isMouseCallbackActive;
   cv::Mat m_debugImage;
   void reinitDebugWindow();
+  sofa::core::DataTracker m_displayDebugDataTracker;
+
+  std::vector<DSM*> m_params;
+  const std::string m_win_name;
 };
 
-}  // namespace common
 }  // namespace sofacv
-#endif  // SOFACV_COMMON_IMAGEFILTER_NEWGUI_H
+#endif  // SOFACV_IMAGEFILTER_OLDGUI_H

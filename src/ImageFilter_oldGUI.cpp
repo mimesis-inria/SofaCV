@@ -33,8 +33,6 @@
 
 namespace sofacv
 {
-namespace common
-{
 unsigned ImageFilter::m_window_uid = 0;
 
 ImageFilter::ImageFilter()
@@ -245,5 +243,4 @@ void ImageFilter::registerData(sofa::Data<sofa::defaulttype::Vec4d>* data,
   m_params.push_back(new VecSliderManager<4, double>(data, min, max, step));
 }
 
-}  // namespace common
 }  // namespace sofacv

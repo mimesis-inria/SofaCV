@@ -10,8 +10,6 @@
 
 namespace sofacv
 {
-namespace common
-{
 SOFA_DECL_CLASS(ImageFilter)
 
 unsigned ImageFilter::m_window_uid = 0;
@@ -260,5 +258,4 @@ void ImageFilter::registerData(sofa::Data<sofa::defaulttype::Vec4d>* /*data*/,
 {
 }
 
-}  // namespace common
 }  // namespace sofacv

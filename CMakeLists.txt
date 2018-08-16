@@ -39,6 +39,7 @@ set(HEADER_FILES
   src/acquisition/BaseFrameGrabber.h
   src/acquisition/VideoGrabber.h
   src/ImplicitDataEngine.h
+  src/ImageFilter.h
   src/DependencyGraphVisitor.h
   src/DependencyGraphAnimationLoop.h
   )
@@ -88,18 +89,39 @@ set(${PROJECT_NAME}_LIBRARIES
   ${OpenCV_LIBRARIES}
   )
 
+set (SOFACV_NEW_GUI_ENABLED ON CACHE BOOL "Enables ImageFilter Widgets for runSofa2")
 if(SofaQtQuickGUI_FOUND)
   find_package(Qt5QuickControls2 REQUIRED)
   find_package(Qt5Quick REQUIRED)
   find_package(Qt5Qml REQUIRED)
+  find_package(GLEW REQUIRED)
 
   add_definitions("-D${PROJECT_NAME}_NEW_GUI_ENABLED")
   add_definitions("-DSOFA_BUILD_${PROJECT_NAME}_PLUGIN")
+  add_definitions("-DHAS_GLEW")
+
+  list(APPEND SOURCE_FILES
+    src/gui/ImageFilterDisplay.cpp
+    src/gui/ImageFilterModel.cpp
+    src/ImageFilter_newGUI.cpp
+    )
+
+  list(APPEND HEADER_FILES
+    src/gui/ImageFilterDisplay.h
+    src/gui/ImageFilterModel.h
+    src/ImageFilter_newGUI.h
+    )
+
+    set(MOC_HEADER_FILES
+    src/gui/ImageFilterDisplay.h
+    src/gui/ImageFilterModel.h
+    )
 
   set(QML_FILES
     src/gui/qml/SofaDataTypes/SofaDataType_cvMat.qml
     src/gui/qml/SofaDataTypes/SofaDataType_cvDMatch.qml
     src/gui/qml/SofaDataTypes/SofaDataType_cvKeypoint.qml
+    src/gui/qml/SofaWidgets/ImageFilterWidget.qml
     )
 
   set(QRC_FILES
@@ -108,6 +130,7 @@ if(SofaQtQuickGUI_FOUND)
 
   list (APPEND ${PROJECT_NAME}_LIBRARIES
     SofaQtQuickGUI
+    ${GLEW_LIBRARIES}
     )
   # do not use "set(CMAKE_AUTOMOC ON)" since all the mocced files
   # will be compiled by a single compilation unit leading to a
@@ -116,6 +139,8 @@ if(SofaQtQuickGUI_FOUND)
   qt5_add_resources(RESOURCE_FILES ${QRC_FILES})
 
   list (APPEND ${PROJECT_NAME}_FILES
+    ${SOURCE_FILES}
+    ${HEADER_FILES}
     ${MOC_FILES}
     ${RESOURCE_FILES}
     ${QML_FILES}
@@ -125,6 +150,20 @@ if(SofaQtQuickGUI_FOUND)
     add_definitions(-DQT_NO_DEBUG)
   endif(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DQT_PLUGIN)
+else ()
+  list(APPEND HEADER_FILES
+    src/DataSliderMgr.h
+    src/DataSliderMgr.inl
+    src/ImageFilter_oldGUI.h
+    )
+
+  list(APPEND SOURCE_FILES
+    src/ImageFilter_oldGUI.cpp
+    )
+  set(${PROJECT_NAME}_SOURCES
+    ${SOURCE_FILES}
+    ${HEADER_FILES}
+    )
 endif (SofaQtQuickGUI_FOUND)
 
 set(${PROJECT_NAME}_RESOURCES_PATH \"${CMAKE_CURRENT_SOURCE_DIR}/resources\")

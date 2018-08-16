@@ -1,8 +1,8 @@
 #ifndef SOFACV_GUI_IMAGEFILTERDISPLAY_H
 #define SOFACV_GUI_IMAGEFILTERDISPLAY_H
 
-#include "ImageProcessingPlugin.h"
-#include "common/ImageFilter.h"
+#include "SofaCVPlugin.h"
+#include "ImageFilter.h"
 #include "gui/ImageFilterModel.h"
 
 #include <SofaQtQuickGUI/SofaComponent.h>
@@ -19,7 +19,7 @@ namespace gui
 {
 class ImageFilterDisplay;
 
-class SOFA_IMAGEPROCESSING_API FilterRenderer
+class SOFA_SOFACV_API FilterRenderer
     : public QQuickFramebufferObject::Renderer
 {
  public:
@@ -32,7 +32,7 @@ class SOFA_IMAGEPROCESSING_API FilterRenderer
   const ImageFilterDisplay* m_imageFilterDisplay;
 };
 
-class SOFA_IMAGEPROCESSING_API ImageFilterDisplay : public QQuickFramebufferObject
+class SOFA_SOFACV_API ImageFilterDisplay : public QQuickFramebufferObject
 {
   Q_OBJECT
 

@@ -1,5 +1,5 @@
-#ifndef SOFACV_COMMON_IMAGEFILTER_H
-#define SOFACV_COMMON_IMAGEFILTER_H
+#ifndef SOFACV_IMAGEFILTER_H
+#define SOFACV_IMAGEFILTER_H
 
 #ifdef SOFACV_NEW_GUI_ENABLED
 #include "ImageFilter_newGUI.h"
@@ -10,4 +10,4 @@
 //int ImageFilterClass = sofa::core::RegisterObject("Base class for SofaOR's image processing filters")
 //        .add<sofaor::processor::ImageFilter>();
 
-#endif  // SOFACV_COMMON_IMAGEFILTER_H
+#endif  // SOFACV_IMAGEFILTER_H
