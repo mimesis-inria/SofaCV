@@ -4,10 +4,11 @@
 #include <sofa/helper/system/FileRepository.h>
 
 #ifdef QT_PLUGIN
+#include <gui/ImageFilterDisplay.h>
+#include <gui/ImageFilterModel.h>
 #include <QApplication>
 #include <QDebug>
 #include <QQuickPaintedItem>
-
 const int versionMajor = 1;
 const int versionMinor = 0;
 
@@ -51,6 +52,14 @@ void initExternalModule()
     sofa::helper::system::DataRepository.addLastPath(SOFACV_RESOURCES_PATH);
 #ifdef QT_PLUGIN
     initResources();
+
+    qmlRegisterType<sofacv::gui::ImageFilterDisplay>(
+        "ImageFilterDisplay", versionMajor, versionMinor, "ImageFilterDisplay");
+    qmlRegisterType<sofacv::gui::ImageFilterModel>(
+        "ImageFilterModel", versionMajor, versionMinor, "ImageFilterModel");
+    qmlRegisterType<sofacv::gui::ImageFilterModelList>(
+        "ImageFilterModelList", versionMajor, versionMinor,
+        "ImageFilterModelList");
 #endif  // QT_PLUGIN
 #ifdef SOFA_HAVE_SOFAPYTHON
     if (PythonFactory::s_sofaPythonModule)

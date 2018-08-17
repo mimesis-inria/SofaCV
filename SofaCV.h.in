@@ -7,6 +7,7 @@
 #include "src/datatypes/cvDMatch.h"
 #include "src/datatypes/cvKeypoint.h"
 #include "src/ImplicitDataEngine.h"
+#include "src/ImageFilter.h"
 #include "src/datatypes/cvMatUtils.h"
 
 #endif  // SOFACV_ALL_H

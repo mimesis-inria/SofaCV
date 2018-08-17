@@ -20,8 +20,8 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#ifndef SOFACV_COMMON_DATASLIDERMGR_H
-#define SOFACV_COMMON_DATASLIDERMGR_H
+#ifndef SOFACV_DATASLIDERMGR_H
+#define SOFACV_DATASLIDERMGR_H
 
 #include <SofaCV/SofaCV.h>
 #include <sofa/core/ObjectFactory.h>
@@ -29,8 +29,6 @@
 #include <sofa/simulation/AnimateBeginEvent.h>
 
 namespace sofacv
-{
-namespace common
 {
 struct DSM
 {
@@ -94,6 +92,5 @@ struct VecSliderManager : DSM
   U m_min, m_max, m_step;
 };
 
-}  // namespace common
 }  // namespace sofacv
-#endif  // SOFACV_COMMON_DATASLIDERMGR_H
+#endif  // SOFACV_DATASLIDERMGR_H

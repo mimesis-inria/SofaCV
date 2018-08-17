@@ -1,5 +1,5 @@
-#ifndef SOFACV_COMMON_DATASLIDERMANAGER_INL
-#define SOFACV_COMMON_DATASLIDERMANAGER_INL
+#ifndef SOFACV_DATASLIDERMANAGER_INL
+#define SOFACV_DATASLIDERMANAGER_INL
 
 #include "DataSliderMgr.h"
 #include "ImageFilter_oldGUI.h"
@@ -8,8 +8,6 @@
 #include <opencv2/highgui.hpp>
 
 namespace sofacv
-{
-namespace common
 {
 // CONSTRUCTORS
 
@@ -305,7 +303,6 @@ void VecSliderManager<N, U>::callback_w(int val, void* mgr)
 	}
 }
 
-}  // namespace common
 }  // namespace sofacv
 
-#endif  // SOFACV_COMMON_DATASLIDERMANAGER_INL
+#endif  // SOFACV_DATASLIDERMANAGER_INL

@@ -5,7 +5,7 @@ if (CMAKE_VERSION GREATER 3.9)
   cmake_policy(SET CMP0053 OLD)
   cmake_policy(SET CMP0054 OLD)
   cmake_policy(SET CMP0017 NEW)
-endif ()
+endif (CMAKE_VERSION GREATER 3.9)
 
 set(${PROJECT_NAME}_MAJOR_VERSION 2)
 set(${PROJECT_NAME}_MINOR_VERSION 0)
@@ -89,14 +89,17 @@ set(${PROJECT_NAME}_LIBRARIES
   ${OpenCV_LIBRARIES}
   )
 
-set (SOFACV_NEW_GUI_ENABLED ON CACHE BOOL "Enables ImageFilter Widgets for runSofa2")
-if(SofaQtQuickGUI_FOUND)
+set (SOFACV_NEW_GUI_ENABLED OFF CACHE BOOL "Enables ImageFilter Widgets for runSofa2")
+message (SofaQtQuickGUI_FOUND)
+message(${SOFACV_NEW_GUI_ENABLED})
+if(SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
+    message ("WE FOUND THE NEW GUI! COOL!")
   find_package(Qt5QuickControls2 REQUIRED)
   find_package(Qt5Quick REQUIRED)
   find_package(Qt5Qml REQUIRED)
   find_package(GLEW REQUIRED)
 
-  add_definitions("-D${PROJECT_NAME}_NEW_GUI_ENABLED")
+  add_definitions("-DSOFACV_NEW_GUI_ENABLED")
   add_definitions("-DSOFA_BUILD_${PROJECT_NAME}_PLUGIN")
   add_definitions("-DHAS_GLEW")
 
@@ -160,11 +163,11 @@ else ()
   list(APPEND SOURCE_FILES
     src/ImageFilter_oldGUI.cpp
     )
-  set(${PROJECT_NAME}_SOURCES
+  set(${PROJECT_NAME}_FILES
     ${SOURCE_FILES}
     ${HEADER_FILES}
     )
-endif (SofaQtQuickGUI_FOUND)
+endif (SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
 
 set(${PROJECT_NAME}_RESOURCES_PATH \"${CMAKE_CURRENT_SOURCE_DIR}/resources\")
 configure_file("${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.h")
@@ -189,7 +192,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}"
 if ( SofaPython_FOUND )
   target_link_libraries(${PROJECT_NAME} SofaPython)
   add_definitions("-DSOFA_HAVE_SOFAPYTHON")
-endif()
+endif( SofaPython_FOUND )
 
 sofa_create_package(${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})
 
@@ -199,5 +202,5 @@ if(SOFA_BUILD_TESTS)
     find_package(SofaTest QUIET)
     if(SofaTest_FOUND)
         add_subdirectory(SofaCV_test)
-    endif()
-endif()
+    endif(SofaTest_FOUND)
+endif(SOFA_BUILD_TESTS)
