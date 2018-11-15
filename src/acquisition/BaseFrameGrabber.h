@@ -52,7 +52,7 @@ class SOFA_SOFACV_API BaseFrameGrabber : virtual public BaseGrabber
     setDirtyValue();
   }
 
-  virtual void Update() override
+  virtual void doUpdate() override
   {
 
   }

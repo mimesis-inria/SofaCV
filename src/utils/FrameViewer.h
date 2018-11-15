@@ -24,7 +24,7 @@ class SOFA_SOFACV_API FrameViewer : virtual public ImplicitDataEngine
 
   void init() override;
   void reinit() override;
-  void Update() override;
+  void doUpdate() override;
   void draw(const sofa::core::visual::VisualParams*) override;
   void computeBBox(const sofa::core::ExecParams* params, bool) override;
 

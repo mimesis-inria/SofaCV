@@ -62,7 +62,7 @@ class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
   virtual ~ImageFilter() override;
 
   void init() override;
-  virtual void Update() override;
+  virtual void doUpdate() override;
   void reinit() override;
   void bindGlTexture(const std::string& imageString);
   virtual void drawFullFrame();

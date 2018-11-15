@@ -42,7 +42,7 @@ void FrameViewer::init()
   update();
 }
 
-void FrameViewer::Update()
+void FrameViewer::doUpdate()
 {
   drawImpl();
 }

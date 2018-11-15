@@ -119,7 +119,7 @@ struct TestEngine : public ImplicitDataEngine
     addOutput(&d_c_out);
   }
 
-  void Update() override
+  void doUpdate() override
   {
     std::cout << getName() << "::Update()" << std::endl;
     d_a_out.setValue(d_a.getValue() + 1);

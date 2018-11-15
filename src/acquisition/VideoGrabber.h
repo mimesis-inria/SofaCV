@@ -82,7 +82,7 @@ class SOFA_SOFACV_API VideoGrabber : public BaseFrameGrabber
   virtual ~VideoGrabber() override;
 
   void init() override;
-  void Update() override;
+  void doUpdate() override;
   void reinit() override;
   void cleanup() override;
 

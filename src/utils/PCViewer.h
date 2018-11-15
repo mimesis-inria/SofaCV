@@ -21,7 +21,7 @@ class SOFA_SOFACV_API PCViewer : public ImplicitDataEngine
   virtual ~PCViewer();
 
   virtual void init() override;
-  virtual void Update() override;
+  virtual void doUpdate() override;
 	void computeBBox(const sofa::core::ExecParams*, bool);
   virtual void draw(const sofa::core::visual::VisualParams*) override;
   virtual void reinit();

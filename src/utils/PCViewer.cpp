@@ -31,7 +31,7 @@ void PCViewer::init()
   update();
 }
 
-void PCViewer::Update()
+void PCViewer::doUpdate()
 {
   m_positions = d_positions.getValue();
   const sofa::helper::vector<Vec3b>& c = d_colors.getValue();

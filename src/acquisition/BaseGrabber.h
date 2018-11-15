@@ -32,7 +32,6 @@ class SOFA_SOFACV_API BaseGrabber : virtual public ImplicitDataEngine
   {
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
-//      cleanDirty();
       update(); /// always call update() for grabbers. It's
                 /// decided internally whether or not they should do something
       return;

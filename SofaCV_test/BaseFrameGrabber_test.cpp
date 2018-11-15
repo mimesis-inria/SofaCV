@@ -47,7 +47,7 @@ struct TestFrameGrabber : public BaseFrameGrabber
   }
 
   void init() override {}
-  void Update() override {}
+  void doUpdate() override {}
 
   void testSplitDeinterleaved()
   {

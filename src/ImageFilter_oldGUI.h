@@ -99,7 +99,7 @@ class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
   virtual ~ImageFilter();
 
   virtual void init() override;
-  virtual void Update() override;
+  virtual void doUpdate() override;
   virtual void reinit() override;
 
   /**

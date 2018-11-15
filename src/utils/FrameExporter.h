@@ -45,7 +45,7 @@ class SOFA_SOFACV_API FrameExporter : public ImplicitDataEngine
 
   void reinit() override {}
 
-  void Update() override;
+  void doUpdate() override;
 
   void cleanup() override;
 
@@ -53,7 +53,6 @@ class SOFA_SOFACV_API FrameExporter : public ImplicitDataEngine
   {
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
-//      cleanDirty();
       update(); /// always call update() for grabbers. It's
                 /// decided internally whether or not they should do something
       return;

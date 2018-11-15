@@ -28,8 +28,8 @@ ImplicitDataEngine* ImplicitDataEngine::getPreviousEngineInGraph()
   getContext()->get<ImplicitDataEngine>(&engines);
   for (size_t i = 0; i < engines.size(); ++i)
     if (engines[i]->getName() == getName())
-      return (i) ? (engines[i - 1]) : (NULL);
-  return NULL;
+      return (i) ? (engines[i - 1]) : (nullptr);
+  return nullptr;
 }
 
 ImplicitDataEngine::ImplicitDataEngine()
@@ -43,24 +43,12 @@ ImplicitDataEngine::ImplicitDataEngine()
   f_listening.setValue(true);
 }
 
-void ImplicitDataEngine::update()
-{
-  const DDGLinkContainer& inputs = getInputs();
-  for(size_t i=0, iend=inputs.size() ; i<iend ; ++i )
-  {
-    static_cast<sofa::core::objectmodel::BaseData*>(inputs[i])->updateIfDirty();
-  }
-  cleanDirty();
-  Update();
-}
-
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
                                   bool trackOnly)
 {
   if (!d_autolink.getValue() || trackOnly || data->isSet())
   {
-    trackData(data);
-    sofa::core::objectmodel::DDGNode::addInput(data);
+    sofa::core::DataEngine::addInput(data);
     return;
   }
   ImplicitDataEngine* engine = getPreviousEngineInGraph();
@@ -77,8 +65,7 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
     }
     else
     {
-      trackData(data);
-      sofa::core::objectmodel::DDGNode::addInput(data);
+      sofa::core::DataEngine::addInput(data);
       msg_advice(getName() + "::" + data->getName())
           << "linked to " << data->getLinkPath()
           << " implicitly. Please ensure that this makes sense. Otherwise, set "
@@ -89,17 +76,6 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
     msg_warning(getName() + "::bindInputData()")
         << "couldn't bind input data " << data->getName()
         << " implicitly. Link is broken";
-}
-
-void ImplicitDataEngine::trackData(sofa::core::objectmodel::BaseData* data)
-{
-    m_dataTracker.trackData(*data);
-}
-
-void ImplicitDataEngine::untrackData(
-    sofa::core::objectmodel::BaseData* /*data*/)
-{
-    // need a way to remove a data from a DataTracker...
 }
 
 }  // namespace sofacv
