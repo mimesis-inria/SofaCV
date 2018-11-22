@@ -47,7 +47,6 @@ namespace sofacv
  *
  */
 
-
 class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
 {
  public:
@@ -67,7 +66,8 @@ class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
   /// trackOnly allows you to have an engine with autolink, but with some
   /// variables (flagged trackOnly) that would not be looked for using the
   /// autolink (optional)
-  void addInput(sofa::core::objectmodel::BaseData* data, bool trackOnly = false);
+  void addInput(sofa::core::objectmodel::BaseData* data,
+                bool trackOnly = false);
 
   /// Sets a callback method for data
   void trackData(sofa::core::objectmodel::BaseData* data);

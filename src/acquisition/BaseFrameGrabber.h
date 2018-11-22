@@ -27,14 +27,12 @@ class SOFA_SOFACV_API BaseFrameGrabber : virtual public BaseGrabber
 
   sofa::Data<cvMat>
       d_fullFrame;  ///< [OUTPUT] raw frame as retrieved from the grabber
-  sofa::Data<cvMat>
-      d_frame1;  ///< [OUTPUT] Left image (full frame if mono)
-  sofa::Data<cvMat>
-      d_frame2;  ///< [OUTPUT] Right image (nothing if mono)
+  sofa::Data<cvMat> d_frame1;  ///< [OUTPUT] Left image (full frame if mono)
+  sofa::Data<cvMat> d_frame2;  ///< [OUTPUT] Right image (nothing if mono)
 
   // cv::CAP_PROPS
   sofa::Data<double> d_fps;  ///< [OUTPUT] Video frequency, if the device
-                             ///provides the information
+                             /// provides the information
   sofa::Data<sofa::defaulttype::Vec2u>
       d_dimensions;  ///< [OUTPUT] Dimensions of the grabbed image
 
@@ -52,32 +50,25 @@ class SOFA_SOFACV_API BaseFrameGrabber : virtual public BaseGrabber
     setDirtyValue();
   }
 
-  virtual void Update() override
-  {
+  virtual void Update() override {}
 
-  }
-
-protected:
+ protected:
   /// \brief deinterleaved image splitting function (see
   /// http://www.stereo3d.com/formats.htm)
-  void split_deinterleaved(const cvMat& src, cvMat& dstL,
-                           cvMat& dstR);
+  void split_deinterleaved(const cvMat& src, cvMat& dstL, cvMat& dstR);
   /// \brief top-bottom image splitting function (see
   /// http://www.stereo3d.com/formats.htm)
-  void split_top_bottom(const cvMat& src, cvMat& dstL,
-                        cvMat& dstR);
+  void split_top_bottom(const cvMat& src, cvMat& dstL, cvMat& dstR);
   /// \brief side-by-side image splitting function (see
   /// http://www.stereo3d.com/formats.htm)
-  void split_side_by_side(const cvMat& src, cvMat& dstL,
-                          cvMat& dstR);
+  void split_side_by_side(const cvMat& src, cvMat& dstL, cvMat& dstR);
   /// \brief rotated side-by-side image splitting function (see
   /// http://www.stereo3d.com/formats.htm)
-  void split_rotated_side_by_side(const cvMat& src, cvMat& dstL,
-                                  cvMat& dstR);
+  void split_rotated_side_by_side(const cvMat& src, cvMat& dstL, cvMat& dstR);
 
   // splits the frames according to the specified video mode
-  void splitFrames(const cvMat& src, cvMat& dstL,
-                   cvMat& dstR, image::VideoMode mode);
+  void splitFrames(const cvMat& src, cvMat& dstL, cvMat& dstR,
+                   image::VideoMode mode);
 };
 
 }  // namespace acquisition

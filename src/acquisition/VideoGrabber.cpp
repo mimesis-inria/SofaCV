@@ -1,31 +1,31 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #include "VideoGrabber.h"
 
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/AdvancedTimer.h>
-#include <sofa/simulation/AnimateBeginEvent.h>
 #include <sofa/helper/system/FileRepository.h>
+#include <sofa/simulation/AnimateBeginEvent.h>
 
 namespace sofacv
 {
@@ -68,7 +68,8 @@ VideoGrabber::VideoGrabber()
 void VideoGrabber::init()
 {
   // Differentiate between a file on the filesystem and an URL on the network
-  // If m_filename is an image sequence, path must still be absolute, or relative to current dir
+  // If m_filename is an image sequence, path must still be absolute, or
+  // relative to current dir
   std::string s = d_fileName.getFullPath();
   if (sofa::helper::system::DataRepository.findFile(s, "", &std::cerr))
     m_filename = d_fileName.getFullPath();
@@ -135,9 +136,9 @@ void VideoGrabber::grabFrame()
       m_seek = int(m_cap.get(cv::CAP_PROP_POS_FRAMES));
     else
       m_seek++;
-    splitFrames(m_frame, m_left, m_right,
-                static_cast<image::VideoMode>(
-                    d_videoMode.getValue().getSelectedId()));
+    splitFrames(
+        m_frame, m_left, m_right,
+        static_cast<image::VideoMode>(d_videoMode.getValue().getSelectedId()));
     m.unlock();
   }
   m_cap.grab();

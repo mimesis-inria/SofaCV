@@ -1,7 +1,7 @@
 #include "SofaCVPlugin.h"
 #include <sofa/config.h>
-#include <sofa/helper/system/config.h>
 #include <sofa/helper/system/FileRepository.h>
+#include <sofa/helper/system/config.h>
 
 #ifdef QT_PLUGIN
 #include <gui/ImageFilterDisplay.h>
@@ -34,13 +34,14 @@ namespace component
 {
 // Here are just several convenient functions to help user to know what contains
 // the plugin
-extern "C" {
-SOFA_SOFACV_API void initExternalModule();
-SOFA_SOFACV_API const char* getModuleName();
-SOFA_SOFACV_API const char* getModuleVersion();
-SOFA_SOFACV_API const char* getModuleLicense();
-SOFA_SOFACV_API const char* getModuleDescription();
-SOFA_SOFACV_API const char* getModuleComponentList();
+extern "C"
+{
+  SOFA_SOFACV_API void initExternalModule();
+  SOFA_SOFACV_API const char* getModuleName();
+  SOFA_SOFACV_API const char* getModuleVersion();
+  SOFA_SOFACV_API const char* getModuleLicense();
+  SOFA_SOFACV_API const char* getModuleDescription();
+  SOFA_SOFACV_API const char* getModuleComponentList();
 }
 
 void initExternalModule()

@@ -1,8 +1,8 @@
 #ifndef SOFACV_ACQUISITION_BASEGRABBER_H
 #define SOFACV_ACQUISITION_BASEGRABBER_H
 
-#include "SofaCVPlugin.h"
 #include "ImplicitDataEngine.h"
+#include "SofaCVPlugin.h"
 
 namespace sofacv
 {
@@ -32,9 +32,9 @@ class SOFA_SOFACV_API BaseGrabber : virtual public ImplicitDataEngine
   {
     if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
     {
-//      cleanDirty();
-      update(); /// always call update() for grabbers. It's
-                /// decided internally whether or not they should do something
+      //      cleanDirty();
+      update();  /// always call update() for grabbers. It's
+                 /// decided internally whether or not they should do something
       return;
     }
     ImplicitDataEngine::handleEvent(e);

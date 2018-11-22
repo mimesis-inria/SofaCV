@@ -1,34 +1,34 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #ifndef SOFACV_IMAGEFILTER_OLDGUI_H
 #define SOFACV_IMAGEFILTER_OLDGUI_H
 
-#include "SofaCVPlugin.h"
-#include "datatypes/cvMat.h"
-#include "ImplicitDataEngine.h"
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/OptionsGroup.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
+#include "ImplicitDataEngine.h"
+#include "SofaCVPlugin.h"
+#include "datatypes/cvMat.h"
 
 namespace sofacv
 {
@@ -116,8 +116,8 @@ class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
   /// trackbars, and activates the necessary callbacks
   void refreshDebugWindow();
 
-  sofa::Data<cvMat> d_img;        ///< [INPUT] image to process
-  sofa::Data<cvMat> d_img_out;    ///< [OUTPUT] processed image
+  sofa::Data<cvMat> d_img;                ///< [INPUT] image to process
+  sofa::Data<cvMat> d_img_out;            ///< [OUTPUT] processed image
   sofa::Data<bool> d_displayDebugWindow;  ///< toggles the Debug UI
   sofa::Data<bool> d_isActive;  ///< Whether the filter is performed or not
   sofa::Data<bool> d_outputImage;
@@ -152,7 +152,8 @@ class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
    * @param[in] step the discretized interval for the slider
    *
    */
-  void registerData(sofa::Data<uchar>* data, uchar min, uchar max, uchar step = 1);
+  void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
+                    uchar step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
   void registerData(sofa::Data<int>* data, int min, int max, int step = 1);
@@ -166,7 +167,8 @@ class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
                     double step = 1);
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)
-  void registerData(sofa::Data<float>* data, float min, float max, float step = 1.0f);
+  void registerData(sofa::Data<float>* data, float min, float max,
+                    float step = 1.0f);
 
   /// @see void registerData(sofa::Data<uchar>* data, uchar min, uchar max,
   /// uchar step)

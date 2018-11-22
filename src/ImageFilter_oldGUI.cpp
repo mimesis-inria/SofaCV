@@ -1,24 +1,24 @@
 /******************************************************************************
-*       SOFAOR, SOFA plugin for the Operating Room, development version       *
-*                        (c) 2017 INRIA, MIMESIS Team                         *
-*                                                                             *
-* This program is a free software; you can redistribute it and/or modify it   *
-* under the terms of the GNU Lesser General Public License as published by    *
-* the Free Software Foundation; either version 1.0 of the License, or (at     *
-* your option) any later version.                                             *
-*                                                                             *
-* This program is distributed in the hope that it will be useful, but WITHOUT *
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
-* for more details.                                                           *
-*                                                                             *
-* You should have received a copy of the GNU Lesser General Public License    *
-* along with this program. If not, see <http://www.gnu.org/licenses/>.        *
-*******************************************************************************
-* Authors: Bruno Marques and external contributors (see Authors.txt)          *
-*                                                                             *
-* Contact information: contact-mimesis@inria.fr                               *
-******************************************************************************/
+ *       SOFAOR, SOFA plugin for the Operating Room, development version       *
+ *                        (c) 2017 INRIA, MIMESIS Team                         *
+ *                                                                             *
+ * This program is a free software; you can redistribute it and/or modify it   *
+ * under the terms of the GNU Lesser General Public License as published by    *
+ * the Free Software Foundation; either version 1.0 of the License, or (at     *
+ * your option) any later version.                                             *
+ *                                                                             *
+ * This program is distributed in the hope that it will be useful, but WITHOUT *
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or       *
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License *
+ * for more details.                                                           *
+ *                                                                             *
+ * You should have received a copy of the GNU Lesser General Public License    *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.        *
+ *******************************************************************************
+ * Authors: Bruno Marques and external contributors (see Authors.txt)          *
+ *                                                                             *
+ * Contact information: contact-mimesis@inria.fr                               *
+ ******************************************************************************/
 
 #include "ImageFilter_oldGUI.h"
 #include "DataSliderMgr.inl"
@@ -77,7 +77,7 @@ void ImageFilter::Update()
     if (d_displayDebugWindow.getValue())
     {
       cv::imshow(m_win_name, d_img_out.getValue());
-//      cv::waitKey(1);
+      //      cv::waitKey(1);
     }
     sofa::helper::AdvancedTimer::stepEnd("Image Filters");
     return;
@@ -105,8 +105,8 @@ void ImageFilter::reinit()
   if (m_displayDebugDataTracker.isDirty() && d_isActive.getValue())
     refreshDebugWindow();
 
-//  // to set needsRefresh to true
-//  ImplicitDataEngine::reinit();
+  //  // to set needsRefresh to true
+  //  ImplicitDataEngine::reinit();
 }
 
 void ImageFilter::reinitDebugWindow()
@@ -114,15 +114,14 @@ void ImageFilter::reinitDebugWindow()
   if (!d_displayDebugWindow.getValue())
   {
     if (cvGetWindowHandle(m_win_name.c_str()) && m_isMouseCallbackActive)
-        cv::setMouseCallback(m_win_name, NULL, NULL);
-    if (cvGetWindowHandle(m_win_name.c_str()))
-        cv::destroyWindow(m_win_name);
+      cv::setMouseCallback(m_win_name, NULL, NULL);
+    if (cvGetWindowHandle(m_win_name.c_str())) cv::destroyWindow(m_win_name);
     return;
   }
 
   // WITH QT:
-    cv::namedWindow(m_win_name,
-                    CV_WINDOW_NORMAL | CV_WINDOW_AUTOSIZE | CV_GUI_EXPANDED);
+  cv::namedWindow(m_win_name,
+                  CV_WINDOW_NORMAL | CV_WINDOW_AUTOSIZE | CV_GUI_EXPANDED);
   for (DSM* dmgr : m_params) dmgr->createSlider(m_win_name);
   if (m_isMouseCallbackActive && cvGetWindowHandle(m_win_name.c_str()))
     cv::setMouseCallback(m_win_name, &ImageFilter::_mouseCallback, this);
@@ -131,7 +130,9 @@ void ImageFilter::reinitDebugWindow()
 void ImageFilter::refreshDebugWindow()
 {
   reinitDebugWindow();
-  if (!d_displayDebugWindow.getValue() || !cvGetWindowHandle(m_win_name.c_str())) return;
+  if (!d_displayDebugWindow.getValue() ||
+      !cvGetWindowHandle(m_win_name.c_str()))
+    return;
   applyFilter(d_img.getValue(), m_debugImage, true);
   if (m_debugImage.empty()) return;
 

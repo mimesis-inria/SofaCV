@@ -12,7 +12,7 @@ namespace sofacv
 namespace cvmat
 {
 template <typename T>
-inline void desserialize(std::istream &/*in*/, T */*data*/)
+inline void desserialize(std::istream & /*in*/, T * /*data*/)
 {
 }
 
@@ -374,8 +374,7 @@ struct cvMatTypeInfo
 };
 
 template <>
-struct DataTypeInfo<sofacv::cvMat>
-    : public cvMatTypeInfo<sofacv::cvMat>
+struct DataTypeInfo<sofacv::cvMat> : public cvMatTypeInfo<sofacv::cvMat>
 {
   static std::string name() { return "cvMat"; }
 };

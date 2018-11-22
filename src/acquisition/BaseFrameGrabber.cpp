@@ -8,7 +8,7 @@ namespace acquisition
 {
 SOFA_DECL_CLASS(BaseFrameGrabber)
 
-//int BaseFrameGrabberClass =
+// int BaseFrameGrabberClass =
 //		sofa::core::RegisterObject(
 //        "OpenCV-based component reading mono and stereo videos")
 //        .add<BaseFrameGrabber>();
@@ -37,7 +37,7 @@ BaseFrameGrabber::BaseFrameGrabber()
 
   this->addAlias(&d_frame2, "img2_out");
 
-	sofa::helper::OptionsGroup* videoMode = d_videoMode.beginEdit();
+  sofa::helper::OptionsGroup* videoMode = d_videoMode.beginEdit();
   videoMode->setNames(5, "MONO", "STEREO_INTERLEAVED", "STEREO_TOP_BOTTOM",
                       "STEREO_SIDE_BY_SIDE", "STEREO_ROTATED_SIDE_BY_SIDE");
   videoMode->setSelectedItem(0);
@@ -46,8 +46,7 @@ BaseFrameGrabber::BaseFrameGrabber()
 
 BaseFrameGrabber::~BaseFrameGrabber() {}
 
-void BaseFrameGrabber::split_deinterleaved(const cvMat& src,
-                                           cvMat& dstL,
+void BaseFrameGrabber::split_deinterleaved(const cvMat& src, cvMat& dstL,
                                            cvMat& dstR)
 {
   // First put odd lines on the left & pair on right of the same image
@@ -59,33 +58,30 @@ void BaseFrameGrabber::split_deinterleaved(const cvMat& src,
   dstR = tmp(rectR).clone();
 }
 
-void BaseFrameGrabber::split_top_bottom(const cvMat& src,
-                                        cvMat& dstL,
+void BaseFrameGrabber::split_top_bottom(const cvMat& src, cvMat& dstL,
                                         cvMat& dstR)
 {
   // take first half of the rows
   dstL = src(cv::Range(0, src.rows / 2), cv::Range::all()).clone();
   // take second half of the rows
-	dstR = src(cv::Range(src.rows / 2, src.rows), cv::Range::all()).clone();
+  dstR = src(cv::Range(src.rows / 2, src.rows), cv::Range::all()).clone();
 }
 
-void BaseFrameGrabber::split_side_by_side(const cvMat& src,
-                                          cvMat& dstL,
+void BaseFrameGrabber::split_side_by_side(const cvMat& src, cvMat& dstL,
                                           cvMat& dstR)
 {
   // take first half of the cols
   dstL = src(cv::Range::all(), cv::Range(0, src.cols / 2)).clone();
   // take second half of the cols
-	dstR = src(cv::Range::all(), cv::Range(src.cols / 2, src.cols)).clone();
+  dstR = src(cv::Range::all(), cv::Range(src.cols / 2, src.cols)).clone();
 }
 
-void BaseFrameGrabber::split_rotated_side_by_side(const cvMat& src,
-                                                  cvMat& dstL,
+void BaseFrameGrabber::split_rotated_side_by_side(const cvMat& src, cvMat& dstL,
                                                   cvMat& dstR)
 {
   // same as side_by_side
   dstL = src(cv::Range::all(), cv::Range(0, src.cols / 2)).clone();
-	dstR = src(cv::Range::all(), cv::Range(src.cols / 2, src.cols)).clone();
+  dstR = src(cv::Range::all(), cv::Range(src.cols / 2, src.cols)).clone();
 
   // Then rotate:
   // transpose + flip around Y = 90° CW
@@ -97,8 +93,7 @@ void BaseFrameGrabber::split_rotated_side_by_side(const cvMat& src,
   cv::flip(dstR, dstR, 0);
 }
 
-void BaseFrameGrabber::splitFrames(const cvMat& src,
-                                   cvMat& dstL, cvMat& dstR,
+void BaseFrameGrabber::splitFrames(const cvMat& src, cvMat& dstL, cvMat& dstR,
                                    image::VideoMode mode)
 {
   switch (mode)

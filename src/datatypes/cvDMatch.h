@@ -46,7 +46,7 @@ class SOFA_SOFACV_API cvDMatch : public cv::DMatch
 
   inline friend std::ostream& operator<<(std::ostream& out, const cvDMatch& s)
   {
-		out << s.distance << ' ' << s.imgIdx << ' ' << s.queryIdx << ' '
+    out << s.distance << ' ' << s.imgIdx << ' ' << s.queryIdx << ' '
         << s.trainIdx << ' ';
     return out;
   }
@@ -65,7 +65,7 @@ namespace defaulttype
 template <>
 struct DataTypeName<sofacv::cvDMatch>
 {
-    static const char* name() { return "cvDMatch"; }
+  static const char* name() { return "cvDMatch"; }
 };
 
 }  // namespace defaulttype

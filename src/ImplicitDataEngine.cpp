@@ -2,7 +2,6 @@
 
 namespace sofacv
 {
-
 bool ImplicitDataEngine::_bindData(sofa::core::objectmodel::BaseData* data,
                                    const std::string& alias)
 {
@@ -46,7 +45,7 @@ ImplicitDataEngine::ImplicitDataEngine()
 void ImplicitDataEngine::update()
 {
   const DDGLinkContainer& inputs = getInputs();
-  for(size_t i=0, iend=inputs.size() ; i<iend ; ++i )
+  for (size_t i = 0, iend = inputs.size(); i < iend; ++i)
   {
     static_cast<sofa::core::objectmodel::BaseData*>(inputs[i])->updateIfDirty();
   }
@@ -93,13 +92,13 @@ void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
 
 void ImplicitDataEngine::trackData(sofa::core::objectmodel::BaseData* data)
 {
-    m_dataTracker.trackData(*data);
+  m_dataTracker.trackData(*data);
 }
 
 void ImplicitDataEngine::untrackData(
     sofa::core::objectmodel::BaseData* /*data*/)
 {
-    // need a way to remove a data from a DataTracker...
+  // need a way to remove a data from a DataTracker...
 }
 
 }  // namespace sofacv
