@@ -52,13 +52,10 @@ class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
  public:
   SOFA_CLASS(ImplicitDataEngine, sofa::core::DataEngine);
 
-  /// Constructor. d_isLeft is only for stereo (L/R) data engines
-  /// (leave untouched otherwise)
   ImplicitDataEngine();
   virtual ~ImplicitDataEngine() {}
 
-  virtual void update() final;
-  virtual void Update() = 0;
+  virtual void doUpdate() = 0;
 
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set

@@ -130,11 +130,11 @@ static PyObject* cvMatData_reshape(PyObject* self, PyObject* args)
     int nx, ny, nz;
     if (!PyArg_ParseTuple(args, "Os",&shape, &depth))
     {
-        return NULL;
+        return nullptr;
     }
     if (!PyArg_ParseTuple(shape, "iii",&nx, &ny, &nz))
     {
-        return NULL;
+        return nullptr;
     }
     data->setValue(cv::Mat(nx,ny, CV_MAKETYPE(dtypeAsDepth(depth), nz)));
     return self;

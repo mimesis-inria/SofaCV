@@ -74,7 +74,7 @@ void ImageFilterModel::display()
 ////////
 
 ImageFilterModelList::ImageFilterModelList(QObject* parent)
-    : QObject(parent), m_sofaComponentList(NULL)
+    : QObject(parent), m_sofaComponentList(nullptr)
 {
   connect(this, &ImageFilterModelList::sofaComponentListChanged, this,
           &ImageFilterModelList::handleSofaDataChange);

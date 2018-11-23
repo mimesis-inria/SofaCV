@@ -368,9 +368,9 @@ struct cvMatTypeInfo
     i >> data;
   }
 
-  static const void *getValuePtr(const DataType &) { return NULL; }
+  static const void *getValuePtr(const DataType &) { return nullptr; }
 
-  static void *getValuePtr(DataType &) { return NULL; }
+  static void *getValuePtr(DataType &) { return nullptr; }
 };
 
 template <>

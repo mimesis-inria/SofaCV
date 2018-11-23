@@ -32,7 +32,7 @@ void FrameExporter::init()
   update();
 }
 
-void FrameExporter::Update()
+void FrameExporter::doUpdate()
 {
   ++m_stepCounter;
 

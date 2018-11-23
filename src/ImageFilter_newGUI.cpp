@@ -6,7 +6,6 @@
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/helper/gl/RAII.h>
 #include <sofa/helper/system/gl.h>
-//#include <sofa/helper/system/glut.h>
 
 namespace sofacv
 {
@@ -42,7 +41,7 @@ void ImageFilter::init()
   addOutput(&d_img_out);
 }
 
-void ImageFilter::Update()
+void ImageFilter::doUpdate()
 {
   sofa::helper::AdvancedTimer::stepBegin("Image Filters");
 
@@ -71,7 +70,6 @@ void ImageFilter::Update()
 void ImageFilter::reinit()
 {
   std::cout << getName() << " Reinit()" << std::endl;
-//  updateIfDirty(); // always call update when a data is dirty
 //  if (d_isActive.getValue()) m_debugImage = d_img_out.getValue().clone();
 }
 

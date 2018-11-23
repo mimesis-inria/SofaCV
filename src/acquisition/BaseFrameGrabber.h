@@ -50,7 +50,10 @@ class SOFA_SOFACV_API BaseFrameGrabber : virtual public BaseGrabber
     setDirtyValue();
   }
 
-  virtual void Update() override {}
+  virtual void doUpdate() override
+  {
+
+  }
 
  protected:
   /// \brief deinterleaved image splitting function (see

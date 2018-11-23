@@ -65,7 +65,7 @@ void ImageFilter::init()
   update();
 }
 
-void ImageFilter::Update()
+void ImageFilter::doUpdate()
 {
   sofa::helper::AdvancedTimer::stepBegin("Image Filters");
 
@@ -102,7 +102,7 @@ void ImageFilter::Update()
 
 void ImageFilter::reinit()
 {
-  if (m_displayDebugDataTracker.isDirty() && d_isActive.getValue())
+  if (m_displayDebugDataTracker.hasChanged() && d_isActive.getValue())
     refreshDebugWindow();
 
   //  // to set needsRefresh to true

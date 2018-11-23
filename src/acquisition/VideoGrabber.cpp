@@ -187,33 +187,33 @@ void VideoGrabber::retrieveFrame()
 
 void VideoGrabber::reinit()
 {
-  if (m_dataTracker.isDirty(d_stopped))
+  if (m_dataTracker.hasChanged(d_stopped))
   {
     StoppedChanged();
   }
-  if (m_dataTracker.isDirty(d_paused))
+  if (m_dataTracker.hasChanged(d_paused))
   {
     PausedChanged();
   }
-  if (m_dataTracker.isDirty(d_fileName))
+  if (m_dataTracker.hasChanged(d_fileName))
   {
     FileNameChanged();
   }
-  if (m_dataTracker.isDirty(d_camIdx))
+  if (m_dataTracker.hasChanged(d_camIdx))
   {
     CamIdxChanged();
   }
-  if (m_dataTracker.isDirty(d_async))
+  if (m_dataTracker.hasChanged(d_async))
   {
     AsyncChanged();
   }
-  if (m_dataTracker.isDirty(d_seekFrame))
+  if (m_dataTracker.hasChanged(d_seekFrame))
   {
     SeekChanged();
   }
 }
 
-void VideoGrabber::Update()
+void VideoGrabber::doUpdate()
 {
   sofa::helper::AdvancedTimer::stepBegin(("retrieve frame"));
   if (!m_async)
@@ -280,7 +280,7 @@ void VideoGrabber::SeekChanged()
   m_cap.set(cv::CAP_PROP_POS_FRAMES, m_seek);
   if (m_async)
   {
-    m.unlock();
+      m.unlock();
   }
   update();
 }
