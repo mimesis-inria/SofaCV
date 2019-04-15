@@ -1,7 +1,7 @@
 #ifndef SOFACV_IMPLICITDATAENGINE_H
 #define SOFACV_IMPLICITDATAENGINE_H
 
-#include <SofaCVPlugin.h>
+#include <SofaCV/SofaCVPlugin.h>
 #include <sofa/core/DataEngine.h>
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/core/objectmodel/IdleEvent.h>
@@ -53,9 +53,7 @@ class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
   SOFA_CLASS(ImplicitDataEngine, sofa::core::DataEngine);
 
   ImplicitDataEngine();
-  virtual ~ImplicitDataEngine() {}
-
-  virtual void doUpdate() = 0;
+  virtual ~ImplicitDataEngine() override {}
 
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set

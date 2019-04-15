@@ -23,8 +23,8 @@
 #ifndef SOFACV_ACQUISITION_VIDEOGRABBER_H
 #define SOFACV_ACQUISITION_VIDEOGRABBER_H
 
-#include "ImplicitDataEngine.h"
-#include "SofaCVPlugin.h"
+#include "SofaCV/ImplicitDataEngine.h"
+#include "SofaCV/SofaCVPlugin.h"
 
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/helper/OptionsGroup.h>

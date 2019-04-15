@@ -1,5 +1,5 @@
 #include <SceneCreator/SceneCreator.h>
-#include "SofaCV/SofaCV.h"
+#include <SofaCV/SofaCV.h>
 using sofacv::ImplicitDataEngine;
 #include <SofaTest/Sofa_test.h>
 

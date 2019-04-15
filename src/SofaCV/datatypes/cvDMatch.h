@@ -1,7 +1,7 @@
 #ifndef SOFACV_CVDMATCH_H
 #define SOFACV_CVDMATCH_H
 
-#include "SofaCVPlugin.h"
+#include "SofaCV/SofaCVPlugin.h"
 
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>
@@ -15,28 +15,10 @@ namespace sofacv
 class SOFA_SOFACV_API cvDMatch : public cv::DMatch
 {
  public:
-  cvDMatch()
-  {
-    distance = -1.0f;
-    imgIdx = -1;
-    queryIdx = -1;
-    trainIdx = -1;
-  }
-  cvDMatch(const cv::DMatch& o)
-  {
-    distance = o.distance;
-    imgIdx = o.imgIdx;
-    queryIdx = o.queryIdx;
-    trainIdx = o.trainIdx;
-  }
-  cvDMatch(int _queryIdx, int _trainIdx, float _distance)
-      : cv::DMatch(_queryIdx, _trainIdx, _distance)
-  {
-  }
-  cvDMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance)
-      : cv::DMatch(_queryIdx, _trainIdx, _imgIdx, _distance)
-  {
-  }
+  cvDMatch();
+  cvDMatch(const cv::DMatch& o);
+  cvDMatch(int _queryIdx, int _trainIdx, float _distance);
+  cvDMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance);
 
   inline friend std::istream& operator>>(std::istream& in, cvDMatch& s)
   {

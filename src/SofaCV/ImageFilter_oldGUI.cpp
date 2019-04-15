@@ -35,10 +35,15 @@ namespace sofacv
 {
 unsigned ImageFilter::m_window_uid = 0;
 
+void ImageFilter::_mouseCallback(int e, int x, int y, int f, void *d)
+{
+    reinterpret_cast<ImageFilter*>(d)->mouseCallback(e, x, y, f);
+}
+
 ImageFilter::ImageFilter()
     : d_img(initData(
-          &d_img, cvMat(), "img",
-          "Input image, that will undergo changes through the filter.", false)),
+                &d_img, cvMat(), "img",
+                "Input image, that will undergo changes through the filter.", false)),
       d_img_out(initData(&d_img_out, "img_out",
                          "Output image, holding the filter's result", false)),
       d_displayDebugWindow(initData(&d_displayDebugWindow, false, "Debug",

@@ -1,7 +1,7 @@
 #ifndef SOFACV_CVKEYPOINT_H
 #define SOFACV_CVKEYPOINT_H
 
-#include "SofaCVPlugin.h"
+#include "SofaCV/SofaCVPlugin.h"
 
 #include <sofa/defaulttype/DataTypeInfo.h>
 
@@ -18,22 +18,12 @@ namespace sofacv
 class SOFA_SOFACV_API cvKeypoint : public cv::KeyPoint
 {
  public:
-  cvKeypoint(const cv::KeyPoint& kp)
-      : cv::KeyPoint(kp.pt, kp.size, kp.angle, kp.response, kp.octave,
-                     kp.class_id)
-  {
-  }
+  cvKeypoint(const cv::KeyPoint& kp);
   cvKeypoint() : cv::KeyPoint() {}
   cvKeypoint(cv::Point2f _pt, float _size, float _angle = -1,
-             float _response = 0, int _octave = 0, int _class_id = -1)
-      : cv::KeyPoint(_pt, _size, _angle, _response, _octave, _class_id)
-  {
-  }
+             float _response = 0, int _octave = 0, int _class_id = -1);
   cvKeypoint(float x, float y, float _size, float _angle = -1,
-             float _response = 0, int _octave = 0, int _class_id = -1)
-      : cv::KeyPoint(x, y, _size, _angle, _response, _octave, _class_id)
-  {
-  }
+             float _response = 0, int _octave = 0, int _class_id = -1);
 
   inline friend std::istream& operator>>(std::istream& in, cvKeypoint& s)
   {

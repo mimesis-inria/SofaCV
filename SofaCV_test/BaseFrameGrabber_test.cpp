@@ -20,7 +20,7 @@
 * Contact information: contact-mimesis@inria.fr                               *
 ******************************************************************************/
 
-#include <SofaCV/src/acquisition/BaseFrameGrabber.h>
+#include <SofaCV/acquisition/BaseFrameGrabber.h>
 using sofacv::acquisition::BaseFrameGrabber;
 #include <SofaTest/Sofa_test.h>
 
