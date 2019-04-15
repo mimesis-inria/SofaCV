@@ -1,8 +1,8 @@
 #ifndef SOFACV_COMMON_PCVIEWER_H
 #define SOFACV_COMMON_PCVIEWER_H
 
-#include "SofaCVPlugin.h"
-#include "ImplicitDataEngine.h"
+#include "SofaCV/SofaCVPlugin.h"
+#include "SofaCV/ImplicitDataEngine.h"
 
 namespace sofacv
 {
@@ -18,13 +18,13 @@ class SOFA_SOFACV_API PCViewer : public ImplicitDataEngine
 
  public:
   PCViewer();
-  virtual ~PCViewer();
+  virtual ~PCViewer() override;
 
   virtual void init() override;
   virtual void doUpdate() override;
-	void computeBBox(const sofa::core::ExecParams*, bool);
+  void computeBBox(const sofa::core::ExecParams*, bool) override;
   virtual void draw(const sofa::core::visual::VisualParams*) override;
-  virtual void reinit();
+  virtual void reinit() override;
 
 	sofa::Data<double> d_size;
 	// INPUTS

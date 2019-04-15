@@ -1,9 +1,9 @@
 #ifndef SOFACV_UTILS_FRAMEEXPORTER_H
 #define SOFACV_UTILS_FRAMEEXPORTER_H
 
-#include "SofaCVPlugin.h"
-#include "datatypes/cvMat.h"
-#include "ImplicitDataEngine.h"
+#include "SofaCV/SofaCVPlugin.h"
+#include "SofaCV/datatypes/cvMat.h"
+#include "SofaCV/ImplicitDataEngine.h"
 
 #include <sofa/helper/OptionsGroup.h>
 

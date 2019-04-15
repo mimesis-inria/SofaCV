@@ -1,9 +1,9 @@
 #ifndef SOFACV_ACQUISITION_BASEFRAMEGRABBER_H
 #define SOFACV_ACQUISITION_BASEFRAMEGRABBER_H
 
-#include "SofaCVPlugin.h"
-#include "datatypes/cvMat.h"
-#include "datatypes/cvMatUtils.h"
+#include "SofaCV/SofaCVPlugin.h"
+#include "SofaCV/datatypes/cvMat.h"
+#include "SofaCV/datatypes/cvMatUtils.h"
 
 #include "BaseGrabber.h"
 
@@ -38,21 +38,12 @@ class SOFA_SOFACV_API BaseFrameGrabber : virtual public BaseGrabber
 
  public:
   BaseFrameGrabber();
-  virtual ~BaseFrameGrabber();
+  virtual ~BaseFrameGrabber() override;
 
-  virtual void init() override
-  {
-    addOutput(&d_fullFrame);
-    addOutput(&d_frame1);
-    addOutput(&d_frame2);
-    addOutput(&d_dimensions);
-    addOutput(&d_fps);
-    setDirtyValue();
-  }
+  virtual void init() override;
 
   virtual void doUpdate() override
   {
-
   }
 
  protected:

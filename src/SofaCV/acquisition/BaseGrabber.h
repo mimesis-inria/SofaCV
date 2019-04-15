@@ -1,8 +1,8 @@
 #ifndef SOFACV_ACQUISITION_BASEGRABBER_H
 #define SOFACV_ACQUISITION_BASEGRABBER_H
 
-#include "ImplicitDataEngine.h"
-#include "SofaCVPlugin.h"
+#include "SofaCV/ImplicitDataEngine.h"
+#include "SofaCV/SofaCVPlugin.h"
 
 namespace sofacv
 {
@@ -28,16 +28,7 @@ class SOFA_SOFACV_API BaseGrabber : virtual public ImplicitDataEngine
   /// ImplicitDataEngine
   /// A variant of handleEvent should be implemented there, that would look like
   /// this:
-  virtual void handleEvent(sofa::core::objectmodel::Event* e)
-  {
-    if (sofa::simulation::AnimateBeginEvent::checkEventType(e))
-    {
-      update(); /// always call update() for grabbers. It's
-                /// decided internally whether or not they should do something
-      return;
-    }
-    ImplicitDataEngine::handleEvent(e);
-  }
+  virtual void handleEvent(sofa::core::objectmodel::Event* e);
 };
 
 }  // namespace acquisition

@@ -46,10 +46,20 @@ BaseFrameGrabber::BaseFrameGrabber()
 
 BaseFrameGrabber::~BaseFrameGrabber() {}
 
+void BaseFrameGrabber::init()
+{
+    addOutput(&d_fullFrame);
+    addOutput(&d_frame1);
+    addOutput(&d_frame2);
+    addOutput(&d_dimensions);
+    addOutput(&d_fps);
+    setDirtyValue();
+}
+
 void BaseFrameGrabber::split_deinterleaved(const cvMat& src, cvMat& dstL,
                                            cvMat& dstR)
 {
-  // First put odd lines on the left & pair on right of the same image
+    // First put odd lines on the left & pair on right of the same image
   cv::Mat tmp(src.rows / 2, src.cols * 2, src.type(), src.data);
   // Then split vertically
   cv::Rect rectL(0, 0, tmp.cols / 2, tmp.rows);

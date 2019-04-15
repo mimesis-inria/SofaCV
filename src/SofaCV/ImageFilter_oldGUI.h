@@ -78,10 +78,7 @@ class DSM;
  */
 class SOFA_SOFACV_API ImageFilter : public ImplicitDataEngine
 {
-  static void _mouseCallback(int e, int x, int y, int f, void* d)
-  {
-    reinterpret_cast<ImageFilter*>(d)->mouseCallback(e, x, y, f);
-  }
+  static void _mouseCallback(int e, int x, int y, int f, void* d);
 
  public:
   SOFA_CLASS(ImageFilter, ImplicitDataEngine);

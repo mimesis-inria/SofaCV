@@ -1,7 +1,7 @@
 #ifndef SOFACV_CVMAT_H
 #define SOFACV_CVMAT_H
 
-#include "SofaCVPlugin.h"
+#include "SofaCV/SofaCVPlugin.h"
 
 #include <sofa/defaulttype/DataTypeInfo.h>
 #include <iostream>

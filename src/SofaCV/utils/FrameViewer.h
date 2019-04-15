@@ -1,9 +1,9 @@
 #ifndef SOFACV_COMMON_FRAMEVIEWER_H
 #define SOFACV_COMMON_FRAMEVIEWER_H
 
-#include "SofaCVPlugin.h"
-#include "ImplicitDataEngine.h"
-#include "datatypes/cvMat.h"
+#include "SofaCV/SofaCVPlugin.h"
+#include "SofaCV/ImplicitDataEngine.h"
+#include "SofaCV/datatypes/cvMat.h"
 
 #include <SofaBaseVisual/VisualModelImpl.h>
 #include <sofa/helper/OptionsGroup.h>

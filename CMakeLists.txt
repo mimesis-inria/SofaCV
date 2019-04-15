@@ -20,47 +20,47 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(HEADER_FILES
-  SofaCV.h
-  src/SofaCVPlugin.h
-  src/datatypes/cvKeypoint.h
-  src/datatypes/cvDMatch.h
-  src/datatypes/cvMat.h
-  src/datatypes/cvMatUtils.h
-  src/utils/FrameViewer.h
-  src/utils/FrameExporter.h
-  src/utils/PCViewer.h
-  src/acquisition/BaseGrabber.h
-  src/acquisition/BaseFrameGrabber.h
-  src/acquisition/VideoGrabber.h
-  src/ImplicitDataEngine.h
-  src/ImageFilter.h
+  src/SofaCV/SofaCV.h
+  src/SofaCV/SofaCVPlugin.h
+  src/SofaCV/datatypes/cvKeypoint.h
+  src/SofaCV/datatypes/cvDMatch.h
+  src/SofaCV/datatypes/cvMat.h
+  src/SofaCV/datatypes/cvMatUtils.h
+  src/SofaCV/utils/FrameViewer.h
+  src/SofaCV/utils/FrameExporter.h
+  src/SofaCV/utils/PCViewer.h
+  src/SofaCV/acquisition/BaseGrabber.h
+  src/SofaCV/acquisition/BaseFrameGrabber.h
+  src/SofaCV/acquisition/VideoGrabber.h
+  src/SofaCV/ImplicitDataEngine.h
+  src/SofaCV/ImageFilter.h
   )
 
 set(SOURCE_FILES
-  src/SofaCVPlugin.cpp
-  src/datatypes/cvKeypoint.cpp
-  src/datatypes/cvDMatch.cpp
-  src/datatypes/cvMat.cpp
-  src/datatypes/cvMatUtils.cpp
-  src/utils/FrameViewer.cpp
-  src/utils/FrameExporter.cpp
-  src/utils/PCViewer.cpp
-  src/acquisition/BaseGrabber.cpp
-  src/acquisition/BaseFrameGrabber.cpp
-  src/acquisition/VideoGrabber.cpp
-  src/ImplicitDataEngine.cpp
+  src/SofaCV/SofaCVPlugin.cpp
+  src/SofaCV/datatypes/cvKeypoint.cpp
+  src/SofaCV/datatypes/cvDMatch.cpp
+  src/SofaCV/datatypes/cvMat.cpp
+  src/SofaCV/datatypes/cvMatUtils.cpp
+  src/SofaCV/utils/FrameViewer.cpp
+  src/SofaCV/utils/FrameExporter.cpp
+  src/SofaCV/utils/PCViewer.cpp
+  src/SofaCV/acquisition/BaseGrabber.cpp
+  src/SofaCV/acquisition/BaseFrameGrabber.cpp
+  src/SofaCV/acquisition/VideoGrabber.cpp
+  src/SofaCV/ImplicitDataEngine.cpp
   )
 
 find_package(SofaPython QUIET)
 if( SofaPython_FOUND )
   set(PYTHON_FILES
-    src/python/SofaCV/__init__.py
+    src/SofaCV/python/SofaCV/__init__.py
     )
 
-  list(APPEND SOURCE_FILES src/python/Binding_cvMatData.cpp)
+  list(APPEND SOURCE_FILES src/SofaCV/python/Binding_cvMatData.cpp)
   list(APPEND HEADER_FILES
-    src/python/Binding_cvMatData.h)
-  sofa_set_python_directory(${PROJECT_NAME} "src/python")
+    src/SofaCV/python/Binding_cvMatData.h)
+  sofa_set_python_directory(${PROJECT_NAME} "src/SofaCV/python")
 endif()
 
 
@@ -80,8 +80,6 @@ set(${PROJECT_NAME}_LIBRARIES
   )
 
 set (SOFACV_NEW_GUI_ENABLED OFF CACHE BOOL "Enables ImageFilter Widgets for runSofa2")
-message (SofaQtQuickGUI_FOUND)
-message(${SOFACV_NEW_GUI_ENABLED})
 if(SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
     message ("WE FOUND THE NEW GUI! COOL!")
   find_package(Qt5QuickControls2 REQUIRED)
@@ -94,31 +92,31 @@ if(SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
   add_definitions("-DHAS_GLEW")
 
   list(APPEND SOURCE_FILES
-    src/gui/ImageFilterDisplay.cpp
-    src/gui/ImageFilterModel.cpp
-    src/ImageFilter_newGUI.cpp
+    src/SofaCV/gui/ImageFilterDisplay.cpp
+    src/SofaCV/gui/ImageFilterModel.cpp
+    src/SofaCV/ImageFilter_newGUI.cpp
     )
 
   list(APPEND HEADER_FILES
-    src/gui/ImageFilterDisplay.h
-    src/gui/ImageFilterModel.h
-    src/ImageFilter_newGUI.h
+    src/SofaCV/gui/ImageFilterDisplay.h
+    src/SofaCV/gui/ImageFilterModel.h
+    src/SofaCV/ImageFilter_newGUI.h
     )
 
     set(MOC_HEADER_FILES
-    src/gui/ImageFilterDisplay.h
-    src/gui/ImageFilterModel.h
+    src/SofaCV/gui/ImageFilterDisplay.h
+    src/SofaCV/gui/ImageFilterModel.h
     )
 
   set(QML_FILES
-    src/gui/qml/SofaDataTypes/SofaDataType_cvMat.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_cvDMatch.qml
-    src/gui/qml/SofaDataTypes/SofaDataType_cvKeypoint.qml
-    src/gui/qml/SofaWidgets/ImageFilterWidget.qml
+    src/SofaCV/gui/qml/SofaDataTypes/SofaDataType_cvMat.qml
+    src/SofaCV/gui/qml/SofaDataTypes/SofaDataType_cvDMatch.qml
+    src/SofaCV/gui/qml/SofaDataTypes/SofaDataType_cvKeypoint.qml
+    src/SofaCV/gui/qml/SofaWidgets/ImageFilterWidget.qml
     )
 
   set(QRC_FILES
-    src/gui/qml/SofaCV_qml.qrc
+    src/SofaCV/gui/qml/SofaCV_qml.qrc
     )
 
   list (APPEND ${PROJECT_NAME}_LIBRARIES
@@ -145,13 +143,13 @@ if(SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
   add_definitions(-DQT_PLUGIN)
 else ()
   list(APPEND HEADER_FILES
-    src/DataSliderMgr.h
-    src/DataSliderMgr.inl
-    src/ImageFilter_oldGUI.h
+    src/SofaCV/DataSliderMgr.h
+    src/SofaCV/DataSliderMgr.inl
+    src/SofaCV/ImageFilter_oldGUI.h
     )
 
   list(APPEND SOURCE_FILES
-    src/ImageFilter_oldGUI.cpp
+    src/SofaCV/ImageFilter_oldGUI.cpp
     )
   set(${PROJECT_NAME}_FILES
     ${SOURCE_FILES}
@@ -160,31 +158,32 @@ else ()
 endif (SofaQtQuickGUI_FOUND AND ${SOFACV_NEW_GUI_ENABLED})
 
 set(${PROJECT_NAME}_RESOURCES_PATH \"${CMAKE_CURRENT_SOURCE_DIR}/resources\")
-configure_file("${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.h")
-configure_file("${PROJECT_NAME}.h.in" "${CMAKE_BINARY_DIR}/include/${PROJECT_NAME}.h")
+configure_file("src/SofaCV/${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/SofaCV/${PROJECT_NAME}.h")
+configure_file("src/SofaCV/${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_BINARY_DIR}/include/SofaCV/${PROJECT_NAME}.h")
 set(${PROJECT_NAME}_RESOURCES_PATH  \"${CMAKE_INSTALL_PREFIX}/share/sofa/plugins/${PROJECT_NAME}\")
-configure_file("${PROJECT_NAME}.h.in" "${CMAKE_BINARY_DIR}/include/installed${PROJECT_NAME}.h")
-install(FILES "${CMAKE_BINARY_DIR}/include/installed${PROJECT_NAME}.h" DESTINATION "include/${PROJECT_NAME}/" RENAME "${PROJECT_NAME}.h")
+configure_file("src/SofaCV/${PROJECT_NAME}.h.in" "${CMAKE_CURRENT_BINARY_DIR}/include/SofaCV/installed${PROJECT_NAME}.h")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/include/SofaCV/installed${PROJECT_NAME}.h" DESTINATION "include/${PROJECT_NAME}/" RENAME "${PROJECT_NAME}.h")
 
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_FILES} ${PYTHON_FILES})
 
-target_link_libraries(${PROJECT_NAME} ${${PROJECT_NAME}_LIBRARIES})
+if ( SofaPython_FOUND )
+  target_link_libraries(${PROJECT_NAME} PRIVATE SofaPython)
+  add_definitions("-DSOFA_HAVE_SOFAPYTHON")
+endif( SofaPython_FOUND )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_LIBRARIES})
 
 target_compile_options(${PROJECT_NAME} PUBLIC -D${PROJECT_NAME}_VERSION=\"${${PROJECT_NAME}_VERSION}\")
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
+
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>")
-target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")
+target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 
-if ( SofaPython_FOUND )
-  target_link_libraries(${PROJECT_NAME} SofaPython)
-  add_definitions("-DSOFA_HAVE_SOFAPYTHON")
-endif( SofaPython_FOUND )
 
-sofa_create_package(${PROJECT_NAME} ${${PROJECT_NAME}_VERSION} ${PROJECT_NAME} ${PROJECT_NAME})
+sofa_generate_package(NAME ${PROJECT_NAME} VERSION ${${PROJECT_NAME}_VERSION} TARGETS ${PROJECT_NAME} INCLUDE_INSTALL_DIR ${PROJECT_NAME} INCLUDE_SOURCE_DIR "src/${PROJECT_NAME}"})
 
 install(DIRECTORY resources/ DESTINATION share/sofa/plugins/${PROJECT_NAME})
 
