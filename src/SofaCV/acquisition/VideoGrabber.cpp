@@ -25,6 +25,7 @@
 #include <sofa/core/ObjectFactory.h>
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/helper/system/FileRepository.h>
+#include <sofa/helper/system/SetDirectory.h>
 #include <sofa/simulation/AnimateBeginEvent.h>
 
 namespace sofacv
@@ -71,10 +72,27 @@ void VideoGrabber::init()
   // If m_filename is an image sequence, path must still be absolute, or
   // relative to current dir
   std::string s = d_fileName.getFullPath();
-  if (sofa::helper::system::DataRepository.findFile(s, "", &std::cerr))
+  std::ostringstream oss;
+  if (sofa::helper::system::DataRepository.findFile(s, "", &oss)) //avoid printing msg_error...
     m_filename = d_fileName.getFullPath();
-  else
-    m_filename = d_fileName.getValue();
+  else //findFile() wont be able to interpret "%06d"-style format
+  {
+      const int size = 1024;
+      char buffer[size];
+      // TODO: check if correct format string: https://www.owasp.org/index.php/Format_string_attack
+      snprintf( buffer, size, d_fileName.getValue().c_str(), 1);
+      std::string strFromFormat(buffer);
+      if(sofa::helper::system::DataRepository.findFile(strFromFormat, "", &std::cerr))
+      {
+          std::string filenameWithFormat = sofa::helper::system::SetDirectory::GetFileName(d_fileName.getValue().c_str());
+          std::string basedir = sofa::helper::system::SetDirectory::GetParentDir(strFromFormat.c_str());
+          m_filename = basedir+"/"+ filenameWithFormat;
+      }
+      else
+      {
+          m_filename = d_fileName.getValue();
+      }
+  }
 
   m_stopped = d_stopped.getValue();
   m_paused = d_paused.getValue();
