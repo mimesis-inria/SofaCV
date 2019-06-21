@@ -7,7 +7,6 @@ set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_M
 
 find_package(OpenCV 3.2 REQUIRED)
 find_package(SofaFramework REQUIRED)
-find_package(SofaGui REQUIRED)
 find_package(SofaQtQuickGUI QUIET)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -74,8 +73,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(${PROJECT_NAME}_LIBRARIES
   SofaCore
   SofaSimulationCommon
-  SofaGuiQt
-  SofaGuiCommon
   ${OpenCV_LIBRARIES}
   )
 
