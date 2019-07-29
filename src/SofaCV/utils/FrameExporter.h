@@ -22,6 +22,7 @@ namespace utils
  */
 class SOFA_SOFACV_API FrameExporter : public ImplicitDataEngine
 {
+  sofa::Data<std::string> d_filePath;  ///< name of the file to write into
   sofa::Data<std::string> d_fileName;  ///< name of the file to write into
   sofa::Data<cvMat> d_img;     ///< [INPUT] image to write in fileName
   sofa::Data<unsigned>
