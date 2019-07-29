@@ -53,7 +53,7 @@ class SOFA_SOFACV_API ImplicitDataEngine : public sofa::core::DataEngine
   SOFA_CLASS(ImplicitDataEngine, sofa::core::DataEngine);
 
   ImplicitDataEngine();
-  virtual ~ImplicitDataEngine() override {}
+  virtual ~ImplicitDataEngine() override;
 
  protected:
   /// Adds a new input to this engine, binds it to its parent if not set

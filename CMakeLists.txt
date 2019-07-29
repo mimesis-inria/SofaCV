@@ -29,6 +29,8 @@ set(HEADER_FILES
   src/SofaCV/utils/FrameViewer.h
   src/SofaCV/utils/FrameExporter.h
   src/SofaCV/utils/PCViewer.h
+  src/SofaCV/acquisition/BaseScheduler.h
+  src/SofaCV/acquisition/DTScheduler.h
   src/SofaCV/acquisition/BaseGrabber.h
   src/SofaCV/acquisition/BaseFrameGrabber.h
   src/SofaCV/acquisition/VideoGrabber.h
@@ -45,6 +47,8 @@ set(SOURCE_FILES
   src/SofaCV/utils/FrameViewer.cpp
   src/SofaCV/utils/FrameExporter.cpp
   src/SofaCV/utils/PCViewer.cpp
+  src/SofaCV/acquisition/BaseScheduler.cpp
+  src/SofaCV/acquisition/DTScheduler.cpp
   src/SofaCV/acquisition/BaseGrabber.cpp
   src/SofaCV/acquisition/BaseFrameGrabber.cpp
   src/SofaCV/acquisition/VideoGrabber.cpp

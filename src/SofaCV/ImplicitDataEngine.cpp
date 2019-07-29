@@ -42,6 +42,8 @@ ImplicitDataEngine::ImplicitDataEngine()
   f_listening.setValue(true);
 }
 
+ImplicitDataEngine::~ImplicitDataEngine() {}
+
 void ImplicitDataEngine::addInput(sofa::core::objectmodel::BaseData* data,
                                   bool trackOnly)
 {
