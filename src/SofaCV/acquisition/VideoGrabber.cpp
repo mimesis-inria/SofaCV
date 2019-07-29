@@ -36,7 +36,7 @@ namespace video
 {
 SOFA_DECL_CLASS(VideoGrabber)
 
-int VideoGrabberClass =
+static int VideoGrabberClass =
     sofa::core::RegisterObject(
         "OpenCV-based component reading mono and stereo videos")
         .add<VideoGrabber>();
@@ -231,15 +231,16 @@ void VideoGrabber::reinit()
   }
 }
 
+
 void VideoGrabber::doUpdate()
 {
-  sofa::helper::AdvancedTimer::stepBegin(("retrieve frame"));
+  sofa::helper::AdvancedTimer::stepBegin("RetrieveFrame");
   if (!m_async)
   {
     grabFrame();
   }
   retrieveFrame();
-  sofa::helper::AdvancedTimer::stepEnd(("retrieve frame"));
+  sofa::helper::AdvancedTimer::stepEnd("RetrieveFrame");
 }
 
 void VideoGrabber::StoppedChanged()
@@ -330,6 +331,35 @@ void VideoGrabber::cleanup()
     t.join();
   }
   m_cap.release();
+}
+
+void VideoGrabber::grab(double elapsed)
+{
+    if (m_async)
+    {
+        msg_error(this->getName() + "::grab()") << "async mode is not supported when controlled by a Scheduler.";
+        return;
+    }
+    if (d_interpolate.getValue())
+    {
+        // Do interpolation stuff
+    }
+    else
+    {
+        std::cout << elapsed << std::endl;
+        while (elapsed > 0)
+        {
+            update();
+            elapsed--;
+        }
+
+        /// Huh...: Seek is actually slower than grabbing X times the last frame.
+//        m_seek += int(std::round(elapsed));
+//        m_cap.set(CV_CAP_PROP_POS_FRAMES, m_seek);
+//        d_seekFrame.setValue(m_seek);
+//        m_dataTracker.clean(d_seekFrame);
+//        update();
+    }
 }
 
 VideoGrabber::~VideoGrabber() {}

@@ -84,6 +84,7 @@ class SOFA_SOFACV_API VideoGrabber : public BaseFrameGrabber
   void doUpdate() override;
   void reinit() override;
   void cleanup() override;
+  void grab(double elapsed) override;
 
  protected:
   void grabFrame();

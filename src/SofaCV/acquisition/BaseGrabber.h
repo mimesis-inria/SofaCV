@@ -17,18 +17,18 @@ namespace acquisition
 class SOFA_SOFACV_API BaseGrabber : virtual public ImplicitDataEngine
 {
  public:
-  BaseGrabber() {}
-  virtual ~BaseGrabber() {}
+    SOFA_ABSTRACT_CLASS(BaseGrabber, ImplicitDataEngine);
 
- protected:
-  /// different handleEvent behavior for Data grabbers:
-  /// checkData will always return false, as there is no input to this engine
-  /// so:
-  /// All grabbers should inherit a DataGrabber iface, itself deriving from
-  /// ImplicitDataEngine
-  /// A variant of handleEvent should be implemented there, that would look like
-  /// this:
-  virtual void handleEvent(sofa::core::objectmodel::Event* e);
+    BaseGrabber();
+    virtual ~BaseGrabber() override;
+
+    virtual void grab(double elapsed);
+    sofa::Data<bool> d_interpolate { false }; /// should this grabber interpolate (if an implementation is provided) ?
+    void useScheduler(bool);
+protected:
+    virtual void handleEvent(sofa::core::objectmodel::Event* e) override;
+
+    bool m_hasScheduler { false }; /// If this grabber is controlled by a scheduler
 };
 
 }  // namespace acquisition
