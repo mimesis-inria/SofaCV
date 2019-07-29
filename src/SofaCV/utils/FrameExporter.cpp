@@ -8,7 +8,7 @@ namespace utils
 FrameExporter::FrameExporter()
     : d_fileName(initData(&d_fileName, "fileName", "output image file name")),
       d_img(initData(&d_img, "img", "image to export")),
-      d_nSteps(initData(&d_nSteps, (unsigned)0, "nSteps",
+      d_nSteps(initData(&d_nSteps, (unsigned)1, "nSteps",
                         "number of steps between each export (0 means no "
                         "export during animation")),
       d_exportType(initData(&d_exportType, "exportType",
@@ -62,6 +62,7 @@ void FrameExporter::doUpdate()
       }
       break;
     case 2:  // STEP
+      if (d_nSteps.getValue() == 0) return;
       if (m_stepCounter % d_nSteps.getValue() == 0)
       {
         cv::imwrite(std::to_string(m_stepCounter) + "_" + d_fileName.getValue(),
