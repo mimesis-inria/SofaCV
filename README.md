@@ -26,61 +26,8 @@ The SofaCV plugin is not a standalone plugin by itself. Instead it provides an A
 ### Contribution guidelines ###
 
 * __Contributing to SofaCV:__
-    SofaCV has 2 main branches, __master__ and __develop__. both branches are protected, and you need to create pull (merge) requests to contribute to the codebase. merge requests are made against develop, except for __FAST-MERGE__ labelled PRs that are merged against both master and develop. merged PRs in develop are merged back into master once they've proven themselves stable enough
-
-* __Coding styles:__
-    SofaCV is developped using a (slightly) modified Google / gnu C++ codestyle. To contribute, please try to respect this indentation. The following clang-format style can be set in qtCreator's beautifier plugin if you want:
-```
-BasedOnStyle: Google,
-UseTab: Never,
-BreakBeforeBraces: Allman
-```
-
-    Otherwise,  the following stylesheet can be set in your QtCreator cpp codestyles (on linux: .config/QtProject/qtcreator/codestyles/Cpp/SofaCV.xml)
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE QtCreatorCodeStyle>
-<!-- Written by QtCreator 4.2.1, 2017-03-09T12:50:16. -->
-<qtcreator>
- <data>
-  <variable>CodeStyleData</variable>
-  <valuemap type="QVariantMap">
-   <value type="bool" key="AlignAssignments">false</value>
-   <value type="bool" key="AutoSpacesForTabs">false</value>
-   <value type="bool" key="BindStarToIdentifier">false</value>
-   <value type="bool" key="BindStarToLeftSpecifier">true</value>
-   <value type="bool" key="BindStarToRightSpecifier">false</value>
-   <value type="bool" key="BindStarToTypeName">true</value>
-   <value type="bool" key="ExtraPaddingForConditionsIfConfusingAlign">true</value>
-   <value type="bool" key="IndentAccessSpecifiers">false</value>
-   <value type="bool" key="IndentBlockBody">true</value>
-   <value type="bool" key="IndentBlockBraces">false</value>
-   <value type="bool" key="IndentBlocksRelativeToSwitchLabels">true</value>
-   <value type="bool" key="IndentClassBraces">false</value>
-   <value type="bool" key="IndentControlFlowRelativeToSwitchLabels">true</value>
-   <value type="bool" key="IndentDeclarationsRelativeToAccessSpecifiers">true</value>
-   <value type="bool" key="IndentEnumBraces">false</value>
-   <value type="bool" key="IndentFunctionBody">true</value>
-   <value type="bool" key="IndentFunctionBraces">false</value>
-   <value type="bool" key="IndentNamespaceBody">false</value>
-   <value type="bool" key="IndentNamespaceBraces">false</value>
-   <value type="int" key="IndentSize">2</value>
-   <value type="bool" key="IndentStatementsRelativeToSwitchLabels">true</value>
-   <value type="bool" key="IndentSwitchLabels">true</value>
-   <value type="int" key="PaddingMode">2</value>
-   <value type="bool" key="ShortGetterName">true</value>
-   <value type="bool" key="SpacesForTabs">false</value>
-   <value type="int" key="TabSize">2</value>
-  </valuemap>
- </data>
- <data>
-  <variable>DisplayName</variable>
-  <value type="QString">Google</value>
- </data>
-</qtcreator>
-```
-
-
+    The __master__ branch for SofaCV is protected, and you need to create pull requests to contribute to the codebase. 
+    
 ### Who do I talk to? ###
 
 * Repo owner or admin: bruno.josue.marques@inria.fr
