@@ -56,55 +56,65 @@ py::buffer_info cvMatToBufferInfo(BaseData* m)
     sofa::Data<sofacv::cvMat>* matData = dynamic_cast<sofa::Data<sofacv::cvMat>*>(m);
     sofacv::cvMat* mat = matData->beginEdit();
 
-    const AbstractTypeInfo& nfo { *m->getValueTypeInfo() };
-    auto itemNfo = nfo.BaseType();
-
-    const char* format = nullptr;
-    size_t datasize = 8;
+    std::string format = "";
+    size_t elemsize = 1;
+    size_t channels = size_t(mat->channels());
     switch(mat->depth())
     {
     case CV_8U:
-        format = py::format_descriptor<uint8_t>::value;
-        datasize = 1;
+        format = py::format_descriptor<uint8_t>::format();
+        elemsize = 1;
         break;
     case CV_8S:
-        format = py::format_descriptor<int8_t>::value;
-        datasize = 1;
+        format = py::format_descriptor<int8_t>::format();
+        elemsize = 1;
         break;
     case CV_16U:
-        format = py::format_descriptor<uint16_t>::value;
-        datasize = 2;
+        format = py::format_descriptor<uint16_t>::format();
+        elemsize = 2;
         break;
     case CV_16S:
-        format = py::format_descriptor<int16_t>::value;
-        datasize = 2;
+        format = py::format_descriptor<int16_t>::format();
+        elemsize = 2;
         break;
     case CV_32S:
-        format = py::format_descriptor<int32_t>::value;
-        datasize = 4;
+        format = py::format_descriptor<int32_t>::format();
+        elemsize = 4;
         break;
     case CV_32F:
-        format = py::format_descriptor<_Float32>::value;
-        datasize = 4;
+        format = py::format_descriptor<_Float32>::format();
+        elemsize = 4;
         break;
     case CV_64F:
-        format = py::format_descriptor<_Float64>::value;
-        datasize = 8;
+        format = py::format_descriptor<_Float64>::format();
+        elemsize = 8;
         break;
     }
 
+    std::vector<size_t> bufferdim;
+    std::vector<size_t> strides;
 
-    std::tuple<int,int,int> shape = {mat->cols, mat->rows, mat->channels()};
-    size_t  ndim = 3;
+    if (channels == 1)
+    {
+        bufferdim = {size_t(mat->rows), size_t(mat->cols)};
+        strides = {elemsize * size_t(mat->cols), elemsize};
+    }
+    else
+    {
+        bufferdim = {size_t(mat->rows), size_t(mat->cols), channels};
+        strides = {elemsize * size_t(mat->cols) * channels, elemsize * channels, elemsize};
+    }
+    size_t ndim = bufferdim.size();
 
     void* ptr = const_cast<void*>(reinterpret_cast<void*>(mat->data));
+
     py::buffer_info ninfo(
-                ptr,       /* Pointer to buffer */
-                datasize,  /* Size of one scalar */
-                format,    /* Python struct-style format descriptor */
-                ndim,      /* Number of dimensions */
-    { std::get<0>(shape), std::get<1>(shape), std::get<2>(shape)}, /* Buffer dimensions */
-    { datasize * std::get<0>(shape) * std::get<1>(shape) * std::get<2>(shape),    datasize }                         /* Strides (in bytes) for each index */
+                ptr,              /* Pointer to buffer */
+                long(elemsize),   /* Size of one scalar */
+                format,           /* Python struct-style format descriptor */
+                long(ndim),       /* Number of dimensions */
+                bufferdim,        /* Buffer dimensions */
+                strides           /* Strides (in bytes) for each index */
                 );
     return ninfo;
 }
@@ -176,6 +186,14 @@ void moduleAddcvMat(py::module& m)
 //        return py::none();
 //    });
 
+    p.def("__getattr__", [](cvMat* self, const std::string& attrname){
+        if(attrname == "value")
+        {
+            std::cout << "get attr value" << std::endl;
+            return getPythonArrayForCVMat(self);
+        }
+        throw py::attribute_error("There is no attribute '"+attrname+"'");
+    });
 
     p.def("apply", [](cvMat* self, py::function f)
     {
@@ -190,12 +208,12 @@ void moduleAddcvMat(py::module& m)
         }
     });
 
-//    p.def("__str__", [](BaseData* self)
-//    {
-//        std::stringstream tmp;
-//        tmp << "SofaCV.cvMat <name='" << self->getName() << "', address=" << self << ">";
-//        return py::str(tmp.str());
-//    });
+    p.def("__str__", [](BaseData* self)
+    {
+        std::stringstream tmp;
+        tmp << "SofaCV.cvMat <name='" << self->getName() << "', address=" << self << ">";
+        return py::str(tmp.str());
+    });
 
 //    p.def("__repr__", [](BaseData* self)
 //    {

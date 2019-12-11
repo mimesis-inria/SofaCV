@@ -1,16 +1,27 @@
 
-import Sofa
+import Sofa.Core
 import SofaCV
+import cv2
 
+class MyController(Sofa.Core.Controller):
+    def __init__(self, *args, **kwargs):
+        Sofa.Core.Controller.__init__(self, *args, **kwargs)
+        self.parent = kwargs.get('parent')
+        
+    def onAnimateBeginEvent(self, e):
+        print(e)
+        imgData = self.parent.input.img_out
+        print(imgData)
+        print(imgData.value)
+        cv2.imwrite("plop.jpg", imgData.value)
+
+        
 def createScene(node):
-    node.createObject('RequiredPlugin', pluginName='SofaCV')
-    node.createObject('RequiredPlugin', pluginName='SofaPython')
+    node.addObject('RequiredPlugin', name='SofaCV')
+    # node.addObject('VideoGrabber', name='input', videoFile="/home/bruno/dev/similar/plugins/SofaCV/resources/test_video.avi")
 
-    # Asynchronous grab (a thread grabs frames and submits the latest to the simulation at each step. (Real-time, No Schedulers needed)
-    node.createObject('VideoGrabber', name='input', cam_index="0", async="true")
-
-    node.createObject('PythonScriptDataEngine', filename='ImageFilterController.py', classname='ImageFilter', printLog="true")
-
-    node.createObject('FrameViewer', name='viewer', img='@input.img_out', corners="-1 1 0 1 1 0 1 -1 0 -1 -1 0", mode="ORTHO")
+    node.addObject("VideoGrabber", name="input", cam_index=0)
+    node.addObject(MyController(name="MyController", parent=node))
+    node.addObject('FrameViewer', name='viewer', img='@input.img_out', corners="-1 1 0 1 1 0 1 -1 0 -1 -1 0", mode="ORTHO")
     
     return 0
