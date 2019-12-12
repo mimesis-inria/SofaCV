@@ -65,7 +65,7 @@ if( SofaPython_FOUND )
     src/SofaCV/python/Binding_cvMatData.h)
   sofa_set_python_directory(${PROJECT_NAME} "src/SofaCV/python")
 endif()
-
+find_package(SofaPython3 QUIET)
 
 set(${PROJECT_NAME}_FILES
   ${HEADER_FILES}
@@ -187,6 +187,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}"
 sofa_generate_package(NAME ${PROJECT_NAME} VERSION ${${PROJECT_NAME}_VERSION} TARGETS ${PROJECT_NAME} INCLUDE_INSTALL_DIR ${PROJECT_NAME} INCLUDE_SOURCE_DIR "src/${PROJECT_NAME}"})
 
 install(DIRECTORY resources/ DESTINATION share/sofa/plugins/${PROJECT_NAME})
+
+
+if( SofaPython3_FOUND )
+  add_subdirectory(python3)
+endif()
 
 if(SOFA_BUILD_TESTS)
     find_package(SofaTest QUIET)
