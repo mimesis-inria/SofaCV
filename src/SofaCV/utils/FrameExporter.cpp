@@ -1,4 +1,5 @@
 #include "FrameExporter.h"
+#include <opencv2/imgcodecs.hpp>
 
 namespace sofacv
 {
@@ -51,7 +52,7 @@ void FrameExporter::doUpdate()
     img = d_img.getValue();
 
   std::vector<int> qualityType;
-  qualityType.push_back(CV_IMWRITE_JPEG_QUALITY);
+  qualityType.push_back(cv::IMWRITE_JPEG_QUALITY);
   qualityType.push_back(90);
 
   switch (d_exportType.getValue().getSelectedId())
@@ -81,7 +82,7 @@ void FrameExporter::cleanup()
   if (d_exportType.getValue().getSelectedId() == 1)  // END
   {
     std::vector<int> qualityType;
-    qualityType.push_back(CV_IMWRITE_JPEG_QUALITY);
+    qualityType.push_back(cv::IMWRITE_JPEG_QUALITY);
     qualityType.push_back(90);
 
     cv::Mat img;

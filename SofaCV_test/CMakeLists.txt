@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(SofaCV_test)
 
-find_package(OpenCV 3.2 REQUIRED)
+find_package(OpenCV REQUIRED)
 find_package(SofaCV REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})

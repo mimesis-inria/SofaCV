@@ -1,7 +1,7 @@
 #include "FrameViewer.h"
 
 #include <sofa/core/ObjectFactory.h>
-#include <sofa/core/visual/DrawToolGL.h>
+#include <sofa/gl/DrawToolGL.h>
 
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/helper/gl/RAII.h>
@@ -210,7 +210,7 @@ void FrameViewer::draw(const sofa::core::visual::VisualParams *)
   drawImpl();
 }
 
-void FrameViewer::computeBBox(const sofa::core::ExecParams *params, bool)
+void FrameViewer::computeBBox(const sofa::core::ExecParams *, bool)
 {
   if (d_mode.getValue().getSelectedId() != 0) return;
 
@@ -234,8 +234,7 @@ void FrameViewer::computeBBox(const sofa::core::ExecParams *params, bool)
       if (p[c] < minBBox[c]) minBBox[c] = p[c];
     }
   }
-  this->f_bbox.setValue(
-      params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
+  this->f_bbox.setValue(sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
 }  // namespace utils

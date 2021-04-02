@@ -23,13 +23,14 @@
 #include "ImageFilter_oldGUI.h"
 #include "DataSliderMgr.inl"
 
-#include <sofa/core/visual/DrawToolGL.h>
+#include <sofa/gl/DrawToolGL.h>
 
 #include <sofa/helper/AdvancedTimer.h>
 #include <sofa/helper/gl/RAII.h>
 #include <sofa/helper/system/gl.h>
 
 #include <opencv2/highgui.hpp>
+#include<opencv2/highgui/highgui_c.h>
 
 namespace sofacv
 {

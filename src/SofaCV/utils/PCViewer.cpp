@@ -1,7 +1,7 @@
 #include "PCViewer.h"
 
 #include <sofa/core/ObjectFactory.h>
-#include <sofa/core/visual/DrawToolGL.h>
+#include <sofa/helper/visual/DrawTool.h>
 #include <sofa/helper/system/gl.h>
 
 namespace sofacv
@@ -40,7 +40,7 @@ void PCViewer::doUpdate()
     m_colors[i].set(c[i][2] / 255.0f, c[i][1] / 255.0f, c[i][0] / 255.0f, 1.0f);
 }
 
-void PCViewer::computeBBox(const sofa::core::ExecParams* params, bool)
+void PCViewer::computeBBox(const sofa::core::ExecParams* , bool)
 {
   if (m_positions.size() == 0) return;
 
@@ -60,8 +60,7 @@ void PCViewer::computeBBox(const sofa::core::ExecParams* params, bool)
       if (p[c] < minBBox[c]) minBBox[c] = p[c];
     }
   }
-  this->f_bbox.setValue(
-      params, sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
+  this->f_bbox.setValue(sofa::defaulttype::TBoundingBox<double>(minBBox, maxBBox));
 }
 
 void PCViewer::draw(const sofa::core::visual::VisualParams*)

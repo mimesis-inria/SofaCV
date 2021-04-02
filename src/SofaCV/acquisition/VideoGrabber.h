@@ -28,6 +28,7 @@
 
 #include <sofa/defaulttype/Vec.h>
 #include <sofa/helper/OptionsGroup.h>
+#include <sofa/core/objectmodel/DataFileName.h>
 #include "BaseFrameGrabber.h"
 
 #include <opencv2/opencv.hpp>
