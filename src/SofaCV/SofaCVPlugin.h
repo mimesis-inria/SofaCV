@@ -1,7 +1,7 @@
 #ifndef SOFACV_INITPLUGIN_H
 #define SOFACV_INITPLUGIN_H
 
-#include <sofa/helper/system/config.h>
+#include <sofa/helper/config.h>
 
 #ifdef SOFA_BUILD_SOFACV_PLUGIN
 #define SOFA_SOFACV_API SOFA_EXPORT_DYNAMIC_LIBRARY
